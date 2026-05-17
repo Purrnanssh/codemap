@@ -1,0 +1,93 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# CodeMap — project metadata
+# ─────────────────────────────────────────────────────────────────────────────
+# This file is the single source of truth for what this project is, who built
+# it, what it depends on, and how its tools should behave.
+# Spec: https://packaging.python.org/en/latest/specifications/pyproject-toml/
+
+[build-system]
+requires = ["hatchling>=1.21"]
+build-backend = "hatchling.build"
+
+# ─── Project identity ────────────────────────────────────────────────────────
+[project]
+name = "codemap"
+version = "0.1.0"
+description = "Static analysis tool that maps Python codebases — dependency graphs, call graphs, and complexity metrics."
+readme = "README.md"
+requires-python = ">=3.11,<3.13"
+license = { text = "MIT" }
+authors = [
+    { name = "Purrnanssh Sinha", email = "prrnnssh@gmail.com" }
+]
+keywords = ["static-analysis", "ast", "dependency-graph", "python", "cli"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Code Generators",
+]
+
+# Runtime dependencies — installed for everyone using CodeMap.
+dependencies = [
+    "typer>=0.12.0",
+    "rich>=13.7.0",
+]
+
+# Optional dev dependencies — installed only by contributors.
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=5.0.0",
+    "ruff>=0.5.0",
+    "mypy>=1.10.0",
+]
+
+# ─── CLI entry point ─────────────────────────────────────────────────────────
+# This is what lets us run `codemap` from anywhere on the system after install.
+# When you type `codemap`, Python runs the `main` function inside `codemap.cli`.
+[project.scripts]
+codemap = "codemap.cli:main"
+
+# ─── Project URLs ────────────────────────────────────────────────────────────
+[project.urls]
+Homepage = "https://github.com/Purrnanssh/codemap"
+Repository = "https://github.com/Purrnanssh/codemap"
+Issues = "https://github.com/Purrnanssh/codemap/issues"
+
+# ─── Build configuration ─────────────────────────────────────────────────────
+# Tell hatchling where the source code lives.
+[tool.hatch.build.targets.wheel]
+packages = ["src/codemap"]
+
+# ─── Ruff (linter + formatter) ───────────────────────────────────────────────
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "W",   # pycodestyle warnings
+    "I",   # isort (import ordering)
+    "B",   # flake8-bugbear (common bugs)
+    "UP",  # pyupgrade (modernize syntax)
+    "SIM", # simplify
+]
+
+# ─── Mypy (type checker) ─────────────────────────────────────────────────────
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unreachable = true
+
+# ─── Pytest (test runner) ────────────────────────────────────────────────────
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-ra --strict-markers"
+testpaths = ["tests"]
+
