@@ -33,8 +33,7 @@ def hello(name: str = "world") -> None:
     """Say hello — a tiny smoke test to confirm the CLI is wired up correctly."""
     console.print(
         Panel.fit(
-            f"[bold cyan]Hello, {name}![/bold cyan]\n"
-            f"[dim]CodeMap v{__version__} is alive.[/dim]",
+            f"[bold cyan]Hello, {name}![/bold cyan]\n[dim]CodeMap v{__version__} is alive.[/dim]",
             border_style="cyan",
             title="🗺️  CodeMap",
         )
@@ -54,5 +53,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-    

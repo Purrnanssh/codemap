@@ -6,4 +6,3 @@ the project (CLI `--version`, README badges, package metadata) picks it up.
 """
 
 __version__ = "0.1.0"
-
