@@ -3,7 +3,7 @@
 > Static analysis tool that maps Python codebases — dependency graphs, call graphs, and code complexity visualization.
 
 [![Python](https://img.shields.io/badge/python-3.11-blue?style=flat-square)](https://www.python.org)
-[![Status](https://img.shields.io/badge/status-in%20development-orange?style=flat-square)](#status)
+[![CI](https://github.com/Purrnanssh/codemap/actions/workflows/ci.yml/badge.svg)](https://github.com/Purrnanssh/codemap/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
 
 ---
