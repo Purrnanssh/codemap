@@ -13,7 +13,12 @@ from __future__ import annotations
 
 import ast
 
-from codemap.ast_engine.models import ClassInfo, FunctionInfo, ImportInfo
+from codemap.ast_engine.models import CallInfo, ClassInfo, FunctionInfo, ImportInfo
+
+# Sentinel value used when a call's callee expression is not a simple
+# name or dotted attribute chain (for example, a call on the result
+# of another call, a subscript, or a lambda).
+UNKNOWN_CALLEE = "<unknown>"
 
 
 def extract_imports(source: str) -> tuple[ImportInfo, ...]:
@@ -135,6 +140,43 @@ def extract_classes(source: str) -> tuple[ClassInfo, ...]:
     return tuple(classes)
 
 
+def extract_calls(source: str) -> tuple[CallInfo, ...]:
+    """Extract all function and method call sites from Python source code.
+
+    Calls are captured wherever they appear, including inside
+    functions, methods, and nested blocks. Both simple name calls
+    (``print()``) and attribute calls (``os.path.join()``) are
+    represented by their textual dotted name.
+
+    Calls whose callee expression cannot be cleanly named (calls on
+    the result of another call, subscript expressions, lambdas) are
+    still captured, with the callee set to ``"<unknown>"``. The line
+    number is always recorded.
+
+    Args:
+        source: Python source code as a string.
+
+    Returns:
+        A tuple of CallInfo objects, one per call site.
+
+    Raises:
+        SyntaxError: If the source is not valid Python.
+    """
+    tree = ast.parse(source)
+    calls: list[CallInfo] = []
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call):
+            calls.append(
+                CallInfo(
+                    callee=_resolve_callee(node.func),
+                    line=node.lineno,
+                )
+            )
+
+    return tuple(calls)
+
+
 def _build_function_info(
     node: ast.FunctionDef | ast.AsyncFunctionDef,
 ) -> FunctionInfo:
@@ -150,3 +192,30 @@ def _build_function_info(
         args=tuple(arg.arg for arg in node.args.args),
         is_async=isinstance(node, ast.AsyncFunctionDef),
     )
+
+
+def _resolve_callee(func: ast.expr) -> str:
+    """Resolve the callee expression of a Call node to a dotted name.
+
+    Handles the two common shapes:
+        ``Name`` nodes -> returns the name directly
+        ``Attribute`` chains -> returns the full dotted path
+
+    For all other shapes (calls on calls, subscripts, lambdas,
+    starred expressions), returns ``UNKNOWN_CALLEE``.
+    """
+    if isinstance(func, ast.Name):
+        return func.id
+
+    if isinstance(func, ast.Attribute):
+        parts: list[str] = [func.attr]
+        current: ast.expr = func.value
+        while isinstance(current, ast.Attribute):
+            parts.append(current.attr)
+            current = current.value
+        if isinstance(current, ast.Name):
+            parts.append(current.id)
+            return ".".join(reversed(parts))
+        return UNKNOWN_CALLEE
+
+    return UNKNOWN_CALLEE
