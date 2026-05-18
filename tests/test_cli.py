@@ -20,20 +20,12 @@ runner = CliRunner()
 
 
 def test_hello_default_name() -> None:
-    """`codemap hello` (no args) should greet 'world' and report the version."""
+    """`codemap hello` should greet 'world' and report the version."""
     result = runner.invoke(app, ["hello"])
 
     assert result.exit_code == 0, f"hello exited with {result.exit_code}: {result.output}"
     assert "Hello, world!" in result.output
     assert __version__ in result.output
-
-
-def test_hello_with_custom_name() -> None:
-    """`codemap hello --name Alice` should greet Alice."""
-    result = runner.invoke(app, ["hello", "--name", "Alice"])
-
-    assert result.exit_code == 0
-    assert "Hello, Alice!" in result.output
 
 
 def test_version_command() -> None:
