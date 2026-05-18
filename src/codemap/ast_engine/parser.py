@@ -12,13 +12,53 @@ happens later in the graph-building phase.
 from __future__ import annotations
 
 import ast
+from pathlib import Path
 
-from codemap.ast_engine.models import CallInfo, ClassInfo, FunctionInfo, ImportInfo
+from codemap.ast_engine.models import (
+    CallInfo,
+    ClassInfo,
+    FileAnalysis,
+    FunctionInfo,
+    ImportInfo,
+)
 
 # Sentinel value used when a call's callee expression is not a simple
 # name or dotted attribute chain (for example, a call on the result
 # of another call, a subscript, or a lambda).
 UNKNOWN_CALLEE = "<unknown>"
+
+
+def parse_file(path: Path | str) -> FileAnalysis:
+    """Parse a Python source file into a FileAnalysis.
+
+    Reads the file from disk, parses its content, and runs every
+    extractor in this module against it. Returns a single
+    FileAnalysis bundling all results.
+
+    Args:
+        path: Path to a Python file. May be a Path or a string;
+            strings are coerced to Path.
+
+    Returns:
+        A FileAnalysis containing every import, function, class,
+        and call site found in the file.
+
+    Raises:
+        FileNotFoundError: If the file does not exist.
+        IsADirectoryError: If the path points to a directory.
+        UnicodeDecodeError: If the file is not valid UTF-8.
+        SyntaxError: If the file is not valid Python.
+    """
+    path = Path(path)
+    source = path.read_text(encoding="utf-8")
+
+    return FileAnalysis(
+        path=path,
+        imports=extract_imports(source),
+        functions=extract_functions(source),
+        classes=extract_classes(source),
+        calls=extract_calls(source),
+    )
 
 
 def extract_imports(source: str) -> tuple[ImportInfo, ...]:
