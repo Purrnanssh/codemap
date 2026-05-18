@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import ast
 
-from codemap.ast_engine.models import FunctionInfo, ImportInfo
+from codemap.ast_engine.models import ClassInfo, FunctionInfo, ImportInfo
 
 
 def extract_imports(source: str) -> tuple[ImportInfo, ...]:
@@ -86,18 +86,67 @@ def extract_functions(source: str) -> tuple[FunctionInfo, ...]:
     tree = ast.parse(source)
     functions: list[FunctionInfo] = []
 
-    # Iterate only over the direct children of the module, not the
-    # full tree. This naturally excludes methods (inside classes) and
-    # nested functions (inside other functions).
     for node in tree.body:
         if isinstance(node, ast.FunctionDef | ast.AsyncFunctionDef):
-            functions.append(
-                FunctionInfo(
+            functions.append(_build_function_info(node))
+
+    return tuple(functions)
+
+
+def extract_classes(source: str) -> tuple[ClassInfo, ...]:
+    """Extract all top-level class definitions from Python source code.
+
+    Only top-level classes are returned. Nested classes (a class
+    defined inside another class or inside a function) are
+    intentionally excluded.
+
+    For each class, every direct method (``def`` or ``async def`` in
+    the class body) is captured as a FunctionInfo and stored in the
+    ``methods`` field. Nested methods (functions defined inside a
+    method) are not captured.
+
+    Args:
+        source: Python source code as a string.
+
+    Returns:
+        A tuple of ClassInfo objects, one per top-level class.
+
+    Raises:
+        SyntaxError: If the source is not valid Python.
+    """
+    tree = ast.parse(source)
+    classes: list[ClassInfo] = []
+
+    for node in tree.body:
+        if isinstance(node, ast.ClassDef):
+            methods = tuple(
+                _build_function_info(child)
+                for child in node.body
+                if isinstance(child, ast.FunctionDef | ast.AsyncFunctionDef)
+            )
+            classes.append(
+                ClassInfo(
                     name=node.name,
                     line=node.lineno,
-                    args=tuple(arg.arg for arg in node.args.args),
-                    is_async=isinstance(node, ast.AsyncFunctionDef),
+                    methods=methods,
                 )
             )
 
-    return tuple(functions)
+    return tuple(classes)
+
+
+def _build_function_info(
+    node: ast.FunctionDef | ast.AsyncFunctionDef,
+) -> FunctionInfo:
+    """Convert an AST function node into a FunctionInfo model.
+
+    Internal helper shared by ``extract_functions`` and
+    ``extract_classes`` (for methods). The leading underscore
+    signals that this is not part of the public API.
+    """
+    return FunctionInfo(
+        name=node.name,
+        line=node.lineno,
+        args=tuple(arg.arg for arg in node.args.args),
+        is_async=isinstance(node, ast.AsyncFunctionDef),
+    )
