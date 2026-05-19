@@ -86,6 +86,10 @@ python_version = "3.11"
 strict = true
 warn_unreachable = true
 
+[[tool.mypy.overrides]]
+module = "networkx.*"
+ignore_missing_imports = true
+
 # ─── Pytest (test runner) ────────────────────────────────────────────────────
 [tool.pytest.ini_options]
 minversion = "8.0"
