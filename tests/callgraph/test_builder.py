@@ -312,3 +312,100 @@ class TestRealisticProject:
             graph["helpers.do_work"]["os.path.join"]["kind"]
             == "external"
         )
+
+
+class TestComplexityAttribute:
+    def test_simple_function_complexity_one(
+        self, tmp_path: Path
+    ) -> None:
+        root = _make_project(
+            tmp_path,
+            {"mod.py": "def foo():\n    pass\n"},
+        )
+
+        graph, _ = build_call_graph(root)
+
+        assert graph.nodes["mod.foo"]["complexity"] == 1
+
+    def test_branchy_function_higher_complexity(
+        self, tmp_path: Path
+    ) -> None:
+        source = (
+            "def foo(x):\n"
+            "    if x:\n"
+            "        return 1\n"
+            "    return 0\n"
+        )
+        root = _make_project(tmp_path, {"mod.py": source})
+
+        graph, _ = build_call_graph(root)
+
+        assert graph.nodes["mod.foo"]["complexity"] == 2
+
+    def test_method_complexity(self, tmp_path: Path) -> None:
+        source = (
+            "class Widget:\n"
+            "    def render(self, x):\n"
+            "        if x:\n"
+            "            return 1\n"
+            "        return 0\n"
+        )
+        root = _make_project(tmp_path, {"mod.py": source})
+
+        graph, _ = build_call_graph(root)
+
+        assert graph.nodes["mod.Widget.render"]["complexity"] == 2
+
+    def test_external_nodes_have_no_complexity(
+        self, tmp_path: Path
+    ) -> None:
+        # Synthetic nodes (external, unresolved) should not carry a
+        # complexity attribute; they are not project functions.
+        source = (
+            "import os\n"
+            "\n"
+            "def foo():\n"
+            "    os.path.join(a, b)\n"
+            "    mystery()\n"
+        )
+        root = _make_project(tmp_path, {"mod.py": source})
+
+        graph, _ = build_call_graph(root)
+
+        assert "complexity" not in graph.nodes["os.path.join"]
+        assert "complexity" not in graph.nodes["<unresolved>:mystery"]
+
+    def test_complexities_attached_to_all_functions(
+        self, tmp_path: Path
+    ) -> None:
+        # Mixed-complexity functions in two modules. Each function
+        # node should have its complexity attribute set.
+        root = _make_project(
+            tmp_path,
+            {
+                "a.py": (
+                    "def simple():\n"
+                    "    pass\n"
+                    "\n"
+                    "def branchy(x):\n"
+                    "    if x and x > 0:\n"  # +1 if, +1 and
+                    "        return 1\n"
+                    "    return 0\n"
+                ),
+                "b.py": (
+                    "class Service:\n"
+                    "    def run(self, items):\n"
+                    "        for item in items:\n"  # +1
+                    "            self.process(item)\n"
+                    "    def process(self, x):\n"
+                    "        pass\n"
+                ),
+            },
+        )
+
+        graph, _ = build_call_graph(root)
+
+        assert graph.nodes["a.simple"]["complexity"] == 1
+        assert graph.nodes["a.branchy"]["complexity"] == 3
+        assert graph.nodes["b.Service.run"]["complexity"] == 2
+        assert graph.nodes["b.Service.process"]["complexity"] == 1

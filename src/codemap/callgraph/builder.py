@@ -18,6 +18,11 @@ resolver are checked against the full project-wide function index
 and downgraded to UNRESOLVED if the target does not exist as a real
 function in the project.
 
+Each function node also carries its McCabe cyclomatic complexity as
+a node attribute, computed by ``callgraph.complexity``. Exporters
+and hotspot analysis can read it directly from the graph without
+threading a separate dict through their call signatures.
+
 Files that fail to parse do not contribute nodes (no functions can
 be extracted). Their paths are returned separately so the CLI can
 surface them, mirroring Phase 3's parse-error tolerance.
@@ -30,6 +35,7 @@ from pathlib import Path
 import networkx as nx
 
 from codemap.ast_engine.parser import parse_file
+from codemap.callgraph.complexity import compute_complexities
 from codemap.callgraph.context import build_module_context
 from codemap.callgraph.extractor import extract_module
 from codemap.callgraph.models import (
@@ -51,7 +57,9 @@ def build_call_graph(
 
     Walks the project at ``root``, parses every ``.py`` file, extracts
     every function and call site, and assembles a directed graph of
-    function-to-function call relationships.
+    function-to-function call relationships. Also computes McCabe
+    cyclomatic complexity per function and attaches it as a node
+    attribute.
 
     Args:
         root: Project root directory. As with Phase 3's
@@ -64,13 +72,14 @@ def build_call_graph(
 
             - ``graph`` is an ``nx.DiGraph`` whose nodes are qualified
               names. Function nodes carry the attributes of a
-              ``FunctionNode`` plus ``kind="function"``. External and
-              unresolved nodes carry ``kind="external"`` or
-              ``kind="unresolved"`` respectively, and no other
-              attributes. Edges carry ``kind`` (the string value of
-              the ``CallEdgeKind``), ``call_count`` (number of call
-              sites collapsed into this edge), and ``first_line``
-              (line of the earliest collapsed call site).
+              ``FunctionNode`` plus ``kind="function"`` and
+              ``complexity`` (int). External and unresolved nodes
+              carry ``kind="external"`` or ``kind="unresolved"``
+              respectively, and no other attributes. Edges carry
+              ``kind`` (the string value of the ``CallEdgeKind``),
+              ``call_count`` (number of call sites collapsed into
+              this edge), and ``first_line`` (line of the earliest
+              collapsed call site).
 
             - ``parse_errors`` maps each failed file's path to the
               short error string for that file.
@@ -82,10 +91,10 @@ def build_call_graph(
     records = discover_modules(root)
     internal_modules = {record.dotted_path for record in records}
 
-    # First pass: parse every module and extract its functions and
-    # call sites. We do this in one pass so we can build the
-    # project-wide function index before any edges are emitted, which
-    # is required for cross-module validation in the second pass.
+    # First pass: parse every module and extract its functions, call
+    # sites, and complexity scores. We do this in one pass so we can
+    # build the project-wide function index before any edges are
+    # emitted, which is required for cross-module validation.
     parsed: dict[str, _ParsedModule] = {}
     parse_errors: dict[Path, str] = {}
 
@@ -107,7 +116,8 @@ def build_call_graph(
 
     for module in parsed.values():
         for func in module.functions:
-            _add_function_node(graph, func)
+            complexity = module.complexities.get(func.qualified_name, 1)
+            _add_function_node(graph, func, complexity)
 
     for module in parsed.values():
         for call_site in module.call_sites:
@@ -121,17 +131,19 @@ def build_call_graph(
 class _ParsedModule:
     """Internal: bundle of per-module outputs used during graph building."""
 
-    __slots__ = ("functions", "call_sites", "context")
+    __slots__ = ("functions", "call_sites", "context", "complexities")
 
     def __init__(
         self,
         functions: tuple[FunctionNode, ...],
         call_sites: tuple,  # type: ignore[type-arg]
         context,  # type: ignore[no-untyped-def]
+        complexities: dict[str, int],
     ) -> None:
         self.functions = functions
         self.call_sites = call_sites
         self.context = context
+        self.complexities = complexities
 
 
 class _ParseFailure:
@@ -150,9 +162,9 @@ def _parse_one_module(
     """Parse one module and run the call graph extraction over it.
 
     Returns either the parsed bundle (functions + call sites +
-    context) or a parse failure marker. Errors are caught at the
-    same boundary Phase 3 catches them: ``SyntaxError`` and
-    ``UnicodeDecodeError``.
+    context + complexities) or a parse failure marker. Errors are
+    caught at the same boundary Phase 3 catches them: ``SyntaxError``
+    and ``UnicodeDecodeError``.
     """
     is_package = record.file_path.name == "__init__.py"
 
@@ -173,14 +185,27 @@ def _parse_one_module(
         record.dotted_path,
     )
 
+    # Complexity is computed from the same file. We already know it
+    # parses (parse_file above succeeded), so this call cannot raise
+    # SyntaxError in practice; we still let it propagate if it does.
+    complexities = compute_complexities(
+        record.file_path,
+        record.dotted_path,
+    )
+
     return _ParsedModule(
         functions=functions,
         call_sites=call_sites,
         context=context,
+        complexities=complexities,
     )
 
 
-def _add_function_node(graph: nx.DiGraph, func: FunctionNode) -> None:
+def _add_function_node(
+    graph: nx.DiGraph,
+    func: FunctionNode,
+    complexity: int,
+) -> None:
     """Add a real function node to the graph with its attributes."""
     graph.add_node(
         func.qualified_name,
@@ -191,6 +216,7 @@ def _add_function_node(graph: nx.DiGraph, func: FunctionNode) -> None:
         is_method=func.is_method,
         is_async=func.is_async,
         kind="function",
+        complexity=complexity,
     )
 
 
