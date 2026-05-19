@@ -1,12 +1,12 @@
 """Tests for the call site resolver.
 
-Covers the two shapes resolve_call handles in step 3b:
+Covers the three shapes resolve_call handles:
 
     Bare name      foo
     Dotted chain   a.b.c
+    Self method    self.x
 
-Plus the <unknown> sentinel and the unresolved fallbacks. The
-self.x shape is tested separately in step 3c.
+Plus the <unknown> sentinel and the unresolved fallbacks.
 
 Tests construct ModuleContext instances directly (rather than via
 build_module_context) so each test sets up exactly the bindings it
@@ -23,21 +23,24 @@ from codemap.callgraph.resolver import (
 )
 
 
-def _site(callee_expression: str) -> CallSite:
+def _site(callee_expression: str, caller: str = "pkg.mod.caller") -> CallSite:
     """Build a CallSite for tests, defaulting caller and line."""
     return CallSite(
-        caller="pkg.mod.caller",
+        caller=caller,
         callee_expression=callee_expression,
         line=10,
     )
 
 
-def _ctx(**names: ResolvedName) -> ModuleContext:
+def _ctx(
+    classes: dict[str, tuple[str, ...]] | None = None,
+    **names: ResolvedName,
+) -> ModuleContext:
     """Build a ModuleContext with the given name bindings."""
     return ModuleContext(
         module="pkg.mod",
         names=dict(names),
-        classes={},
+        classes=classes or {},
     )
 
 
@@ -53,7 +56,6 @@ class TestBareNameResolution:
         assert edge.line == 10
 
     def test_internal_class_instantiation(self) -> None:
-        # Calling a class to instantiate it is a call to that class.
         ctx = _ctx(Widget=ResolvedName("pkg.mod.Widget", True))
 
         edge = resolve_call(_site("Widget"), ctx)
@@ -62,7 +64,6 @@ class TestBareNameResolution:
         assert edge.kind is CallEdgeKind.INTERNAL
 
     def test_external_name(self) -> None:
-        # from os import path; path(...)
         ctx = _ctx(path=ResolvedName("os.path", False))
 
         edge = resolve_call(_site("path"), ctx)
@@ -79,7 +80,6 @@ class TestBareNameResolution:
 
 class TestDottedChainResolution:
     def test_internal_module_attribute(self) -> None:
-        # from pkg import helpers; helpers.do_thing()
         ctx = _ctx(helpers=ResolvedName("pkg.helpers", True))
 
         edge = resolve_call(_site("helpers.do_thing"), ctx)
@@ -88,7 +88,6 @@ class TestDottedChainResolution:
         assert edge.kind is CallEdgeKind.INTERNAL
 
     def test_internal_deeper_chain(self) -> None:
-        # from pkg import helpers; helpers.sub.do_thing()
         ctx = _ctx(helpers=ResolvedName("pkg.helpers", True))
 
         edge = resolve_call(_site("helpers.sub.do_thing"), ctx)
@@ -97,7 +96,6 @@ class TestDottedChainResolution:
         assert edge.kind is CallEdgeKind.INTERNAL
 
     def test_external_dotted_chain(self) -> None:
-        # import os; os.path.join(a, b)
         ctx = _ctx(os=ResolvedName("os", False))
 
         edge = resolve_call(_site("os.path.join"), ctx)
@@ -106,7 +104,6 @@ class TestDottedChainResolution:
         assert edge.kind is CallEdgeKind.EXTERNAL
 
     def test_aliased_external_chain(self) -> None:
-        # import numpy as np; np.array(x)
         ctx = _ctx(np=ResolvedName("numpy", False))
 
         edge = resolve_call(_site("np.array"), ctx)
@@ -115,20 +112,101 @@ class TestDottedChainResolution:
         assert edge.kind is CallEdgeKind.EXTERNAL
 
     def test_dotted_head_not_in_context(self) -> None:
-        # zzz isn't anywhere we know about.
         edge = resolve_call(_site("zzz.something"), _ctx())
 
         assert edge.callee == f"{UNRESOLVED_PREFIX}zzz.something"
         assert edge.kind is CallEdgeKind.UNRESOLVED
 
     def test_aliased_from_import_dotted(self) -> None:
-        # from pkg.helpers import util as u; u.do_thing()
         ctx = _ctx(u=ResolvedName("pkg.helpers", True))
 
         edge = resolve_call(_site("u.do_thing"), ctx)
 
         assert edge.callee == "pkg.helpers.do_thing"
         assert edge.kind is CallEdgeKind.INTERNAL
+
+
+class TestSelfMethodResolution:
+    def test_self_method_hit(self) -> None:
+        # Caller is a method of Widget; Widget has 'helper'.
+        ctx = _ctx(classes={"Widget": ("render", "helper")})
+
+        edge = resolve_call(
+            _site("self.helper", caller="pkg.mod.Widget.render"),
+            ctx,
+        )
+
+        assert edge.caller == "pkg.mod.Widget.render"
+        assert edge.callee == "pkg.mod.Widget.helper"
+        assert edge.kind is CallEdgeKind.SELF
+        assert edge.line == 10
+
+    def test_self_method_class_has_no_such_method(self) -> None:
+        # Widget exists but has no 'missing' method.
+        ctx = _ctx(classes={"Widget": ("render",)})
+
+        edge = resolve_call(
+            _site("self.missing", caller="pkg.mod.Widget.render"),
+            ctx,
+        )
+
+        assert edge.kind is CallEdgeKind.UNRESOLVED
+        assert edge.callee == f"{UNRESOLVED_PREFIX}self.missing"
+
+    def test_self_method_caller_class_not_in_context(self) -> None:
+        # Caller's class isn't in the classes index at all.
+        ctx = _ctx(classes={})
+
+        edge = resolve_call(
+            _site("self.helper", caller="pkg.mod.Widget.render"),
+            ctx,
+        )
+
+        assert edge.kind is CallEdgeKind.UNRESOLVED
+
+    def test_self_method_from_module_level_function(self) -> None:
+        # 'self.x' written inside a module-level function (invalid
+        # Python in practice, but possible to construct). The caller
+        # has no class segment, so it cannot be resolved.
+        ctx = _ctx(classes={"Widget": ("helper",)})
+
+        edge = resolve_call(
+            _site("self.helper", caller="pkg.mod.top_level"),
+            ctx,
+        )
+
+        assert edge.kind is CallEdgeKind.UNRESOLVED
+
+    def test_self_deeper_chain_unresolved(self) -> None:
+        # self.helper.do_thing is calling something on what
+        # self.helper returned. We can't track that.
+        ctx = _ctx(classes={"Widget": ("helper",)})
+
+        edge = resolve_call(
+            _site(
+                "self.helper.do_thing",
+                caller="pkg.mod.Widget.render",
+            ),
+            ctx,
+        )
+
+        assert edge.kind is CallEdgeKind.UNRESOLVED
+        assert edge.callee == f"{UNRESOLVED_PREFIX}self.helper.do_thing"
+
+    def test_self_alone_is_unresolved(self) -> None:
+        # 'self' with no attribute would be 'self()', which is
+        # calling self as if it were callable. We can't reason
+        # about that.
+        ctx = _ctx(classes={"Widget": ("helper",)})
+
+        edge = resolve_call(
+            _site("self", caller="pkg.mod.Widget.render"),
+            ctx,
+        )
+
+        # 'self' has no dot, so it goes through the bare-name path,
+        # which sees no binding and returns UNRESOLVED.
+        assert edge.kind is CallEdgeKind.UNRESOLVED
 
 
 class TestUnknownCallee:
@@ -139,27 +217,11 @@ class TestUnknownCallee:
         assert edge.callee == f"{UNRESOLVED_PREFIX}<unknown>"
 
     def test_unknown_sentinel_with_bindings(self) -> None:
-        # Even if there are bindings, the sentinel is always unresolved.
         ctx = _ctx(foo=ResolvedName("pkg.mod.foo", True))
 
         edge = resolve_call(_site("<unknown>"), ctx)
 
         assert edge.kind is CallEdgeKind.UNRESOLVED
-
-
-class TestSelfFallsThroughToUnresolved:
-    """Step 3b does not resolve self.x; that arrives in 3c.
-
-    These tests pin down the current behaviour so step 3c's tests
-    show the change clearly when it lands.
-    """
-
-    def test_self_method_call_unresolved_in_step_3b(self) -> None:
-        # No 'self' binding in the names table, so it falls through.
-        edge = resolve_call(_site("self.helper"), _ctx())
-
-        assert edge.kind is CallEdgeKind.UNRESOLVED
-        assert edge.callee == f"{UNRESOLVED_PREFIX}self.helper"
 
 
 class TestEdgeProperties:

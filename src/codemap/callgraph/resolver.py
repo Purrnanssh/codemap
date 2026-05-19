@@ -6,14 +6,16 @@ function body) and the ``ModuleContext`` for the caller's module,
 it produces a ``CallEdge`` whose ``kind`` tells the rest of the
 pipeline how to interpret the target.
 
-This module handles two shapes of callee expression:
+This module handles three shapes of callee expression:
 
     Bare name      foo                  -> look up 'foo' in context
     Dotted chain   a.b.c                -> look up 'a', append '.b.c'
+    Self method    self.x               -> look up 'x' on caller's class
 
-The ``self.x`` shape is handled in a sibling layer (step 3c) which
-needs the project-wide class -> methods index. The sentinel
-``<unknown>`` from Phase 2's parser always becomes UNRESOLVED.
+The sentinel ``<unknown>`` from Phase 2's parser always becomes
+UNRESOLVED. Deeper self chains like ``self.helper.do_thing`` are
+also UNRESOLVED: resolving them would require tracking what
+``self.helper`` returns, which is out of scope for Phase 4.
 
 The resolver is intentionally optimistic about cross-module names:
 if ``util`` resolves to internal module ``pkg.helpers`` and the call
@@ -30,6 +32,7 @@ from codemap.callgraph.context import ModuleContext
 from codemap.callgraph.models import CallEdge, CallEdgeKind, CallSite
 
 UNRESOLVED_PREFIX = "<unresolved>:"
+SELF_PREFIX = "self."
 
 
 def resolve_call(
@@ -50,15 +53,15 @@ def resolve_call(
         resolved. EXTERNAL and UNRESOLVED edges carry synthetic
         callee names; INTERNAL and SELF edges name real project
         functions (subject to validation by the builder for INTERNAL).
-
-    Note:
-        ``self.x`` expressions are not handled here; they fall
-        through to UNRESOLVED. Add ``self.x`` resolution in step 3c.
     """
     expression = call_site.callee_expression
 
     if expression == UNKNOWN_CALLEE:
         return _unresolved_edge(call_site, expression)
+
+    # self.x: resolve against the caller's enclosing class.
+    if expression.startswith(SELF_PREFIX):
+        return _resolve_self_call(call_site, expression, context)
 
     # Bare name: a single identifier with no dots.
     if "." not in expression:
@@ -66,6 +69,67 @@ def resolve_call(
 
     # Dotted chain: at least one dot.
     return _resolve_dotted_chain(call_site, expression, context)
+
+
+def _resolve_self_call(
+    call_site: CallSite,
+    expression: str,
+    context: ModuleContext,
+) -> CallEdge:
+    """Resolve ``self.x`` against the caller's enclosing class.
+
+    Only ``self.<single_name>`` is resolved; deeper chains like
+    ``self.helper.do_thing`` are UNRESOLVED because we cannot track
+    what ``self.helper`` returns.
+
+    The caller's class is extracted from the caller's qualified name,
+    which for a method has the form ``module.Class.method``. If the
+    caller does not have that shape (e.g. ``self.x`` written inside a
+    module-level function, which is invalid Python but possible to
+    construct), the call falls through to UNRESOLVED.
+    """
+    after_self = expression[len(SELF_PREFIX):]
+
+    # Reject deeper chains.
+    if "." in after_self or not after_self:
+        return _unresolved_edge(call_site, expression)
+
+    class_name = _extract_class_name(call_site.caller, context.module)
+    if class_name is None:
+        return _unresolved_edge(call_site, expression)
+
+    method_names = context.classes.get(class_name)
+    if method_names is None or after_self not in method_names:
+        return _unresolved_edge(call_site, expression)
+
+    target_qname = f"{context.module}.{class_name}.{after_self}"
+    return CallEdge(
+        caller=call_site.caller,
+        callee=target_qname,
+        line=call_site.line,
+        kind=CallEdgeKind.SELF,
+    )
+
+
+def _extract_class_name(caller_qname: str, module: str) -> str | None:
+    """Extract the enclosing class name from a method's qualified name.
+
+    For a caller qualified name like ``module.Class.method``, returns
+    ``Class``. Returns None if the caller is not a method of any
+    class in this module (e.g. it is a module-level function with
+    qualified name ``module.func``, which has no class segment).
+    """
+    if not caller_qname.startswith(f"{module}."):
+        return None
+
+    remainder = caller_qname[len(module) + 1:]
+    parts = remainder.split(".")
+    if len(parts) < 2:
+        # Module-level function: just one segment after the module.
+        return None
+    # Method: at least two segments. The class is the second-to-last;
+    # for a method directly on a class, that is parts[0].
+    return parts[0]
 
 
 def _resolve_bare_name(
