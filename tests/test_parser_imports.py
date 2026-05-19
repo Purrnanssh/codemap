@@ -63,9 +63,27 @@ def test_extract_from_import_multiple_names() -> None:
 
 
 def test_extract_relative_import() -> None:
-    """`from . import x` is captured with an empty module string."""
+    """`from . import x` is captured with empty module and level=1."""
     result = extract_imports("from . import helpers")
-    assert result == (ImportInfo(module="", name="helpers", alias=None, line=1),)
+    assert result == (ImportInfo(module="", name="helpers", alias=None, line=1, level=1),)
+
+
+def test_extract_relative_import_with_module() -> None:
+    """`from .sibling import x` captures module='sibling' and level=1."""
+    result = extract_imports("from .sibling import foo")
+    assert result == (ImportInfo(module="sibling", name="foo", alias=None, line=1, level=1),)
+
+
+def test_extract_relative_import_with_double_dot() -> None:
+    """`from ..pkg import x` captures module='pkg' and level=2."""
+    result = extract_imports("from ..pkg import bar")
+    assert result == (ImportInfo(module="pkg", name="bar", alias=None, line=1, level=2),)
+
+
+def test_extract_absolute_import_has_level_zero() -> None:
+    """Absolute imports always have level=0."""
+    result = extract_imports("from pathlib import Path")
+    assert result == (ImportInfo(module="pathlib", name="Path", alias=None, line=1, level=0),)
 
 
 # ---------------------------------------------------------------------------

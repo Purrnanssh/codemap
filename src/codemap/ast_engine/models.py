@@ -18,16 +18,25 @@ class ImportInfo:
     """A single import statement found in a source file.
 
     Examples of source that produce this model:
-        import os                  -> module='os', name='os', alias=None
-        import os as operating_sys -> module='os', name='os', alias='operating_sys'
-        from pathlib import Path   -> module='pathlib', name='Path', alias=None
-        from x import y as z       -> module='x', name='y', alias='z'
+        import os                  -> module='os', name='os', alias=None, level=0
+        import os as operating_sys -> module='os', name='os', alias='operating_sys', level=0
+        from pathlib import Path   -> module='pathlib', name='Path', alias=None, level=0
+        from x import y as z       -> module='x', name='y', alias='z', level=0
+        from . import sibling      -> module='', name='sibling', alias=None, level=1
+        from .pkg import foo       -> module='pkg', name='foo', alias=None, level=1
+        from ..pkg import bar      -> module='pkg', name='bar', alias=None, level=2
+
+    The ``level`` field mirrors ``ast.ImportFrom.level``:
+        0 means absolute (``import x`` or ``from x import y``)
+        1 means a single-dot relative import (``from . import y``)
+        2 means two-dot (``from .. import y``), and so on.
     """
 
     module: str
     name: str
     alias: str | None
     line: int
+    level: int = 0
 
 
 @dataclass(frozen=True, slots=True)

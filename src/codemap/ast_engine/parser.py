@@ -95,6 +95,7 @@ def extract_imports(source: str) -> tuple[ImportInfo, ...]:
                 )
         elif isinstance(node, ast.ImportFrom):
             module_name = node.module or ""
+            level = node.level
             for alias in node.names:
                 imports.append(
                     ImportInfo(
@@ -102,6 +103,7 @@ def extract_imports(source: str) -> tuple[ImportInfo, ...]:
                         name=alias.name,
                         alias=alias.asname,
                         line=node.lineno,
+                        level=level,
                     )
                 )
 
