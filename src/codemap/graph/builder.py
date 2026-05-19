@@ -118,3 +118,28 @@ def _process_module(
         graph.add_edge(record.dotted_path, target)
 
     graph.nodes[record.dotted_path]["external_imports"] = external_count
+
+
+def find_cycles(graph: nx.DiGraph) -> list[list[str]]:
+    """Find all simple cycles in the dependency graph.
+
+    A simple cycle is a closed path that visits no node more than
+    once (except for the start node, which is also the end). In a
+    dependency graph, each cycle represents a set of modules that
+    form a circular import.
+
+    The result is deterministic: cycles are sorted by length, then
+    lexicographically by their member nodes, so the output is stable
+    across runs.
+
+    Args:
+        graph: A directed graph produced by ``build_graph``.
+
+    Returns:
+        A list of cycles. Each cycle is a list of node dotted paths
+        in traversal order. Returns an empty list if the graph is
+        acyclic.
+    """
+    cycles = [list(cycle) for cycle in nx.simple_cycles(graph)]
+    cycles.sort(key=lambda c: (len(c), c))
+    return cycles

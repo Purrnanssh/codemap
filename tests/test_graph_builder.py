@@ -7,7 +7,7 @@ from pathlib import Path
 import networkx as nx
 import pytest
 
-from codemap.graph.builder import build_graph
+from codemap.graph.builder import build_graph, find_cycles
 
 
 def _touch(path: Path, content: str = "") -> None:
@@ -239,3 +239,95 @@ def test_missing_root_raises(tmp_path: Path) -> None:
     """A nonexistent root propagates FileNotFoundError from discovery."""
     with pytest.raises(FileNotFoundError):
         build_graph(tmp_path / "does_not_exist")
+
+
+# ---------------------------------------------------------------------------
+# Cycle detection
+# ---------------------------------------------------------------------------
+
+
+def test_acyclic_graph_has_no_cycles(tmp_path: Path) -> None:
+    """A linear A -> B -> C dependency chain has no cycles."""
+    _touch(tmp_path / "pkg" / "__init__.py")
+    _touch(tmp_path / "pkg" / "a.py", "from pkg import b\n")
+    _touch(tmp_path / "pkg" / "b.py", "from pkg import c\n")
+    _touch(tmp_path / "pkg" / "c.py")
+
+    graph = build_graph(tmp_path)
+    assert find_cycles(graph) == []
+
+
+def test_two_module_cycle_detected(tmp_path: Path) -> None:
+    """A -> B -> A is found as a 2-cycle."""
+    _touch(tmp_path / "pkg" / "__init__.py")
+    _touch(tmp_path / "pkg" / "a.py", "from pkg import b\n")
+    _touch(tmp_path / "pkg" / "b.py", "from pkg import a\n")
+
+    graph = build_graph(tmp_path)
+    cycles = find_cycles(graph)
+    assert len(cycles) == 1
+    assert set(cycles[0]) == {"pkg.a", "pkg.b"}
+
+
+def test_three_module_cycle_detected(tmp_path: Path) -> None:
+    """A -> B -> C -> A is found as a 3-cycle."""
+    _touch(tmp_path / "pkg" / "__init__.py")
+    _touch(tmp_path / "pkg" / "a.py", "from pkg import b\n")
+    _touch(tmp_path / "pkg" / "b.py", "from pkg import c\n")
+    _touch(tmp_path / "pkg" / "c.py", "from pkg import a\n")
+
+    graph = build_graph(tmp_path)
+    cycles = find_cycles(graph)
+    assert len(cycles) == 1
+    assert set(cycles[0]) == {"pkg.a", "pkg.b", "pkg.c"}
+
+
+def test_multiple_disjoint_cycles(tmp_path: Path) -> None:
+    """Two unrelated cycles in the same project are both found."""
+    _touch(tmp_path / "pkg" / "__init__.py")
+    # Cycle 1: a <-> b
+    _touch(tmp_path / "pkg" / "a.py", "from pkg import b\n")
+    _touch(tmp_path / "pkg" / "b.py", "from pkg import a\n")
+    # Cycle 2: x <-> y
+    _touch(tmp_path / "pkg" / "x.py", "from pkg import y\n")
+    _touch(tmp_path / "pkg" / "y.py", "from pkg import x\n")
+
+    graph = build_graph(tmp_path)
+    cycles = find_cycles(graph)
+    assert len(cycles) == 2
+
+    cycle_sets = [set(c) for c in cycles]
+    assert {"pkg.a", "pkg.b"} in cycle_sets
+    assert {"pkg.x", "pkg.y"} in cycle_sets
+
+
+def test_cycles_are_sorted_deterministically(tmp_path: Path) -> None:
+    """Shorter cycles come before longer ones, ties broken lexicographically."""
+    _touch(tmp_path / "pkg" / "__init__.py")
+    # 3-cycle: a -> b -> c -> a
+    _touch(tmp_path / "pkg" / "a.py", "from pkg import b\n")
+    _touch(tmp_path / "pkg" / "b.py", "from pkg import c\n")
+    _touch(tmp_path / "pkg" / "c.py", "from pkg import a\n")
+    # 2-cycle: x -> y -> x
+    _touch(tmp_path / "pkg" / "x.py", "from pkg import y\n")
+    _touch(tmp_path / "pkg" / "y.py", "from pkg import x\n")
+
+    graph = build_graph(tmp_path)
+    cycles = find_cycles(graph)
+    assert len(cycles) == 2
+    # The 2-cycle should come first (shorter).
+    assert len(cycles[0]) == 2
+    assert len(cycles[1]) == 3
+
+
+def test_empty_graph_has_no_cycles() -> None:
+    """An empty graph trivially has no cycles."""
+    graph = nx.DiGraph()
+    assert find_cycles(graph) == []
+
+
+def test_single_node_has_no_cycles(tmp_path: Path) -> None:
+    """A graph with one node and no edges has no cycles."""
+    _touch(tmp_path / "lone.py")
+    graph = build_graph(tmp_path)
+    assert find_cycles(graph) == []
