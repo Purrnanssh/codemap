@@ -24,6 +24,8 @@ When you join a new codebase, or come back to your own after six months, the har
 
 ## Quick example
 
+### Analyze a single file
+
 After installation:
 
 ```bash
@@ -48,6 +50,37 @@ You get a Rich-formatted breakdown of every import, top-level function, class (w
 │  main       ()       line 72 │
 ╰──────────────────────────────╯
 
+### Scan a whole project
+
+Phase 3 adds project-wide dependency analysis:
+
+```bash
+codemap scan src/
+```
+
+You get a digest of your codebase's wiring: total modules, internal vs external imports, the most-imported modules (your foundation layer), any circular dependencies, and any files that failed to parse. Exit codes are CI-friendly: `0` clean, `1` scan failed, `2` cycles detected.
+
+Sample output (CodeMap scanning itself):
+╭ 🕸️  CodeMap Dependency Graph ╮
+│ src                          │
+╰──────────────────────────────╯
+╭──────── Stats ───────────────╮
+│  Modules               11    │
+│  Internal edges        11    │
+│  External imports      26    │
+│  Cycles                 0    │
+│  Parse errors           0    │
+╰──────────────────────────────╯
+╭──── Top imported ────────────────╮
+│  1  codemap.ast_engine.models  3 │
+│  2  codemap.ast_engine.parser  2 │
+│  3  codemap.version            2 │
+│  4  codemap.graph.builder      1 │
+│  ...                             │
+╰──────────────────────────────────╯
+
+**Tip on the path argument.** Point `codemap scan` at the directory that contains your top-level packages. For a `src/` layout, that's `src/`. For a flat layout (with `mypkg/` at the repo root), that's the repo root. Dotted paths in the output are computed relative to this directory and must match the import strings in your code for resolution to work.
+
 ## Status
 
 🚧 **In active development.**
@@ -68,12 +101,17 @@ You get a Rich-formatted breakdown of every import, top-level function, class (w
 - [x] `codemap analyze <path>` CLI command with Rich output
 - [x] 85 tests passing across the engine and CLI
 
-**Phase 3, Dependency graph** 🔜
-- [ ] Multi-file project analysis
-- [ ] Module-level dependency graph
-- [ ] Circular dependency detection
+**Phase 3, Dependency graph** ✅
+- [x] Project-wide module discovery (skips venvs, caches, VCS metadata)
+- [x] Import resolver (absolute, relative, submodule vs name disambiguation)
+- [x] networkx-backed `nx.DiGraph` of module dependencies
+- [x] Deterministic circular dependency detection (Johnson's algorithm via networkx)
+- [x] Parse-error tolerance: broken files don't abort the scan
+- [x] `codemap scan <directory>` CLI with CI-friendly exit codes
+- [x] 167 tests passing across the engine, graph, rendering, and CLI
 
-**Phase 4, Complexity and visualization** 🔜
+**Phase 4, Call graph & visualization** 🔜
+- [ ] Symbol-level call graph (which function calls which)
 - [ ] Cyclomatic complexity per function
 - [ ] Hotspot detection
 - [ ] Graph export (DOT, JSON, HTML)
@@ -82,8 +120,9 @@ You get a Rich-formatted breakdown of every import, top-level function, class (w
 
 - **Python 3.11+**
 - **`ast`** (Python standard library) for parsing
+- **`networkx`** for the dependency graph and cycle detection
 - **Typer + Rich** for the CLI and pretty terminal output
-- **pytest + ruff** for testing and linting
+- **pytest + ruff + mypy** for testing, linting, and type checking
 
 ## Local setup
 
@@ -103,5 +142,3 @@ MIT, see [LICENSE](LICENSE).
 ---
 
 *Built by [Purrnanssh Sinha](https://github.com/Purrnanssh).*
-
-
