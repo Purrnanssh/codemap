@@ -282,3 +282,202 @@ def _parse_errors_panel(graph: nx.DiGraph) -> Panel:
         table.add_row(name, err)
 
     return Panel(table, title=f"Parse errors ({len(rows)})", border_style="yellow")
+
+
+# ===========================================================================
+# Phase 4: Call graph summary rendering
+# ===========================================================================
+
+
+def render_callgraph_summary(
+    graph: nx.DiGraph,
+    parse_errors: dict[Path, str],
+    root: Path,
+    hotspots_limit: int = 10,
+    min_complexity: int = 1,
+) -> Group:
+    """Render a call-graph summary as a Rich Group of panels.
+
+    The Group contains, in order:
+        - A header panel naming the scanned root
+        - A stats panel (function/external/unresolved counts, edge
+          kind breakdown)
+        - A top-hotspots panel (functions ranked by complexity *
+          fan-in, filtered by ``min_complexity``)
+        - A top-unresolved panel (most-frequent unresolved targets,
+          shown only if there are unresolved edges)
+        - A parse-errors panel (only if errors exist)
+
+    Args:
+        graph: The call graph produced by ``build_call_graph``.
+        parse_errors: The parse-error mapping returned alongside the
+            graph.
+        root: The scanned project root (for display only).
+        hotspots_limit: Maximum hotspot entries to show in the table.
+        min_complexity: Hide functions below this complexity from
+            the hotspot table. Does not affect the underlying graph.
+
+    Returns:
+        A Rich Group that can be printed to a Console.
+    """
+    from codemap.callgraph.hotspots import compute_hotspots
+
+    panels: list[Panel] = [
+        _callgraph_header_panel(root),
+        _callgraph_stats_panel(graph),
+    ]
+
+    hotspots = [
+        entry
+        for entry in compute_hotspots(graph)
+        if entry.complexity >= min_complexity
+    ]
+    panels.append(
+        _hotspots_panel(hotspots, hotspots_limit, min_complexity)
+    )
+
+    unresolved_summary = _summarize_unresolved(graph)
+    if unresolved_summary:
+        panels.append(_unresolved_panel(unresolved_summary))
+
+    if parse_errors:
+        panels.append(_callgraph_parse_errors_panel(parse_errors))
+
+    return Group(*panels)
+
+
+def _callgraph_header_panel(root: Path) -> Panel:
+    """Build the top header panel naming the scanned project."""
+    title = Text("📞 CodeMap Call Graph", style="bold cyan")
+    subtitle = Text(str(root), style="dim")
+    return Panel(
+        Group(title, subtitle),
+        border_style="cyan",
+    )
+
+
+def _callgraph_stats_panel(graph: nx.DiGraph) -> Panel:
+    """Build a panel showing top-level counts for the call graph."""
+    function_count = 0
+    external_count = 0
+    unresolved_count = 0
+    for _, attrs in graph.nodes(data=True):
+        kind = attrs.get("kind")
+        if kind == "function":
+            function_count += 1
+        elif kind == "external":
+            external_count += 1
+        elif kind == "unresolved":
+            unresolved_count += 1
+
+    edge_kinds = {"internal": 0, "self": 0, "external": 0, "unresolved": 0}
+    for _, _, attrs in graph.edges(data=True):
+        kind = attrs.get("kind", "internal")
+        if kind in edge_kinds:
+            edge_kinds[kind] += 1
+
+    table = Table(show_header=False, expand=True, box=None)
+    table.add_column("Metric", style="bold")
+    table.add_column("Value", justify="right")
+
+    table.add_row("Functions", str(function_count))
+    table.add_row("External targets", str(external_count))
+    table.add_row("Unresolved targets", str(unresolved_count))
+    table.add_row("Internal edges", str(edge_kinds["internal"]))
+    table.add_row("Self edges", str(edge_kinds["self"]))
+    table.add_row("External edges", str(edge_kinds["external"]))
+    table.add_row("Unresolved edges", str(edge_kinds["unresolved"]))
+
+    return Panel(table, title="Stats", border_style="magenta")
+
+
+def _hotspots_panel(
+    hotspots: list,  # type: ignore[type-arg]
+    limit: int,
+    min_complexity: int,
+) -> Panel:
+    """Build a panel showing the top hotspots by score."""
+    if not hotspots:
+        return _empty_panel(
+            f"Hotspots (min complexity {min_complexity})"
+        )
+
+    table = Table(show_header=True, header_style="bold green", expand=True)
+    table.add_column("Rank", justify="right")
+    table.add_column("Function")
+    table.add_column("Complexity", justify="right")
+    table.add_column("Fan-in", justify="right")
+    table.add_column("Fan-out", justify="right")
+    table.add_column("Score", justify="right")
+
+    for i, entry in enumerate(hotspots[:limit], start=1):
+        table.add_row(
+            str(i),
+            entry.qualified_name,
+            str(entry.complexity),
+            str(entry.fan_in),
+            str(entry.fan_out),
+            str(entry.score),
+        )
+
+    title = (
+        f"Hotspots (top {limit}, min complexity {min_complexity})"
+    )
+    return Panel(table, title=title, border_style="green")
+
+
+def _summarize_unresolved(
+    graph: nx.DiGraph, limit: int = 10
+) -> list[tuple[str, int]]:
+    """Return the most-frequent unresolved targets with edge counts."""
+    counts: dict[str, int] = {}
+    for _, target, attrs in graph.edges(data=True):
+        if attrs.get("kind") == "unresolved":
+            counts[target] = counts.get(target, 0) + 1
+
+    ranked = sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))
+    return ranked[:limit]
+
+
+def _unresolved_panel(summary: list[tuple[str, int]]) -> Panel:
+    """Build a panel listing the most-frequent unresolved targets."""
+    table = Table(show_header=True, header_style="bold yellow", expand=True)
+    table.add_column("Rank", justify="right")
+    table.add_column("Expression")
+    table.add_column("Edges", justify="right")
+
+    for i, (target, count) in enumerate(summary, start=1):
+        # Strip the synthetic prefix for display so the user sees the
+        # bare expression.
+        display = (
+            target[len("<unresolved>:"):]
+            if target.startswith("<unresolved>:")
+            else target
+        )
+        table.add_row(str(i), display, str(count))
+
+    return Panel(
+        table,
+        title=f"Top unresolved ({len(summary)})",
+        border_style="yellow",
+    )
+
+
+def _callgraph_parse_errors_panel(
+    parse_errors: dict[Path, str],
+) -> Panel:
+    """Build a panel listing files that failed to parse."""
+    rows = sorted(parse_errors.items(), key=lambda kv: str(kv[0]))
+
+    table = Table(show_header=True, header_style="bold red", expand=True)
+    table.add_column("File")
+    table.add_column("Error")
+
+    for path, err in rows:
+        table.add_row(str(path), err)
+
+    return Panel(
+        table,
+        title=f"Parse errors ({len(rows)})",
+        border_style="red",
+    )
