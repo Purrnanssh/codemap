@@ -50,6 +50,8 @@ _COMPLEXITY_PALETTE = (
     "#9b1e1e",  # 11+: saturated dark red
 )
 
+_SYNTHETIC_KINDS = frozenset({"external", "unresolved"})
+
 
 def to_json(
     graph: nx.DiGraph,
@@ -91,38 +93,17 @@ def to_json(
     """
     filtered = _filter_graph(graph, min_complexity)
 
-    nodes_payload: list[dict] = []
-    for node_id, attrs in sorted(filtered.nodes(data=True)):
-        node_obj: dict = {"id": node_id, "kind": attrs.get("kind", "function")}
-        if attrs.get("kind") == "function":
-            for key in (
-                "module",
-                "class_name",
-                "name",
-                "line",
-                "is_method",
-                "is_async",
-                "complexity",
-            ):
-                if key in attrs:
-                    node_obj[key] = attrs[key]
-        nodes_payload.append(node_obj)
-
-    edges_payload: list[dict] = []
-    for source, target, attrs in sorted(
-        filtered.edges(data=True),
-        key=lambda e: (e[0], e[1]),
-    ):
-        edge_obj: dict = {
-            "source": source,
-            "target": target,
-            "kind": attrs.get("kind", "internal"),
-        }
-        if "call_count" in attrs:
-            edge_obj["call_count"] = attrs["call_count"]
-        if "first_line" in attrs:
-            edge_obj["first_line"] = attrs["first_line"]
-        edges_payload.append(edge_obj)
+    nodes_payload = [
+        _json_node(node_id, attrs)
+        for node_id, attrs in sorted(filtered.nodes(data=True))
+    ]
+    edges_payload = [
+        _json_edge(source, target, attrs)
+        for source, target, attrs in sorted(
+            filtered.edges(data=True),
+            key=lambda e: (e[0], e[1]),
+        )
+    ]
 
     document = {"nodes": nodes_payload, "edges": edges_payload}
 
@@ -163,7 +144,7 @@ def to_dot(
 
     lines: list[str] = []
     lines.append("digraph CodeMap {")
-    lines.append('  rankdir=LR;')
+    lines.append("  rankdir=LR;")
     lines.append('  node [fontname="Helvetica", fontsize=10];')
     lines.append('  edge [fontname="Helvetica", fontsize=9];')
     lines.append("")
@@ -184,110 +165,188 @@ def to_dot(
     return "\n".join(lines) + "\n"
 
 
+# ---------------------------------------------------------------------------
+# Filtering
+# ---------------------------------------------------------------------------
+
+
 def _filter_graph(
     graph: nx.DiGraph,
     min_complexity: int,
 ) -> nx.DiGraph:
-    """Return a new graph with nodes filtered by complexity.
+    """Return a graph filtered by minimum complexity.
 
     Function nodes whose complexity is below ``min_complexity`` are
-    dropped. Edges touching dropped nodes are dropped. Synthetic
-    nodes (external, unresolved) that no longer have any edges
-    after the filter are dropped too, to avoid orphan nodes
-    cluttering the output.
+    dropped. Edges touching dropped nodes vanish with them. Synthetic
+    nodes (external, unresolved) that lose all their edges after the
+    filter are dropped too, so the output is not littered with orphan
+    targets.
 
-    If ``min_complexity`` is 0 the original graph is returned
-    unchanged (no copy).
+    If ``min_complexity`` is 0 or negative the original graph is
+    returned unchanged (no copy).
     """
     if min_complexity <= 0:
         return graph
 
-    # First pass: which function nodes survive?
-    keep: set[str] = set()
+    kept = _select_kept_nodes(graph, min_complexity)
+    subgraph = graph.subgraph(kept).copy()
+    _drop_orphan_synthetic_nodes(subgraph)
+    return subgraph
+
+
+def _select_kept_nodes(
+    graph: nx.DiGraph,
+    min_complexity: int,
+) -> set[str]:
+    """Return the set of node ids that survive the complexity filter.
+
+    Function nodes survive only when their complexity meets the
+    threshold. Synthetic nodes (external, unresolved) survive the
+    first pass unconditionally; pruning their orphans is the second
+    pass's responsibility.
+    """
+    kept: set[str] = set()
     for node, attrs in graph.nodes(data=True):
         if attrs.get("kind") != "function":
-            # Synthetic nodes survive provisionally; we'll prune
-            # orphans after edge filtering.
-            keep.add(node)
+            kept.add(node)
             continue
         if attrs.get("complexity", 1) >= min_complexity:
-            keep.add(node)
+            kept.add(node)
+    return kept
 
-    subgraph = graph.subgraph(keep).copy()
 
-    # Second pass: drop synthetic nodes that have no edges in the
-    # filtered subgraph (their only connections were to dropped
-    # function nodes).
-    orphan_synthetic: list[str] = []
-    for node, attrs in subgraph.nodes(data=True):
-        if attrs.get("kind") in {"external", "unresolved"}:
-            if subgraph.degree(node) == 0:
-                orphan_synthetic.append(node)
-    subgraph.remove_nodes_from(orphan_synthetic)
+def _drop_orphan_synthetic_nodes(subgraph: nx.DiGraph) -> None:
+    """Mutate ``subgraph`` in place to remove synthetic nodes with no edges.
 
-    return subgraph
+    Synthetic nodes only earn their place in the graph by being the
+    target of some function's call. Once filtering has removed every
+    function that referenced them, they no longer carry meaning and
+    would just clutter the output.
+    """
+    orphans = [
+        node
+        for node, attrs in subgraph.nodes(data=True)
+        if attrs.get("kind") in _SYNTHETIC_KINDS
+        and subgraph.degree(node) == 0
+    ]
+    subgraph.remove_nodes_from(orphans)
+
+
+# ---------------------------------------------------------------------------
+# JSON serialization
+# ---------------------------------------------------------------------------
+
+
+_JSON_FUNCTION_ATTRS = (
+    "module",
+    "class_name",
+    "name",
+    "line",
+    "is_method",
+    "is_async",
+    "complexity",
+)
+
+
+def _json_node(node_id: str, attrs: dict) -> dict:
+    """Build the JSON payload for one node."""
+    payload: dict = {
+        "id": node_id,
+        "kind": attrs.get("kind", "function"),
+    }
+    if attrs.get("kind") == "function":
+        for key in _JSON_FUNCTION_ATTRS:
+            if key in attrs:
+                payload[key] = attrs[key]
+    return payload
+
+
+def _json_edge(source: str, target: str, attrs: dict) -> dict:
+    """Build the JSON payload for one edge."""
+    payload: dict = {
+        "source": source,
+        "target": target,
+        "kind": attrs.get("kind", "internal"),
+    }
+    if "call_count" in attrs:
+        payload["call_count"] = attrs["call_count"]
+    if "first_line" in attrs:
+        payload["first_line"] = attrs["first_line"]
+    return payload
+
+
+# ---------------------------------------------------------------------------
+# DOT serialization
+# ---------------------------------------------------------------------------
 
 
 def _dot_node_line(node_id: str, attrs: dict) -> str:
     """Format one node as a DOT statement."""
     kind = attrs.get("kind", "function")
-    label = _dot_label(node_id, kind)
 
     if kind == "function":
-        complexity = attrs.get("complexity", 1)
-        color = _complexity_color(complexity)
-        is_method = attrs.get("is_method", False)
-        is_async = attrs.get("is_async", False)
-
-        attr_parts = [
-            f'label="{label}"',
-            "shape=box",
-            "style=filled",
-            f'fillcolor="{color}"',
-        ]
-        if is_async:
-            attr_parts.append("peripheries=2")
-        elif is_method:
-            attr_parts.append("penwidth=2")
-        return f'  "{node_id}" [{", ".join(attr_parts)}];'
-
+        return _dot_function_node(node_id, attrs)
     if kind == "external":
-        attr_parts = [
-            f'label="{label}"',
-            "shape=ellipse",
-            "style=dashed",
-            'color="#666666"',
-            'fontcolor="#666666"',
-        ]
-        return f'  "{node_id}" [{", ".join(attr_parts)}];'
-
+        return _dot_synthetic_node(
+            node_id, kind, style="dashed", color="#666666"
+        )
     if kind == "unresolved":
-        attr_parts = [
-            f'label="{label}"',
-            "shape=ellipse",
-            "style=dotted",
-            'color="#888888"',
-            'fontcolor="#888888"',
-        ]
-        return f'  "{node_id}" [{", ".join(attr_parts)}];'
-
+        return _dot_synthetic_node(
+            node_id, kind, style="dotted", color="#888888"
+        )
     # Unknown kind: bare node.
     return f'  "{node_id}";'
+
+
+def _dot_function_node(node_id: str, attrs: dict) -> str:
+    """Format a function node with complexity-driven color and decorations."""
+    label = _dot_label(node_id, "function")
+    complexity = attrs.get("complexity", 1)
+    color = _complexity_color(complexity)
+
+    parts = [
+        f'label="{label}"',
+        "shape=box",
+        "style=filled",
+        f'fillcolor="{color}"',
+    ]
+    if attrs.get("is_async"):
+        parts.append("peripheries=2")
+    elif attrs.get("is_method"):
+        parts.append("penwidth=2")
+    return f'  "{node_id}" [{", ".join(parts)}];'
+
+
+def _dot_synthetic_node(
+    node_id: str,
+    kind: str,
+    style: str,
+    color: str,
+) -> str:
+    """Format an external or unresolved node with dashed/dotted styling."""
+    label = _dot_label(node_id, kind)
+    parts = [
+        f'label="{label}"',
+        "shape=ellipse",
+        f"style={style}",
+        f'color="{color}"',
+        f'fontcolor="{color}"',
+    ]
+    return f'  "{node_id}" [{", ".join(parts)}];'
+
+
+_EDGE_STYLE_BY_KIND = {
+    "self": 'style=solid, color="#4682b4"',
+    "external": 'style=dashed, color="#999999"',
+    "unresolved": 'style=dotted, color="#999999"',
+}
+_INTERNAL_EDGE_STYLE = 'style=solid, color="black"'
 
 
 def _dot_edge_line(source: str, target: str, attrs: dict) -> str:
     """Format one edge as a DOT statement."""
     kind = attrs.get("kind", "internal")
-
-    if kind == "self":
-        style = 'style=solid, color="#4682b4"'
-    elif kind == "external":
-        style = 'style=dashed, color="#999999"'
-    elif kind == "unresolved":
-        style = 'style=dotted, color="#999999"'
-    else:
-        style = 'style=solid, color="black"'
-
+    style = _EDGE_STYLE_BY_KIND.get(kind, _INTERNAL_EDGE_STYLE)
     return f'  "{source}" -> "{target}" [{style}];'
 
 
@@ -307,7 +366,6 @@ def _dot_label(node_id: str, kind: str) -> str:
     else:
         label = node_id
 
-    # Escape DOT-significant characters.
     label = label.replace("\\", "\\\\").replace('"', '\\"')
     return label
 
