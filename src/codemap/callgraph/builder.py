@@ -36,11 +36,12 @@ import networkx as nx
 
 from codemap.ast_engine.parser import parse_file
 from codemap.callgraph.complexity import compute_complexities
-from codemap.callgraph.context import build_module_context
+from codemap.callgraph.context import ModuleContext, build_module_context
 from codemap.callgraph.extractor import extract_module
 from codemap.callgraph.models import (
     CallEdge,
     CallEdgeKind,
+    CallSite,
     FunctionNode,
 )
 from codemap.callgraph.resolver import (
@@ -136,8 +137,8 @@ class _ParsedModule:
     def __init__(
         self,
         functions: tuple[FunctionNode, ...],
-        call_sites: tuple,  # type: ignore[type-arg]
-        context,  # type: ignore[no-untyped-def]
+        call_sites: tuple[CallSite, ...],
+        context: ModuleContext,
         complexities: dict[str, int],
     ) -> None:
         self.functions = functions

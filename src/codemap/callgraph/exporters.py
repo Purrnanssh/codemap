@@ -27,6 +27,7 @@ the caller's responsibility (this is the CLI's job in step 8).
 from __future__ import annotations
 
 import json
+from typing import Any
 
 import networkx as nx
 
@@ -246,9 +247,9 @@ _JSON_FUNCTION_ATTRS = (
 )
 
 
-def _json_node(node_id: str, attrs: dict) -> dict:
+def _json_node(node_id: str, attrs: dict[str, Any]) -> dict[str, Any]:
     """Build the JSON payload for one node."""
-    payload: dict = {
+    payload: dict[str, Any] = {
         "id": node_id,
         "kind": attrs.get("kind", "function"),
     }
@@ -259,9 +260,9 @@ def _json_node(node_id: str, attrs: dict) -> dict:
     return payload
 
 
-def _json_edge(source: str, target: str, attrs: dict) -> dict:
+def _json_edge(source: str, target: str, attrs: dict[str, Any]) -> dict[str, Any]:
     """Build the JSON payload for one edge."""
-    payload: dict = {
+    payload: dict[str, Any] = {
         "source": source,
         "target": target,
         "kind": attrs.get("kind", "internal"),
@@ -278,7 +279,7 @@ def _json_edge(source: str, target: str, attrs: dict) -> dict:
 # ---------------------------------------------------------------------------
 
 
-def _dot_node_line(node_id: str, attrs: dict) -> str:
+def _dot_node_line(node_id: str, attrs: dict[str, Any]) -> str:
     """Format one node as a DOT statement."""
     kind = attrs.get("kind", "function")
 
@@ -292,7 +293,7 @@ def _dot_node_line(node_id: str, attrs: dict) -> str:
     return f'  "{node_id}";'
 
 
-def _dot_function_node(node_id: str, attrs: dict) -> str:
+def _dot_function_node(node_id: str, attrs: dict[str, Any]) -> str:
     """Format a function node with complexity-driven color and decorations."""
     label = _dot_label(node_id, "function")
     complexity = attrs.get("complexity", 1)
@@ -337,7 +338,7 @@ _EDGE_STYLE_BY_KIND = {
 _INTERNAL_EDGE_STYLE = 'style=solid, color="black"'
 
 
-def _dot_edge_line(source: str, target: str, attrs: dict) -> str:
+def _dot_edge_line(source: str, target: str, attrs: dict[str, Any]) -> str:
     """Format one edge as a DOT statement."""
     kind = attrs.get("kind", "internal")
     style = _EDGE_STYLE_BY_KIND.get(kind, _INTERNAL_EDGE_STYLE)
