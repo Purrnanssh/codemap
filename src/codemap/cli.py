@@ -196,28 +196,21 @@ def callgraph(
     Files that fail to parse are reported but do not stop the scan.
     """
     if format is not None and output is None:
-        console.print(
-            "[bold red]Error:[/bold red] --format requires --output."
-        )
+        console.print("[bold red]Error:[/bold red] --format requires --output.")
         raise typer.Exit(code=1)
     if output is not None and format is None:
-        console.print(
-            "[bold red]Error:[/bold red] --output requires --format."
-        )
+        console.print("[bold red]Error:[/bold red] --output requires --format.")
         raise typer.Exit(code=1)
     if format is not None and format not in {"dot", "json"}:
         console.print(
-            f"[bold red]Error:[/bold red] unknown --format '{format}'. "
-            f"Choices: dot, json."
+            f"[bold red]Error:[/bold red] unknown --format '{format}'. Choices: dot, json."
         )
         raise typer.Exit(code=1)
 
     try:
         graph, parse_errors = build_call_graph(directory)
     except (FileNotFoundError, NotADirectoryError) as exc:
-        console.print(
-            f"[bold red]Cannot scan {directory}:[/bold red] {exc}"
-        )
+        console.print(f"[bold red]Cannot scan {directory}:[/bold red] {exc}")
         raise typer.Exit(code=1) from exc
 
     console.print(
@@ -236,9 +229,7 @@ def callgraph(
         else:
             payload = to_dot(graph, min_complexity=min_complexity)
         output.write_text(payload, encoding="utf-8")
-        console.print(
-            f"[dim]Wrote {format.upper()} export to {output}[/dim]"
-        )
+        console.print(f"[dim]Wrote {format.upper()} export to {output}[/dim]")
 
     if parse_errors:
         raise typer.Exit(code=2)

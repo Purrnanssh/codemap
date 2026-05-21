@@ -327,14 +327,8 @@ def render_callgraph_summary(
         _callgraph_stats_panel(graph),
     ]
 
-    hotspots = [
-        entry
-        for entry in compute_hotspots(graph)
-        if entry.complexity >= min_complexity
-    ]
-    panels.append(
-        _hotspots_panel(hotspots, hotspots_limit, min_complexity)
-    )
+    hotspots = [entry for entry in compute_hotspots(graph) if entry.complexity >= min_complexity]
+    panels.append(_hotspots_panel(hotspots, hotspots_limit, min_complexity))
 
     unresolved_summary = _summarize_unresolved(graph)
     if unresolved_summary:
@@ -398,9 +392,7 @@ def _hotspots_panel(
 ) -> Panel:
     """Build a panel showing the top hotspots by score."""
     if not hotspots:
-        return _empty_panel(
-            f"Hotspots (min complexity {min_complexity})"
-        )
+        return _empty_panel(f"Hotspots (min complexity {min_complexity})")
 
     table = Table(show_header=True, header_style="bold green", expand=True)
     table.add_column("Rank", justify="right")
@@ -420,15 +412,11 @@ def _hotspots_panel(
             str(entry.score),
         )
 
-    title = (
-        f"Hotspots (top {limit}, min complexity {min_complexity})"
-    )
+    title = f"Hotspots (top {limit}, min complexity {min_complexity})"
     return Panel(table, title=title, border_style="green")
 
 
-def _summarize_unresolved(
-    graph: nx.DiGraph, limit: int = 10
-) -> list[tuple[str, int]]:
+def _summarize_unresolved(graph: nx.DiGraph, limit: int = 10) -> list[tuple[str, int]]:
     """Return the most-frequent unresolved targets with edge counts."""
     counts: dict[str, int] = {}
     for _, target, attrs in graph.edges(data=True):
@@ -449,11 +437,7 @@ def _unresolved_panel(summary: list[tuple[str, int]]) -> Panel:
     for i, (target, count) in enumerate(summary, start=1):
         # Strip the synthetic prefix for display so the user sees the
         # bare expression.
-        display = (
-            target[len("<unresolved>:"):]
-            if target.startswith("<unresolved>:")
-            else target
-        )
+        display = target[len("<unresolved>:") :] if target.startswith("<unresolved>:") else target
         table.add_row(str(i), display, str(count))
 
     return Panel(

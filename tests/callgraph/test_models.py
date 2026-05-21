@@ -274,15 +274,10 @@ class TestBuildQualifiedName:
         )
 
     def test_explicit_none_class_name(self) -> None:
-        assert (
-            build_qualified_name("pkg.mod", "foo", class_name=None)
-            == "pkg.mod.foo"
-        )
+        assert build_qualified_name("pkg.mod", "foo", class_name=None) == "pkg.mod.foo"
 
     def test_nested_module_path(self) -> None:
-        assert (
-            build_qualified_name("a.b.c.d", "func") == "a.b.c.d.func"
-        )
+        assert build_qualified_name("a.b.c.d", "func") == "a.b.c.d.func"
 
     def test_single_segment_module(self) -> None:
         assert build_qualified_name("mod", "foo") == "mod.foo"

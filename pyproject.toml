@@ -68,6 +68,7 @@ packages = ["src/codemap"]
 target-version = "py311"
 line-length = 100
 src = ["src", "tests"]
+extend-exclude = ["tests/fixtures"]
 
 [tool.ruff.lint]
 select = [

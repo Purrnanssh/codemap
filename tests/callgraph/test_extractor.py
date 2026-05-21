@@ -51,11 +51,7 @@ class TestFunctionNodeExtraction:
         assert functions[0].is_method is False
 
     def test_method_extraction(self, tmp_path: Path) -> None:
-        source = (
-            "class Widget:\n"
-            "    def render(self):\n"
-            "        pass\n"
-        )
+        source = "class Widget:\n    def render(self):\n        pass\n"
         file = _write(tmp_path, source)
 
         functions, _ = extract_module(file, "pkg.mod")
@@ -68,11 +64,7 @@ class TestFunctionNodeExtraction:
         assert method.is_method is True
 
     def test_async_method(self, tmp_path: Path) -> None:
-        source = (
-            "class Client:\n"
-            "    async def fetch(self):\n"
-            "        pass\n"
-        )
+        source = "class Client:\n    async def fetch(self):\n        pass\n"
         file = _write(tmp_path, source)
 
         functions, _ = extract_module(file, "pkg.mod")
@@ -82,11 +74,7 @@ class TestFunctionNodeExtraction:
         assert functions[0].is_async is True
 
     def test_multiple_top_level_functions(self, tmp_path: Path) -> None:
-        source = (
-            "def a():\n    pass\n"
-            "def b():\n    pass\n"
-            "def c():\n    pass\n"
-        )
+        source = "def a():\n    pass\ndef b():\n    pass\ndef c():\n    pass\n"
         file = _write(tmp_path, source)
 
         functions, _ = extract_module(file, "pkg.mod")
@@ -96,9 +84,7 @@ class TestFunctionNodeExtraction:
 
     def test_class_with_multiple_methods(self, tmp_path: Path) -> None:
         source = (
-            "class Widget:\n"
-            "    def one(self):\n        pass\n"
-            "    def two(self):\n        pass\n"
+            "class Widget:\n    def one(self):\n        pass\n    def two(self):\n        pass\n"
         )
         file = _write(tmp_path, source)
 
@@ -107,14 +93,8 @@ class TestFunctionNodeExtraction:
         qnames = [f.qualified_name for f in functions]
         assert qnames == ["pkg.mod.Widget.one", "pkg.mod.Widget.two"]
 
-    def test_nested_function_does_not_become_node(
-        self, tmp_path: Path
-    ) -> None:
-        source = (
-            "def outer():\n"
-            "    def inner():\n"
-            "        pass\n"
-        )
+    def test_nested_function_does_not_become_node(self, tmp_path: Path) -> None:
+        source = "def outer():\n    def inner():\n        pass\n"
         file = _write(tmp_path, source)
 
         functions, _ = extract_module(file, "pkg.mod")
@@ -122,15 +102,8 @@ class TestFunctionNodeExtraction:
         assert len(functions) == 1
         assert functions[0].name == "outer"
 
-    def test_nested_method_does_not_become_node(
-        self, tmp_path: Path
-    ) -> None:
-        source = (
-            "class Widget:\n"
-            "    def render(self):\n"
-            "        def helper():\n"
-            "            pass\n"
-        )
+    def test_nested_method_does_not_become_node(self, tmp_path: Path) -> None:
+        source = "class Widget:\n    def render(self):\n        def helper():\n            pass\n"
         file = _write(tmp_path, source)
 
         functions, _ = extract_module(file, "pkg.mod")
@@ -140,13 +113,8 @@ class TestFunctionNodeExtraction:
 
 
 class TestCallSiteAttribution:
-    def test_call_attributed_to_enclosing_function(
-        self, tmp_path: Path
-    ) -> None:
-        source = (
-            "def foo():\n"
-            "    bar()\n"
-        )
+    def test_call_attributed_to_enclosing_function(self, tmp_path: Path) -> None:
+        source = "def foo():\n    bar()\n"
         file = _write(tmp_path, source)
 
         _, call_sites = extract_module(file, "pkg.mod")
@@ -157,10 +125,7 @@ class TestCallSiteAttribution:
         assert call_sites[0].line == 2
 
     def test_attribute_chain_call(self, tmp_path: Path) -> None:
-        source = (
-            "def foo():\n"
-            "    os.path.join(a, b)\n"
-        )
+        source = "def foo():\n    os.path.join(a, b)\n"
         file = _write(tmp_path, source)
 
         _, call_sites = extract_module(file, "pkg.mod")
@@ -168,14 +133,8 @@ class TestCallSiteAttribution:
         assert len(call_sites) == 1
         assert call_sites[0].callee_expression == "os.path.join"
 
-    def test_self_method_call_attributed_to_method(
-        self, tmp_path: Path
-    ) -> None:
-        source = (
-            "class Widget:\n"
-            "    def render(self):\n"
-            "        self.helper()\n"
-        )
+    def test_self_method_call_attributed_to_method(self, tmp_path: Path) -> None:
+        source = "class Widget:\n    def render(self):\n        self.helper()\n"
         file = _write(tmp_path, source)
 
         _, call_sites = extract_module(file, "pkg.mod")
@@ -184,15 +143,8 @@ class TestCallSiteAttribution:
         assert call_sites[0].caller == "pkg.mod.Widget.render"
         assert call_sites[0].callee_expression == "self.helper"
 
-    def test_multiple_calls_in_one_function(
-        self, tmp_path: Path
-    ) -> None:
-        source = (
-            "def foo():\n"
-            "    a()\n"
-            "    b()\n"
-            "    c()\n"
-        )
+    def test_multiple_calls_in_one_function(self, tmp_path: Path) -> None:
+        source = "def foo():\n    a()\n    b()\n    c()\n"
         file = _write(tmp_path, source)
 
         _, call_sites = extract_module(file, "pkg.mod")
@@ -201,15 +153,8 @@ class TestCallSiteAttribution:
         assert callees == ["a", "b", "c"]
         assert all(cs.caller == "pkg.mod.foo" for cs in call_sites)
 
-    def test_calls_in_nested_function_attribute_to_outer(
-        self, tmp_path: Path
-    ) -> None:
-        source = (
-            "def outer():\n"
-            "    def inner():\n"
-            "        helper()\n"
-            "    inner()\n"
-        )
+    def test_calls_in_nested_function_attribute_to_outer(self, tmp_path: Path) -> None:
+        source = "def outer():\n    def inner():\n        helper()\n    inner()\n"
         file = _write(tmp_path, source)
 
         _, call_sites = extract_module(file, "pkg.mod")
@@ -220,13 +165,8 @@ class TestCallSiteAttribution:
         callees = sorted(cs.callee_expression for cs in call_sites)
         assert callees == ["helper", "inner"]
 
-    def test_call_in_nested_call_argument_captured(
-        self, tmp_path: Path
-    ) -> None:
-        source = (
-            "def foo():\n"
-            "    outer(inner())\n"
-        )
+    def test_call_in_nested_call_argument_captured(self, tmp_path: Path) -> None:
+        source = "def foo():\n    outer(inner())\n"
         file = _write(tmp_path, source)
 
         _, call_sites = extract_module(file, "pkg.mod")
@@ -235,10 +175,7 @@ class TestCallSiteAttribution:
         assert callees == ["inner", "outer"]
 
     def test_unknown_callee_preserved(self, tmp_path: Path) -> None:
-        source = (
-            "def foo():\n"
-            "    (lambda x: x)()\n"
-        )
+        source = "def foo():\n    (lambda x: x)()\n"
         file = _write(tmp_path, source)
 
         _, call_sites = extract_module(file, "pkg.mod")
@@ -247,11 +184,7 @@ class TestCallSiteAttribution:
         assert call_sites[0].callee_expression == "<unknown>"
 
     def test_top_level_calls_ignored(self, tmp_path: Path) -> None:
-        source = (
-            "print('hello')\n"
-            "def foo():\n"
-            "    bar()\n"
-        )
+        source = "print('hello')\ndef foo():\n    bar()\n"
         file = _write(tmp_path, source)
 
         _, call_sites = extract_module(file, "pkg.mod")
@@ -314,9 +247,7 @@ class TestIntegration:
         # Check a few specific attributions.
         by_caller: dict[str, list[str]] = {}
         for cs in call_sites:
-            by_caller.setdefault(cs.caller, []).append(
-                cs.callee_expression
-            )
+            by_caller.setdefault(cs.caller, []).append(cs.callee_expression)
 
         assert sorted(by_caller["pkg.mod.Service.run"]) == [
             "helper",

@@ -48,13 +48,7 @@ class TestSingleModule:
         assert graph.number_of_edges() == 0
 
     def test_internal_call_within_module(self, tmp_path: Path) -> None:
-        source = (
-            "def foo():\n"
-            "    bar()\n"
-            "\n"
-            "def bar():\n"
-            "    pass\n"
-        )
+        source = "def foo():\n    bar()\n\ndef bar():\n    pass\n"
         root = _make_project(tmp_path, {"mod.py": source})
 
         graph, _ = build_call_graph(root)
@@ -63,18 +57,8 @@ class TestSingleModule:
         assert graph["mod.foo"]["mod.bar"]["kind"] == "internal"
         assert graph["mod.foo"]["mod.bar"]["call_count"] == 1
 
-    def test_repeated_call_increments_count(
-        self, tmp_path: Path
-    ) -> None:
-        source = (
-            "def foo():\n"
-            "    bar()\n"
-            "    bar()\n"
-            "    bar()\n"
-            "\n"
-            "def bar():\n"
-            "    pass\n"
-        )
+    def test_repeated_call_increments_count(self, tmp_path: Path) -> None:
+        source = "def foo():\n    bar()\n    bar()\n    bar()\n\ndef bar():\n    pass\n"
         root = _make_project(tmp_path, {"mod.py": source})
 
         graph, _ = build_call_graph(root)
@@ -94,25 +78,13 @@ class TestSingleModule:
 
         graph, _ = build_call_graph(root)
 
-        assert graph.has_edge(
-            "mod.Widget.run", "mod.Widget.helper"
-        )
-        assert (
-            graph["mod.Widget.run"]["mod.Widget.helper"]["kind"]
-            == "self"
-        )
+        assert graph.has_edge("mod.Widget.run", "mod.Widget.helper")
+        assert graph["mod.Widget.run"]["mod.Widget.helper"]["kind"] == "self"
 
 
 class TestExternalCalls:
-    def test_external_call_creates_external_node(
-        self, tmp_path: Path
-    ) -> None:
-        source = (
-            "import os\n"
-            "\n"
-            "def foo():\n"
-            "    os.path.join(a, b)\n"
-        )
+    def test_external_call_creates_external_node(self, tmp_path: Path) -> None:
+        source = "import os\n\ndef foo():\n    os.path.join(a, b)\n"
         root = _make_project(tmp_path, {"mod.py": source})
 
         graph, _ = build_call_graph(root)
@@ -122,12 +94,7 @@ class TestExternalCalls:
         assert graph["mod.foo"]["os.path.join"]["kind"] == "external"
 
     def test_aliased_external(self, tmp_path: Path) -> None:
-        source = (
-            "import numpy as np\n"
-            "\n"
-            "def foo():\n"
-            "    np.array(x)\n"
-        )
+        source = "import numpy as np\n\ndef foo():\n    np.array(x)\n"
         root = _make_project(tmp_path, {"mod.py": source})
 
         graph, _ = build_call_graph(root)
@@ -138,10 +105,7 @@ class TestExternalCalls:
 
 class TestUnresolvedCalls:
     def test_unknown_bare_name(self, tmp_path: Path) -> None:
-        source = (
-            "def foo():\n"
-            "    mystery()\n"
-        )
+        source = "def foo():\n    mystery()\n"
         root = _make_project(tmp_path, {"mod.py": source})
 
         graph, _ = build_call_graph(root)
@@ -152,10 +116,7 @@ class TestUnresolvedCalls:
         assert graph.has_edge("mod.foo", target)
 
     def test_lambda_call(self, tmp_path: Path) -> None:
-        source = (
-            "def foo():\n"
-            "    (lambda x: x)()\n"
-        )
+        source = "def foo():\n    (lambda x: x)()\n"
         root = _make_project(tmp_path, {"mod.py": source})
 
         graph, _ = build_call_graph(root)
@@ -172,12 +133,7 @@ class TestCrossModuleValidation:
         root = _make_project(
             tmp_path,
             {
-                "mod_a.py": (
-                    "from mod_b import do_thing\n"
-                    "\n"
-                    "def foo():\n"
-                    "    do_thing()\n"
-                ),
+                "mod_a.py": ("from mod_b import do_thing\n\ndef foo():\n    do_thing()\n"),
                 "mod_b.py": "def do_thing():\n    pass\n",
             },
         )
@@ -187,9 +143,7 @@ class TestCrossModuleValidation:
         assert graph.has_edge("mod_a.foo", "mod_b.do_thing")
         assert graph["mod_a.foo"]["mod_b.do_thing"]["kind"] == "internal"
 
-    def test_phantom_cross_module_call_downgraded(
-        self, tmp_path: Path
-    ) -> None:
+    def test_phantom_cross_module_call_downgraded(self, tmp_path: Path) -> None:
         # mod_a imports the mod_b module and calls a name that
         # doesn't exist there. The resolver emits an optimistic
         # INTERNAL edge to 'mod_b.phantom'; the builder should
@@ -197,12 +151,7 @@ class TestCrossModuleValidation:
         root = _make_project(
             tmp_path,
             {
-                "mod_a.py": (
-                    "import mod_b\n"
-                    "\n"
-                    "def foo():\n"
-                    "    mod_b.phantom()\n"
-                ),
+                "mod_a.py": ("import mod_b\n\ndef foo():\n    mod_b.phantom()\n"),
                 "mod_b.py": "def real_thing():\n    pass\n",
             },
         )
@@ -218,9 +167,7 @@ class TestCrossModuleValidation:
 
 
 class TestParseErrors:
-    def test_broken_file_recorded_not_aborting(
-        self, tmp_path: Path
-    ) -> None:
+    def test_broken_file_recorded_not_aborting(self, tmp_path: Path) -> None:
         # mod_good is valid; mod_bad has a syntax error.
         root = _make_project(
             tmp_path,
@@ -235,10 +182,7 @@ class TestParseErrors:
         # mod_good was parsed fine.
         assert "mod_good.foo" in graph.nodes
         # mod_bad produced no nodes (we have no functions to add).
-        assert not any(
-            isinstance(n, str) and n.startswith("mod_bad")
-            for n in graph.nodes
-        )
+        assert not any(isinstance(n, str) and n.startswith("mod_bad") for n in graph.nodes)
         # The error was recorded.
         bad_path = root / "mod_bad.py"
         assert bad_path in errors
@@ -264,12 +208,7 @@ class TestRealisticProject:
                     "    def cleanup(self):\n"
                     "        pass\n"
                 ),
-                "helpers.py": (
-                    "import os\n"
-                    "\n"
-                    "def do_work():\n"
-                    "    os.path.join('a', 'b')\n"
-                ),
+                "helpers.py": ("import os\n\ndef do_work():\n    os.path.join('a', 'b')\n"),
             },
         )
 
@@ -287,37 +226,20 @@ class TestRealisticProject:
             assert graph.nodes[qname]["kind"] == "function"
 
         # Cross-module internal call.
-        assert graph.has_edge(
-            "services.Service.run", "helpers.do_work"
-        )
-        assert (
-            graph["services.Service.run"]["helpers.do_work"]["kind"]
-            == "internal"
-        )
+        assert graph.has_edge("services.Service.run", "helpers.do_work")
+        assert graph["services.Service.run"]["helpers.do_work"]["kind"] == "internal"
 
         # Self-call inside Service.run.
-        assert graph.has_edge(
-            "services.Service.run", "services.Service.cleanup"
-        )
-        assert (
-            graph["services.Service.run"][
-                "services.Service.cleanup"
-            ]["kind"]
-            == "self"
-        )
+        assert graph.has_edge("services.Service.run", "services.Service.cleanup")
+        assert graph["services.Service.run"]["services.Service.cleanup"]["kind"] == "self"
 
         # External call inside helpers.do_work.
         assert graph.has_edge("helpers.do_work", "os.path.join")
-        assert (
-            graph["helpers.do_work"]["os.path.join"]["kind"]
-            == "external"
-        )
+        assert graph["helpers.do_work"]["os.path.join"]["kind"] == "external"
 
 
 class TestComplexityAttribute:
-    def test_simple_function_complexity_one(
-        self, tmp_path: Path
-    ) -> None:
+    def test_simple_function_complexity_one(self, tmp_path: Path) -> None:
         root = _make_project(
             tmp_path,
             {"mod.py": "def foo():\n    pass\n"},
@@ -327,15 +249,8 @@ class TestComplexityAttribute:
 
         assert graph.nodes["mod.foo"]["complexity"] == 1
 
-    def test_branchy_function_higher_complexity(
-        self, tmp_path: Path
-    ) -> None:
-        source = (
-            "def foo(x):\n"
-            "    if x:\n"
-            "        return 1\n"
-            "    return 0\n"
-        )
+    def test_branchy_function_higher_complexity(self, tmp_path: Path) -> None:
+        source = "def foo(x):\n    if x:\n        return 1\n    return 0\n"
         root = _make_project(tmp_path, {"mod.py": source})
 
         graph, _ = build_call_graph(root)
@@ -356,18 +271,10 @@ class TestComplexityAttribute:
 
         assert graph.nodes["mod.Widget.render"]["complexity"] == 2
 
-    def test_external_nodes_have_no_complexity(
-        self, tmp_path: Path
-    ) -> None:
+    def test_external_nodes_have_no_complexity(self, tmp_path: Path) -> None:
         # Synthetic nodes (external, unresolved) should not carry a
         # complexity attribute; they are not project functions.
-        source = (
-            "import os\n"
-            "\n"
-            "def foo():\n"
-            "    os.path.join(a, b)\n"
-            "    mystery()\n"
-        )
+        source = "import os\n\ndef foo():\n    os.path.join(a, b)\n    mystery()\n"
         root = _make_project(tmp_path, {"mod.py": source})
 
         graph, _ = build_call_graph(root)
@@ -375,9 +282,7 @@ class TestComplexityAttribute:
         assert "complexity" not in graph.nodes["os.path.join"]
         assert "complexity" not in graph.nodes["<unresolved>:mystery"]
 
-    def test_complexities_attached_to_all_functions(
-        self, tmp_path: Path
-    ) -> None:
+    def test_complexities_attached_to_all_functions(self, tmp_path: Path) -> None:
         # Mixed-complexity functions in two modules. Each function
         # node should have its complexity attribute set.
         root = _make_project(

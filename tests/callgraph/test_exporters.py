@@ -264,16 +264,11 @@ class TestDotShape:
         result = to_dot(g)
 
         # Internal edge: solid black.
-        assert (
-            '"mod.a" -> "mod.b" [style=solid, color="black"]' in result
-        )
+        assert '"mod.a" -> "mod.b" [style=solid, color="black"]' in result
         # Self edge: steel blue.
         assert "#4682b4" in result
         # External edge: dashed gray.
-        assert (
-            '"mod.a" -> "os.path" [style=dashed, color="#999999"]'
-            in result
-        )
+        assert '"mod.a" -> "os.path" [style=dashed, color="#999999"]' in result
         # Unresolved edge: dotted gray.
         assert "style=dotted" in result
 
@@ -308,9 +303,7 @@ class TestDotFiltering:
     def test_min_complexity_filters_function_nodes(self) -> None:
         g: nx.DiGraph = nx.DiGraph()
         g.add_node("mod.low", **_function(complexity=1, name="low"))
-        g.add_node(
-            "mod.high", **_function(complexity=5, name="high")
-        )
+        g.add_node("mod.high", **_function(complexity=5, name="high"))
 
         result = to_dot(g, min_complexity=3)
 

@@ -154,12 +154,8 @@ class _CallGraphVisitor(ast.NodeVisitor):
         recurses, then pops.
         """
         is_nested_in_function = bool(self._function_stack)
-        enclosing_class = (
-            self._class_stack[-1] if self._class_stack else None
-        )
-        is_method = (
-            enclosing_class is not None and not is_nested_in_function
-        )
+        enclosing_class = self._class_stack[-1] if self._class_stack else None
+        is_method = enclosing_class is not None and not is_nested_in_function
 
         if not is_nested_in_function:
             # Top-level function or direct class method: becomes a node.

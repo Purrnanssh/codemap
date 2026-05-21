@@ -35,13 +35,7 @@ class TestDefaultSummary:
         root = _project(
             tmp_path,
             {
-                "mod.py": (
-                    "def foo():\n"
-                    "    bar()\n"
-                    "\n"
-                    "def bar():\n"
-                    "    pass\n"
-                ),
+                "mod.py": ("def foo():\n    bar()\n\ndef bar():\n    pass\n"),
             },
         )
 
@@ -97,27 +91,19 @@ class TestExitCodes:
 
 
 class TestFormatAndOutput:
-    def test_format_without_output_errors(
-        self, tmp_path: Path
-    ) -> None:
+    def test_format_without_output_errors(self, tmp_path: Path) -> None:
         root = _project(tmp_path, {"mod.py": "def foo():\n    pass\n"})
 
-        result = runner.invoke(
-            app, ["callgraph", str(root), "--format", "json"]
-        )
+        result = runner.invoke(app, ["callgraph", str(root), "--format", "json"])
 
         assert result.exit_code == 1
         assert "--format requires --output" in result.stdout
 
-    def test_output_without_format_errors(
-        self, tmp_path: Path
-    ) -> None:
+    def test_output_without_format_errors(self, tmp_path: Path) -> None:
         root = _project(tmp_path, {"mod.py": "def foo():\n    pass\n"})
         out = tmp_path / "out.json"
 
-        result = runner.invoke(
-            app, ["callgraph", str(root), "--output", str(out)]
-        )
+        result = runner.invoke(app, ["callgraph", str(root), "--output", str(out)])
 
         assert result.exit_code == 1
         assert "--output requires --format" in result.stdout
@@ -145,13 +131,7 @@ class TestFormatAndOutput:
         root = _project(
             tmp_path,
             {
-                "mod.py": (
-                    "def foo():\n"
-                    "    bar()\n"
-                    "\n"
-                    "def bar():\n"
-                    "    pass\n"
-                ),
+                "mod.py": ("def foo():\n    bar()\n\ndef bar():\n    pass\n"),
             },
         )
         out = tmp_path / "graph.json"
@@ -220,9 +200,7 @@ class TestHotspotsFlag:
             {"mod.py": "def foo():\n    pass\n"},
         )
 
-        result = runner.invoke(
-            app, ["callgraph", str(root), "--hotspots", "3"]
-        )
+        result = runner.invoke(app, ["callgraph", str(root), "--hotspots", "3"])
 
         assert result.exit_code == 0
         assert "top 3" in result.stdout

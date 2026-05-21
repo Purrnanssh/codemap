@@ -10,9 +10,8 @@ what build_call_graph produces: function nodes carry
 
 from __future__ import annotations
 
-import pytest
-
 import networkx as nx
+import pytest
 
 from codemap.callgraph.hotspots import (
     HotspotEntry,
@@ -97,9 +96,7 @@ class TestFanInAndOut:
         graph.add_node("mod.orchestrator", **_function(complexity=1))
         for callee in ("mod.x", "mod.y", "mod.z"):
             graph.add_node(callee, **_function(complexity=1))
-            graph.add_edge(
-                "mod.orchestrator", callee, kind="internal"
-            )
+            graph.add_edge("mod.orchestrator", callee, kind="internal")
 
         result = compute_hotspots(graph)
         by_name = {e.qualified_name: e for e in result}
@@ -113,9 +110,7 @@ class TestFanInAndOut:
         graph: nx.DiGraph = nx.DiGraph()
         graph.add_node("mod.Widget.run", **_function(complexity=1))
         graph.add_node("mod.Widget.helper", **_function(complexity=1))
-        graph.add_edge(
-            "mod.Widget.run", "mod.Widget.helper", kind="self"
-        )
+        graph.add_edge("mod.Widget.run", "mod.Widget.helper", kind="self")
 
         result = compute_hotspots(graph)
         by_name = {e.qualified_name: e for e in result}
@@ -257,11 +252,7 @@ class TestScoreAndOrdering:
         graph.add_edge("mod.caller", "mod.apple", kind="internal")
 
         result = compute_hotspots(graph)
-        names = [
-            e.qualified_name
-            for e in result
-            if e.qualified_name in {"mod.apple", "mod.zebra"}
-        ]
+        names = [e.qualified_name for e in result if e.qualified_name in {"mod.apple", "mod.zebra"}]
 
         assert names == ["mod.apple", "mod.zebra"]
 

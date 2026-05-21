@@ -88,7 +88,7 @@ def _resolve_self_call(
     module-level function, which is invalid Python but possible to
     construct), the call falls through to UNRESOLVED.
     """
-    after_self = expression[len(SELF_PREFIX):]
+    after_self = expression[len(SELF_PREFIX) :]
 
     # Reject deeper chains.
     if "." in after_self or not after_self:
@@ -122,7 +122,7 @@ def _extract_class_name(caller_qname: str, module: str) -> str | None:
     if not caller_qname.startswith(f"{module}."):
         return None
 
-    remainder = caller_qname[len(module) + 1:]
+    remainder = caller_qname[len(module) + 1 :]
     parts = remainder.split(".")
     if len(parts) < 2:
         # Module-level function: just one segment after the module.
@@ -142,11 +142,7 @@ def _resolve_bare_name(
     if resolved is None:
         return _unresolved_edge(call_site, name)
 
-    kind = (
-        CallEdgeKind.INTERNAL
-        if resolved.is_internal
-        else CallEdgeKind.EXTERNAL
-    )
+    kind = CallEdgeKind.INTERNAL if resolved.is_internal else CallEdgeKind.EXTERNAL
     return CallEdge(
         caller=call_site.caller,
         callee=resolved.qualified_name,
@@ -182,11 +178,7 @@ def _resolve_dotted_chain(
         return _unresolved_edge(call_site, expression)
 
     target_qname = f"{resolved.qualified_name}.{rest}"
-    kind = (
-        CallEdgeKind.INTERNAL
-        if resolved.is_internal
-        else CallEdgeKind.EXTERNAL
-    )
+    kind = CallEdgeKind.INTERNAL if resolved.is_internal else CallEdgeKind.EXTERNAL
     return CallEdge(
         caller=call_site.caller,
         callee=target_qname,

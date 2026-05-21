@@ -187,9 +187,7 @@ def _resolve_one_import(
     Returns ``(None, None)`` if the import is malformed or cannot be
     given a sensible binding.
     """
-    is_from_import = (
-        import_info.module != import_info.name or import_info.level > 0
-    )
+    is_from_import = import_info.module != import_info.name or import_info.level > 0
 
     # Determine the local binding name.
     if import_info.alias is not None:
@@ -225,9 +223,7 @@ def _resolve_one_import(
 
     # External: build a best-effort qualified name from the import
     # itself, for display in the graph.
-    external_qname = _external_qualified_name(
-        import_info, is_from_import=is_from_import
-    )
+    external_qname = _external_qualified_name(import_info, is_from_import=is_from_import)
     if external_qname is None:
         return None, None
     return binding, ResolvedName(

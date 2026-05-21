@@ -30,17 +30,12 @@ class TestBaseline:
         assert compute_complexities(file, "mod") == {"mod.foo": 1}
 
     def test_function_with_only_return(self, tmp_path: Path) -> None:
-        file = _write(
-            tmp_path, "def foo():\n    return 42\n"
-        )
+        file = _write(tmp_path, "def foo():\n    return 42\n")
 
         assert compute_complexities(file, "mod") == {"mod.foo": 1}
 
     def test_multiple_top_level_functions(self, tmp_path: Path) -> None:
-        source = (
-            "def a():\n    pass\n"
-            "def b():\n    pass\n"
-        )
+        source = "def a():\n    pass\ndef b():\n    pass\n"
         file = _write(tmp_path, source)
 
         assert compute_complexities(file, "mod") == {
@@ -56,25 +51,14 @@ class TestBaseline:
 
 class TestIfFamily:
     def test_single_if(self, tmp_path: Path) -> None:
-        source = (
-            "def foo(x):\n"
-            "    if x:\n"
-            "        return 1\n"
-            "    return 0\n"
-        )
+        source = "def foo(x):\n    if x:\n        return 1\n    return 0\n"
         file = _write(tmp_path, source)
 
         assert compute_complexities(file, "mod") == {"mod.foo": 2}
 
     def test_if_else_no_extra(self, tmp_path: Path) -> None:
         # else does not add to complexity.
-        source = (
-            "def foo(x):\n"
-            "    if x:\n"
-            "        return 1\n"
-            "    else:\n"
-            "        return 0\n"
-        )
+        source = "def foo(x):\n    if x:\n        return 1\n    else:\n        return 0\n"
         file = _write(tmp_path, source)
 
         assert compute_complexities(file, "mod") == {"mod.foo": 2}
@@ -97,21 +81,13 @@ class TestIfFamily:
         assert compute_complexities(file, "mod") == {"mod.foo": 4}
 
     def test_nested_ifs(self, tmp_path: Path) -> None:
-        source = (
-            "def foo(x, y):\n"
-            "    if x:\n"
-            "        if y:\n"
-            "            return 1\n"
-        )
+        source = "def foo(x, y):\n    if x:\n        if y:\n            return 1\n"
         file = _write(tmp_path, source)
 
         assert compute_complexities(file, "mod") == {"mod.foo": 3}
 
     def test_ternary(self, tmp_path: Path) -> None:
-        source = (
-            "def foo(x):\n"
-            "    return 1 if x else 0\n"
-        )
+        source = "def foo(x):\n    return 1 if x else 0\n"
         file = _write(tmp_path, source)
 
         assert compute_complexities(file, "mod") == {"mod.foo": 2}
@@ -119,31 +95,19 @@ class TestIfFamily:
 
 class TestLoops:
     def test_for_loop(self, tmp_path: Path) -> None:
-        source = (
-            "def foo(items):\n"
-            "    for item in items:\n"
-            "        pass\n"
-        )
+        source = "def foo(items):\n    for item in items:\n        pass\n"
         file = _write(tmp_path, source)
 
         assert compute_complexities(file, "mod") == {"mod.foo": 2}
 
     def test_while_loop(self, tmp_path: Path) -> None:
-        source = (
-            "def foo():\n"
-            "    while True:\n"
-            "        break\n"
-        )
+        source = "def foo():\n    while True:\n        break\n"
         file = _write(tmp_path, source)
 
         assert compute_complexities(file, "mod") == {"mod.foo": 2}
 
     def test_async_for(self, tmp_path: Path) -> None:
-        source = (
-            "async def foo(items):\n"
-            "    async for item in items:\n"
-            "        pass\n"
-        )
+        source = "async def foo(items):\n    async for item in items:\n        pass\n"
         file = _write(tmp_path, source)
 
         assert compute_complexities(file, "mod") == {"mod.foo": 2}
@@ -151,13 +115,7 @@ class TestLoops:
 
 class TestExceptions:
     def test_single_except(self, tmp_path: Path) -> None:
-        source = (
-            "def foo():\n"
-            "    try:\n"
-            "        do_it()\n"
-            "    except ValueError:\n"
-            "        pass\n"
-        )
+        source = "def foo():\n    try:\n        do_it()\n    except ValueError:\n        pass\n"
         file = _write(tmp_path, source)
 
         assert compute_complexities(file, "mod") == {"mod.foo": 2}
@@ -181,11 +139,7 @@ class TestExceptions:
 
 class TestWith:
     def test_single_with(self, tmp_path: Path) -> None:
-        source = (
-            "def foo():\n"
-            "    with open('x') as f:\n"
-            "        pass\n"
-        )
+        source = "def foo():\n    with open('x') as f:\n        pass\n"
         file = _write(tmp_path, source)
 
         assert compute_complexities(file, "mod") == {"mod.foo": 2}
@@ -193,9 +147,7 @@ class TestWith:
     def test_multi_context_with(self, tmp_path: Path) -> None:
         # with a, b, c: counts as +3.
         source = (
-            "def foo():\n"
-            "    with open('a') as f, open('b') as g, open('c') as h:\n"
-            "        pass\n"
+            "def foo():\n    with open('a') as f, open('b') as g, open('c') as h:\n        pass\n"
         )
         file = _write(tmp_path, source)
 
@@ -205,31 +157,21 @@ class TestWith:
 class TestBooleanOps:
     def test_single_and(self, tmp_path: Path) -> None:
         # 'a and b' has two values, one extra beyond the first, so +1.
-        source = (
-            "def foo(a, b):\n"
-            "    return a and b\n"
-        )
+        source = "def foo(a, b):\n    return a and b\n"
         file = _write(tmp_path, source)
 
         assert compute_complexities(file, "mod") == {"mod.foo": 2}
 
     def test_chained_and(self, tmp_path: Path) -> None:
         # 'a and b and c' has three values, two extras, so +2.
-        source = (
-            "def foo(a, b, c):\n"
-            "    return a and b and c\n"
-        )
+        source = "def foo(a, b, c):\n    return a and b and c\n"
         file = _write(tmp_path, source)
 
         assert compute_complexities(file, "mod") == {"mod.foo": 3}
 
     def test_or_inside_if(self, tmp_path: Path) -> None:
         # if (a or b): one if (+1) plus one extra or operand (+1) = 3.
-        source = (
-            "def foo(a, b):\n"
-            "    if a or b:\n"
-            "        return 1\n"
-        )
+        source = "def foo(a, b):\n    if a or b:\n        return 1\n"
         file = _write(tmp_path, source)
 
         assert compute_complexities(file, "mod") == {"mod.foo": 3}
@@ -238,28 +180,19 @@ class TestBooleanOps:
 class TestComprehensions:
     def test_list_comp_no_filter(self, tmp_path: Path) -> None:
         # No 'if' filter, so no extra complexity from the comprehension.
-        source = (
-            "def foo(items):\n"
-            "    return [x for x in items]\n"
-        )
+        source = "def foo(items):\n    return [x for x in items]\n"
         file = _write(tmp_path, source)
 
         assert compute_complexities(file, "mod") == {"mod.foo": 1}
 
     def test_list_comp_with_filter(self, tmp_path: Path) -> None:
-        source = (
-            "def foo(items):\n"
-            "    return [x for x in items if x > 0]\n"
-        )
+        source = "def foo(items):\n    return [x for x in items if x > 0]\n"
         file = _write(tmp_path, source)
 
         assert compute_complexities(file, "mod") == {"mod.foo": 2}
 
     def test_dict_comp_with_filter(self, tmp_path: Path) -> None:
-        source = (
-            "def foo(items):\n"
-            "    return {x: x*x for x in items if x > 0}\n"
-        )
+        source = "def foo(items):\n    return {x: x*x for x in items if x > 0}\n"
         file = _write(tmp_path, source)
 
         assert compute_complexities(file, "mod") == {"mod.foo": 2}
@@ -267,11 +200,7 @@ class TestComprehensions:
 
 class TestAssert:
     def test_assert(self, tmp_path: Path) -> None:
-        source = (
-            "def foo(x):\n"
-            "    assert x > 0\n"
-            "    return x\n"
-        )
+        source = "def foo(x):\n    assert x > 0\n    return x\n"
         file = _write(tmp_path, source)
 
         assert compute_complexities(file, "mod") == {"mod.foo": 2}
@@ -280,12 +209,7 @@ class TestAssert:
 class TestMatch:
     def test_match_single_case(self, tmp_path: Path) -> None:
         # Single case is just one path; +0 extra.
-        source = (
-            "def foo(x):\n"
-            "    match x:\n"
-            "        case 1:\n"
-            "            return 'one'\n"
-        )
+        source = "def foo(x):\n    match x:\n        case 1:\n            return 'one'\n"
         file = _write(tmp_path, source)
 
         assert compute_complexities(file, "mod") == {"mod.foo": 1}
@@ -340,9 +264,7 @@ class TestMethods:
 
 
 class TestNestedFunctions:
-    def test_nested_function_branches_roll_up(
-        self, tmp_path: Path
-    ) -> None:
+    def test_nested_function_branches_roll_up(self, tmp_path: Path) -> None:
         # outer has one if (+1). inner has one if (+1). The nested
         # function doesn't get its own entry, but its branches count
         # toward outer. Total: 1 + 1 + 1 = 3.
@@ -367,13 +289,13 @@ class TestRealistic:
         source = (
             "def process(items, filter_fn):\n"
             "    results = []\n"
-            "    for item in items:\n"               # +1 for
-            "        if item is None:\n"             # +1 if
+            "    for item in items:\n"  # +1 for
+            "        if item is None:\n"  # +1 if
             "            continue\n"
             "        if filter_fn(item) and item > 0:\n"  # +1 if, +1 and
             "            try:\n"
             "                results.append(item * 2)\n"
-            "            except ValueError:\n"       # +1 except
+            "            except ValueError:\n"  # +1 except
             "                pass\n"
             "    return results\n"
         )

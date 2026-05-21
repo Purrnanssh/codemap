@@ -79,14 +79,10 @@ class TestLocalDefinitions:
         )
 
         assert "Widget" in ctx.names
-        assert ctx.names["Widget"] == ResolvedName(
-            "pkg.mod.Widget", True
-        )
+        assert ctx.names["Widget"] == ResolvedName("pkg.mod.Widget", True)
 
     def test_class_methods_indexed(self) -> None:
-        analysis = _analysis(
-            classes=(_cls("Widget", methods=("render", "update")),)
-        )
+        analysis = _analysis(classes=(_cls("Widget", methods=("render", "update")),))
 
         ctx = build_module_context(
             module_dotted="pkg.mod",
@@ -112,9 +108,7 @@ class TestLocalDefinitions:
     def test_methods_not_in_names_table(self) -> None:
         # Methods are accessed via Widget.render or self.render, never
         # by bare name. They must not appear in the names dict.
-        analysis = _analysis(
-            classes=(_cls("Widget", methods=("render",)),)
-        )
+        analysis = _analysis(classes=(_cls("Widget", methods=("render",)),))
 
         ctx = build_module_context(
             module_dotted="pkg.mod",
@@ -154,9 +148,7 @@ class TestExternalImports:
 
     def test_dotted_import_binds_top_level(self) -> None:
         # import os.path  -> binds 'os', target is 'os.path'
-        imp = ImportInfo(
-            module="os.path", name="os.path", alias=None, line=1
-        )
+        imp = ImportInfo(module="os.path", name="os.path", alias=None, line=1)
 
         ctx = build_module_context(
             module_dotted="pkg.mod",
@@ -171,9 +163,7 @@ class TestExternalImports:
 
     def test_import_with_alias(self) -> None:
         # import numpy as np
-        imp = ImportInfo(
-            module="numpy", name="numpy", alias="np", line=1
-        )
+        imp = ImportInfo(module="numpy", name="numpy", alias="np", line=1)
 
         ctx = build_module_context(
             module_dotted="pkg.mod",
@@ -220,9 +210,7 @@ class TestInternalImports:
         # defined inside pkg.helpers (NOT a submodule). The binding
         # 'util' must resolve to the symbol 'pkg.helpers.util', not
         # to the module 'pkg.helpers'.
-        imp = ImportInfo(
-            module="pkg.helpers", name="util", alias=None, line=1
-        )
+        imp = ImportInfo(module="pkg.helpers", name="util", alias=None, line=1)
 
         ctx = build_module_context(
             module_dotted="pkg.mod",
@@ -231,9 +219,7 @@ class TestInternalImports:
             importer_is_package=False,
         )
 
-        assert ctx.names["util"] == ResolvedName(
-            "pkg.helpers.util", True
-        )
+        assert ctx.names["util"] == ResolvedName("pkg.helpers.util", True)
 
     def test_internal_submodule_import(self) -> None:
         # from pkg import sub, where pkg.sub is itself an internal
@@ -251,9 +237,7 @@ class TestInternalImports:
 
     def test_internal_with_alias(self) -> None:
         # from pkg.helpers import util as u  (util is a symbol)
-        imp = ImportInfo(
-            module="pkg.helpers", name="util", alias="u", line=1
-        )
+        imp = ImportInfo(module="pkg.helpers", name="util", alias="u", line=1)
 
         ctx = build_module_context(
             module_dotted="pkg.mod",
@@ -262,16 +246,12 @@ class TestInternalImports:
             importer_is_package=False,
         )
 
-        assert ctx.names["u"] == ResolvedName(
-            "pkg.helpers.util", True
-        )
+        assert ctx.names["u"] == ResolvedName("pkg.helpers.util", True)
 
     def test_relative_import_internal_submodule(self) -> None:
         # from . import sibling, inside pkg.mod, where pkg.sibling
         # is an internal module.
-        imp = ImportInfo(
-            module="", name="sibling", alias=None, line=1, level=1
-        )
+        imp = ImportInfo(module="", name="sibling", alias=None, line=1, level=1)
 
         ctx = build_module_context(
             module_dotted="pkg.mod",
@@ -280,16 +260,12 @@ class TestInternalImports:
             importer_is_package=False,
         )
 
-        assert ctx.names["sibling"] == ResolvedName(
-            "pkg.sibling", True
-        )
+        assert ctx.names["sibling"] == ResolvedName("pkg.sibling", True)
 
     def test_relative_import_internal_symbol(self) -> None:
         # from .helpers import util, inside pkg.mod, where util is a
         # symbol inside pkg.helpers (which is an internal module).
-        imp = ImportInfo(
-            module="helpers", name="util", alias=None, line=1, level=1
-        )
+        imp = ImportInfo(module="helpers", name="util", alias=None, line=1, level=1)
 
         ctx = build_module_context(
             module_dotted="pkg.mod",
@@ -298,9 +274,7 @@ class TestInternalImports:
             importer_is_package=False,
         )
 
-        assert ctx.names["util"] == ResolvedName(
-            "pkg.helpers.util", True
-        )
+        assert ctx.names["util"] == ResolvedName("pkg.helpers.util", True)
 
 
 class TestCollisions:
@@ -309,11 +283,7 @@ class TestCollisions:
         # The import wins.
         analysis = _analysis(
             functions=(_func("foo"),),
-            imports=(
-                ImportInfo(
-                    module="other", name="foo", alias=None, line=10
-                ),
-            ),
+            imports=(ImportInfo(module="other", name="foo", alias=None, line=10),),
         )
 
         ctx = build_module_context(

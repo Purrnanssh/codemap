@@ -115,9 +115,7 @@ class _ComplexityVisitor(ast.NodeVisitor):
         is_nested = bool(self._function_stack)
 
         if not is_nested:
-            enclosing_class = (
-                self._class_stack[-1] if self._class_stack else None
-            )
+            enclosing_class = self._class_stack[-1] if self._class_stack else None
             qname = build_qualified_name(
                 module=self._module,
                 name=node.name,

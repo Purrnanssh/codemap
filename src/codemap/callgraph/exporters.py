@@ -94,8 +94,7 @@ def to_json(
     filtered = _filter_graph(graph, min_complexity)
 
     nodes_payload = [
-        _json_node(node_id, attrs)
-        for node_id, attrs in sorted(filtered.nodes(data=True))
+        _json_node(node_id, attrs) for node_id, attrs in sorted(filtered.nodes(data=True))
     ]
     edges_payload = [
         _json_edge(source, target, attrs)
@@ -226,8 +225,7 @@ def _drop_orphan_synthetic_nodes(subgraph: nx.DiGraph) -> None:
     orphans = [
         node
         for node, attrs in subgraph.nodes(data=True)
-        if attrs.get("kind") in _SYNTHETIC_KINDS
-        and subgraph.degree(node) == 0
+        if attrs.get("kind") in _SYNTHETIC_KINDS and subgraph.degree(node) == 0
     ]
     subgraph.remove_nodes_from(orphans)
 
@@ -287,13 +285,9 @@ def _dot_node_line(node_id: str, attrs: dict) -> str:
     if kind == "function":
         return _dot_function_node(node_id, attrs)
     if kind == "external":
-        return _dot_synthetic_node(
-            node_id, kind, style="dashed", color="#666666"
-        )
+        return _dot_synthetic_node(node_id, kind, style="dashed", color="#666666")
     if kind == "unresolved":
-        return _dot_synthetic_node(
-            node_id, kind, style="dotted", color="#888888"
-        )
+        return _dot_synthetic_node(node_id, kind, style="dotted", color="#888888")
     # Unknown kind: bare node.
     return f'  "{node_id}";'
 
@@ -362,7 +356,7 @@ def _dot_label(node_id: str, kind: str) -> str:
     are escaped.
     """
     if kind == "unresolved" and node_id.startswith("<unresolved>:"):
-        label = node_id[len("<unresolved>:"):]
+        label = node_id[len("<unresolved>:") :]
     else:
         label = node_id
 
