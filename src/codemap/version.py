@@ -5,4 +5,4 @@ everywhere else. Single source of truth: change it here, and every part of
 the project (CLI `--version`, README badges, package metadata) picks it up.
 """
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
