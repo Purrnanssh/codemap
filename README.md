@@ -81,6 +81,46 @@ Sample output (CodeMap scanning itself):
 
 **Tip on the path argument.** Point `codemap scan` at the directory that contains your top-level packages. For a `src/` layout, that's `src/`. For a flat layout (with `mypkg/` at the repo root), that's the repo root. Dotted paths in the output are computed relative to this directory and must match the import strings in your code for resolution to work.
 
+### Build a call graph
+
+Phase 4 goes one level deeper, from modules down to individual functions:
+
+```bash
+codemap callgraph src/
+```
+
+You get a symbol-level map of which function calls which, with McCabe complexity attached to every function and a hotspot table that ranks functions by `complexity × fan-in`, the parts of the codebase most worth your attention when reading or refactoring. Sample output (CodeMap analyzing its own source):
+```
+╭ 📞 CodeMap Call Graph ───────╮
+│ src                          │
+╰──────────────────────────────╯
+╭──────── Stats ───────────────╮
+│  Functions             104   │
+│  Internal edges         89   │
+│  Self edges             17   │
+│  External edges         61   │
+│  Unresolved edges      262   │
+╰──────────────────────────────╯
+╭──── Hotspots (top 5) ──────────────────────────────────────────────────╮
+│  1  codemap.graph.resolver.resolve_import           cx 8  fan-in 2  16 │
+│  2  codemap.callgraph.extractor._handle_call        cx 6  fan-in 2  12 │
+│  3  codemap.graph.discovery.discover_modules        cx 6  fan-in 2  12 │
+│  4  codemap.ast_engine.parser._resolve_callee       cx 5  fan-in 2  10 │
+│  5  codemap.callgraph.builder.build_call_graph      cx 9  fan-in 1   9 │
+╰────────────────────────────────────────────────────────────────────────╯
+```
+
+**Export the graph for visualization.** Pipe to Graphviz or feed to your own tooling:
+
+```bash
+codemap callgraph src/ --format dot --output callgraph.dot
+codemap callgraph src/ --format json --output callgraph.json
+```
+
+**Tip on unresolved calls.** Calls to Python builtins (`len`, `str`, `isinstance`), third-party functions, and dynamic dispatch (`self.x()` where `x` is computed) show up as unresolved by design. CodeMap reports them so you can see what your code depends on without pretending to resolve calls it can't statically prove.
+
+**Tip on hotspot scoring.** `complexity × fan-in` ranks functions that are *both* internally complex *and* depended on from many callers. A function with complexity 12 called from one place is a refactoring candidate. A function with complexity 12 called from twenty places is a refactoring priority.
+
 ## Status
 
 ✅ **Released, v0.4.0.** Feature-complete for the original design.
