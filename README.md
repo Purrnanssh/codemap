@@ -83,7 +83,7 @@ Sample output (CodeMap scanning itself):
 
 ## Status
 
-🚧 **In active development.**
+✅ **Released, v0.4.0.** Feature-complete for the original design.
 
 **Phase 1, Foundation** ✅
 - [x] Project scaffold (src layout, pyproject.toml, hatchling)
@@ -110,11 +110,13 @@ Sample output (CodeMap scanning itself):
 - [x] `codemap scan <directory>` CLI with CI-friendly exit codes
 - [x] 167 tests passing across the engine, graph, rendering, and CLI
 
-**Phase 4, Call graph & visualization** 🔜
-- [ ] Symbol-level call graph (which function calls which)
-- [ ] Cyclomatic complexity per function
-- [ ] Hotspot detection
-- [ ] Graph export (DOT, JSON, HTML)
+**Phase 4, Call graph & complexity** ✅
+- [x] Symbol-level call graph with three-stage resolver (local names, dotted chains, `self.x` methods)
+- [x] McCabe cyclomatic complexity per function
+- [x] Hotspot scoring (complexity × fan-in)
+- [x] Graph export (DOT and JSON)
+- [x] `codemap callgraph <path>` CLI command
+- [x] 367 tests passing across all engines, graphs, exporters, and CLIs
 
 ## Tech stack
 
