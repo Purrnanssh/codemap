@@ -6,6 +6,7 @@ import { GraphLegend } from './components/panels/GraphLegend';
 import type { CodeMapGraph, CodeMapNode, Hotspot, GraphMode } from './types/codemap';
 import { buildModuleGraph, enhanceGraph } from './utils/graphMetrics';
 import { Layers } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 function App() {
   const [rawData, setRawData] = useState<{ symbol: CodeMapGraph, module: CodeMapGraph } | null>(null);
@@ -65,8 +66,15 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-primary animate-pulse text-xl font-light tracking-wide">Loading CodeMap Data...</div>
+      <div className="min-h-screen bg-background cinematic-bg flex flex-col items-center justify-center">
+        <motion.div 
+          animate={{ scale: [0.95, 1, 0.95], opacity: [0.5, 1, 0.5] }} 
+          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+          className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)] flex items-center justify-center mb-4"
+        >
+          <div className="w-3 h-3 rounded-full bg-slate-300" />
+        </motion.div>
+        <div className="text-slate-500 text-[10px] tracking-widest uppercase font-medium">Initializing Workspace</div>
       </div>
     );
   }
@@ -74,21 +82,34 @@ function App() {
   if (!activeData) return null;
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden bg-background text-foreground cinematic-bg">
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 glass-panel px-1.5 py-1.5 rounded-full flex gap-1">
-        <button 
-          onClick={() => { setGraphMode('symbol'); setSelectedNode(null); }}
-          className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${graphMode === 'symbol' ? 'bg-primary text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
-        >
-          Symbol View
-        </button>
-        <button 
-          onClick={() => { setGraphMode('module'); setSelectedNode(null); }}
-          className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${graphMode === 'module' ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
-        >
-          <Layers className="w-4 h-4" />
-          Module View
-        </button>
+    <motion.div 
+      initial={{ opacity: 0 }} 
+      animate={{ opacity: 1 }} 
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="relative w-screen h-screen overflow-hidden bg-background text-foreground cinematic-bg"
+    >
+      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20 p-1 rounded-full flex gap-1 bg-slate-900/60 border border-white/10 shadow-2xl backdrop-blur-xl">
+        {(['symbol', 'module'] as GraphMode[]).map((mode) => (
+          <button
+            key={mode}
+            onClick={() => { setGraphMode(mode); setSelectedNode(null); }}
+            className={`relative px-5 py-1.5 rounded-full text-xs tracking-wide font-medium transition-colors duration-200 flex items-center gap-2 ${
+              graphMode === mode ? 'text-white' : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            {graphMode === mode && (
+              <motion.div
+                layoutId="activeTab"
+                className="absolute inset-0 bg-white/10 border border-white/5 rounded-full"
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              />
+            )}
+            <span className="relative z-10 flex items-center gap-1.5 capitalize">
+              {mode === 'module' && <Layers className="w-3.5 h-3.5" />}
+              {mode} View
+            </span>
+          </button>
+        ))}
       </div>
 
       <GraphViewer 
@@ -112,7 +133,7 @@ function App() {
       />
 
       <GraphLegend isInspectorOpen={!!selectedNode} />
-    </div>
+    </motion.div>
   );
 }
 
