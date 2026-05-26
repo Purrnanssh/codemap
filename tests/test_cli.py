@@ -45,3 +45,5 @@ def test_no_args_shows_help() -> None:
     assert "Usage:" in result.output
     assert "hello" in result.output
     assert "version" in result.output
+
+

@@ -1,0 +1,4633 @@
+{
+  "nodes": [
+    {
+      "id": "<unresolved>:<unknown>",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:FileNotFoundError",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:NotADirectoryError",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:ValueError",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:_EDGE_STYLE_BY_KIND.get",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:any",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:app",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:app.command",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:attrs.get",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:bool",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:caller_qname.startswith",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:calls.append",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:classes.append",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:codemap.ast_engine.models.CallInfo",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:codemap.ast_engine.models.ClassInfo",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:codemap.ast_engine.models.FileAnalysis",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:codemap.ast_engine.models.FunctionInfo",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:codemap.ast_engine.models.ImportInfo",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:codemap.callgraph.builder._ParseFailure",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:codemap.callgraph.builder._ParsedModule",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:codemap.callgraph.complexity._ComplexityVisitor",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:codemap.callgraph.context.ModuleContext",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:codemap.callgraph.context.ResolvedName",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:codemap.callgraph.extractor._CallGraphVisitor",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:codemap.callgraph.hotspots.HotspotEntry",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:codemap.callgraph.models.CallEdge",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:codemap.callgraph.models.CallSite",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:codemap.callgraph.models.FunctionNode",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:codemap.graph.discovery.ModuleRecord",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:console.print",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:context.classes.get",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:context.names.get",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:counts.get",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:counts.items",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:cycles.sort",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:entries.append",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:entries.sort",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:enumerate",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:expression.partition",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:expression.startswith",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:filtered.edges",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:filtered.nodes",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:format.upper",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:function_index.add",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:functions.append",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:graph.add_edge",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:graph.add_node",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:graph.edges",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:graph.has_edge",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:graph.has_node",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:graph.in_degree",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:graph.nodes",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:graph.number_of_edges",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:graph.number_of_nodes",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:graph.out_degree",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:graph.subgraph",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:import_info.name.split",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:importer_dotted.split",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:imports.append",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:int",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:internal_target.endswith",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:isinstance",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:kept.add",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:label.replace",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:len",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:lines.append",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:list",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:module.complexities.get",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:node_id.startswith",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:output.write_text",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:panels.append",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:parse_errors.items",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:parsed.values",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:parts.append",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:parts.pop",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:path.read_text",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:py_file.relative_to",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:records.append",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:records.sort",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:remainder.split",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:reversed",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:root.exists",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:root.is_dir",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:root.resolve",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:root.rglob",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:rows.sort",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:self._class_stack.append",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:self._class_stack.pop",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:self._function_stack.append",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:self._function_stack.pop",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:self.call_sites.append",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:self.functions.append",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:self.generic_visit",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:set",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:sorted",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:str",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:subgraph.degree",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:subgraph.nodes",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:subgraph.remove_nodes_from",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:sum",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:table.add_column",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:table.add_row",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:target.startswith",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:tuple",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:type",
+      "kind": "unresolved"
+    },
+    {
+      "id": "<unresolved>:visitor.visit",
+      "kind": "unresolved"
+    },
+    {
+      "id": "ast.parse",
+      "kind": "external"
+    },
+    {
+      "id": "ast.walk",
+      "kind": "external"
+    },
+    {
+      "id": "codemap.ast_engine.parser._build_function_info",
+      "kind": "function",
+      "module": "codemap.ast_engine.parser",
+      "class_name": null,
+      "name": "_build_function_info",
+      "line": 222,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.ast_engine.parser._resolve_callee",
+      "kind": "function",
+      "module": "codemap.ast_engine.parser",
+      "class_name": null,
+      "name": "_resolve_callee",
+      "line": 239,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 5
+    },
+    {
+      "id": "codemap.ast_engine.parser.extract_calls",
+      "kind": "function",
+      "module": "codemap.ast_engine.parser",
+      "class_name": null,
+      "name": "extract_calls",
+      "line": 185,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.ast_engine.parser.extract_classes",
+      "kind": "function",
+      "module": "codemap.ast_engine.parser",
+      "class_name": null,
+      "name": "extract_classes",
+      "line": 143,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 4
+    },
+    {
+      "id": "codemap.ast_engine.parser.extract_functions",
+      "kind": "function",
+      "module": "codemap.ast_engine.parser",
+      "class_name": null,
+      "name": "extract_functions",
+      "line": 113,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.ast_engine.parser.extract_imports",
+      "kind": "function",
+      "module": "codemap.ast_engine.parser",
+      "class_name": null,
+      "name": "extract_imports",
+      "line": 64,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 7
+    },
+    {
+      "id": "codemap.ast_engine.parser.parse_file",
+      "kind": "function",
+      "module": "codemap.ast_engine.parser",
+      "class_name": null,
+      "name": "parse_file",
+      "line": 31,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.builder._ParseFailure.__init__",
+      "kind": "function",
+      "module": "codemap.callgraph.builder",
+      "class_name": "_ParseFailure",
+      "name": "__init__",
+      "line": 155,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.builder._ParsedModule.__init__",
+      "kind": "function",
+      "module": "codemap.callgraph.builder",
+      "class_name": "_ParsedModule",
+      "name": "__init__",
+      "line": 137,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.builder._add_edge",
+      "kind": "function",
+      "module": "codemap.callgraph.builder",
+      "class_name": null,
+      "name": "_add_edge",
+      "line": 258,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 2
+    },
+    {
+      "id": "codemap.callgraph.builder._add_function_node",
+      "kind": "function",
+      "module": "codemap.callgraph.builder",
+      "class_name": null,
+      "name": "_add_function_node",
+      "line": 205,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.builder._ensure_target_node",
+      "kind": "function",
+      "module": "codemap.callgraph.builder",
+      "class_name": null,
+      "name": "_ensure_target_node",
+      "line": 281,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 4
+    },
+    {
+      "id": "codemap.callgraph.builder._parse_one_module",
+      "kind": "function",
+      "module": "codemap.callgraph.builder",
+      "class_name": null,
+      "name": "_parse_one_module",
+      "line": 159,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 2
+    },
+    {
+      "id": "codemap.callgraph.builder._validate_internal_edge",
+      "kind": "function",
+      "module": "codemap.callgraph.builder",
+      "class_name": null,
+      "name": "_validate_internal_edge",
+      "line": 224,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.callgraph.builder.build_call_graph",
+      "kind": "function",
+      "module": "codemap.callgraph.builder",
+      "class_name": null,
+      "name": "build_call_graph",
+      "line": 54,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 9
+    },
+    {
+      "id": "codemap.callgraph.complexity._ComplexityVisitor.__init__",
+      "kind": "function",
+      "module": "codemap.callgraph.complexity",
+      "class_name": "_ComplexityVisitor",
+      "name": "__init__",
+      "line": 90,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.complexity._ComplexityVisitor._handle_function_def",
+      "kind": "function",
+      "module": "codemap.callgraph.complexity",
+      "class_name": "_ComplexityVisitor",
+      "name": "_handle_function_def",
+      "line": 111,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.callgraph.complexity._ComplexityVisitor._increment",
+      "kind": "function",
+      "module": "codemap.callgraph.complexity",
+      "class_name": "_ComplexityVisitor",
+      "name": "_increment",
+      "line": 205,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.complexity._ComplexityVisitor._increment_by",
+      "kind": "function",
+      "module": "codemap.callgraph.complexity",
+      "class_name": "_ComplexityVisitor",
+      "name": "_increment_by",
+      "line": 208,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 2
+    },
+    {
+      "id": "codemap.callgraph.complexity._ComplexityVisitor.visit_Assert",
+      "kind": "function",
+      "module": "codemap.callgraph.complexity",
+      "class_name": "_ComplexityVisitor",
+      "name": "visit_Assert",
+      "line": 169,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.complexity._ComplexityVisitor.visit_AsyncFor",
+      "kind": "function",
+      "module": "codemap.callgraph.complexity",
+      "class_name": "_ComplexityVisitor",
+      "name": "visit_AsyncFor",
+      "line": 147,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.complexity._ComplexityVisitor.visit_AsyncFunctionDef",
+      "kind": "function",
+      "module": "codemap.callgraph.complexity",
+      "class_name": "_ComplexityVisitor",
+      "name": "visit_AsyncFunctionDef",
+      "line": 108,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.complexity._ComplexityVisitor.visit_AsyncWith",
+      "kind": "function",
+      "module": "codemap.callgraph.complexity",
+      "class_name": "_ComplexityVisitor",
+      "name": "visit_AsyncWith",
+      "line": 165,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.complexity._ComplexityVisitor.visit_BoolOp",
+      "kind": "function",
+      "module": "codemap.callgraph.complexity",
+      "class_name": "_ComplexityVisitor",
+      "name": "visit_BoolOp",
+      "line": 186,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 2
+    },
+    {
+      "id": "codemap.callgraph.complexity._ComplexityVisitor.visit_ClassDef",
+      "kind": "function",
+      "module": "codemap.callgraph.complexity",
+      "class_name": "_ComplexityVisitor",
+      "name": "visit_ClassDef",
+      "line": 100,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.complexity._ComplexityVisitor.visit_ExceptHandler",
+      "kind": "function",
+      "module": "codemap.callgraph.complexity",
+      "class_name": "_ComplexityVisitor",
+      "name": "visit_ExceptHandler",
+      "line": 155,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.complexity._ComplexityVisitor.visit_For",
+      "kind": "function",
+      "module": "codemap.callgraph.complexity",
+      "class_name": "_ComplexityVisitor",
+      "name": "visit_For",
+      "line": 143,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.complexity._ComplexityVisitor.visit_FunctionDef",
+      "kind": "function",
+      "module": "codemap.callgraph.complexity",
+      "class_name": "_ComplexityVisitor",
+      "name": "visit_FunctionDef",
+      "line": 105,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.complexity._ComplexityVisitor.visit_If",
+      "kind": "function",
+      "module": "codemap.callgraph.complexity",
+      "class_name": "_ComplexityVisitor",
+      "name": "visit_If",
+      "line": 136,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.complexity._ComplexityVisitor.visit_IfExp",
+      "kind": "function",
+      "module": "codemap.callgraph.complexity",
+      "class_name": "_ComplexityVisitor",
+      "name": "visit_IfExp",
+      "line": 173,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.complexity._ComplexityVisitor.visit_Match",
+      "kind": "function",
+      "module": "codemap.callgraph.complexity",
+      "class_name": "_ComplexityVisitor",
+      "name": "visit_Match",
+      "line": 178,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 2
+    },
+    {
+      "id": "codemap.callgraph.complexity._ComplexityVisitor.visit_While",
+      "kind": "function",
+      "module": "codemap.callgraph.complexity",
+      "class_name": "_ComplexityVisitor",
+      "name": "visit_While",
+      "line": 151,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.complexity._ComplexityVisitor.visit_With",
+      "kind": "function",
+      "module": "codemap.callgraph.complexity",
+      "class_name": "_ComplexityVisitor",
+      "name": "visit_With",
+      "line": 159,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.complexity._ComplexityVisitor.visit_comprehension",
+      "kind": "function",
+      "module": "codemap.callgraph.complexity",
+      "class_name": "_ComplexityVisitor",
+      "name": "visit_comprehension",
+      "line": 194,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.complexity.compute_complexities",
+      "kind": "function",
+      "module": "codemap.callgraph.complexity",
+      "class_name": null,
+      "name": "compute_complexities",
+      "line": 39,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.context._expand_internal_target",
+      "kind": "function",
+      "module": "codemap.callgraph.context",
+      "class_name": null,
+      "name": "_expand_internal_target",
+      "line": 235,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 4
+    },
+    {
+      "id": "codemap.callgraph.context._external_qualified_name",
+      "kind": "function",
+      "module": "codemap.callgraph.context",
+      "class_name": null,
+      "name": "_external_qualified_name",
+      "line": 274,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 4
+    },
+    {
+      "id": "codemap.callgraph.context._resolve_one_import",
+      "kind": "function",
+      "module": "codemap.callgraph.context",
+      "class_name": null,
+      "name": "_resolve_one_import",
+      "line": 166,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 7
+    },
+    {
+      "id": "codemap.callgraph.context.build_module_context",
+      "kind": "function",
+      "module": "codemap.callgraph.context",
+      "class_name": null,
+      "name": "build_module_context",
+      "line": 92,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 6
+    },
+    {
+      "id": "codemap.callgraph.exporters._complexity_color",
+      "kind": "function",
+      "module": "codemap.callgraph.exporters",
+      "class_name": null,
+      "name": "_complexity_color",
+      "line": 368,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.callgraph.exporters._dot_edge_line",
+      "kind": "function",
+      "module": "codemap.callgraph.exporters",
+      "class_name": null,
+      "name": "_dot_edge_line",
+      "line": 341,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.exporters._dot_function_node",
+      "kind": "function",
+      "module": "codemap.callgraph.exporters",
+      "class_name": null,
+      "name": "_dot_function_node",
+      "line": 296,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.callgraph.exporters._dot_label",
+      "kind": "function",
+      "module": "codemap.callgraph.exporters",
+      "class_name": null,
+      "name": "_dot_label",
+      "line": 348,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.callgraph.exporters._dot_node_line",
+      "kind": "function",
+      "module": "codemap.callgraph.exporters",
+      "class_name": null,
+      "name": "_dot_node_line",
+      "line": 282,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 4
+    },
+    {
+      "id": "codemap.callgraph.exporters._dot_synthetic_node",
+      "kind": "function",
+      "module": "codemap.callgraph.exporters",
+      "class_name": null,
+      "name": "_dot_synthetic_node",
+      "line": 315,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.exporters._drop_orphan_synthetic_nodes",
+      "kind": "function",
+      "module": "codemap.callgraph.exporters",
+      "class_name": null,
+      "name": "_drop_orphan_synthetic_nodes",
+      "line": 218,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.callgraph.exporters._filter_graph",
+      "kind": "function",
+      "module": "codemap.callgraph.exporters",
+      "class_name": null,
+      "name": "_filter_graph",
+      "line": 173,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 2
+    },
+    {
+      "id": "codemap.callgraph.exporters._json_edge",
+      "kind": "function",
+      "module": "codemap.callgraph.exporters",
+      "class_name": null,
+      "name": "_json_edge",
+      "line": 263,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.callgraph.exporters._json_node",
+      "kind": "function",
+      "module": "codemap.callgraph.exporters",
+      "class_name": null,
+      "name": "_json_node",
+      "line": 250,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 4
+    },
+    {
+      "id": "codemap.callgraph.exporters._select_kept_nodes",
+      "kind": "function",
+      "module": "codemap.callgraph.exporters",
+      "class_name": null,
+      "name": "_select_kept_nodes",
+      "line": 197,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 4
+    },
+    {
+      "id": "codemap.callgraph.exporters.to_dot",
+      "kind": "function",
+      "module": "codemap.callgraph.exporters",
+      "class_name": null,
+      "name": "to_dot",
+      "line": 115,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 4
+    },
+    {
+      "id": "codemap.callgraph.exporters.to_json",
+      "kind": "function",
+      "module": "codemap.callgraph.exporters",
+      "class_name": null,
+      "name": "to_json",
+      "line": 57,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 2
+    },
+    {
+      "id": "codemap.callgraph.extractor._CallGraphVisitor.__init__",
+      "kind": "function",
+      "module": "codemap.callgraph.extractor",
+      "class_name": "_CallGraphVisitor",
+      "name": "__init__",
+      "line": 100,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.extractor._CallGraphVisitor._handle_function_def",
+      "kind": "function",
+      "module": "codemap.callgraph.extractor",
+      "class_name": "_CallGraphVisitor",
+      "name": "_handle_function_def",
+      "line": 142,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 6
+    },
+    {
+      "id": "codemap.callgraph.extractor._CallGraphVisitor.visit_AsyncFunctionDef",
+      "kind": "function",
+      "module": "codemap.callgraph.extractor",
+      "class_name": "_CallGraphVisitor",
+      "name": "visit_AsyncFunctionDef",
+      "line": 111,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.extractor._CallGraphVisitor.visit_Call",
+      "kind": "function",
+      "module": "codemap.callgraph.extractor",
+      "class_name": "_CallGraphVisitor",
+      "name": "visit_Call",
+      "line": 121,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 2
+    },
+    {
+      "id": "codemap.callgraph.extractor._CallGraphVisitor.visit_ClassDef",
+      "kind": "function",
+      "module": "codemap.callgraph.extractor",
+      "class_name": "_CallGraphVisitor",
+      "name": "visit_ClassDef",
+      "line": 115,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.extractor._CallGraphVisitor.visit_FunctionDef",
+      "kind": "function",
+      "module": "codemap.callgraph.extractor",
+      "class_name": "_CallGraphVisitor",
+      "name": "visit_FunctionDef",
+      "line": 107,
+      "is_method": true,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.extractor.extract_module",
+      "kind": "function",
+      "module": "codemap.callgraph.extractor",
+      "class_name": null,
+      "name": "extract_module",
+      "line": 40,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.hotspots.compute_hotspots",
+      "kind": "function",
+      "module": "codemap.callgraph.hotspots",
+      "class_name": null,
+      "name": "compute_hotspots",
+      "line": 56,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.callgraph.hotspots.top_hotspots",
+      "kind": "function",
+      "module": "codemap.callgraph.hotspots",
+      "class_name": null,
+      "name": "top_hotspots",
+      "line": 103,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 2
+    },
+    {
+      "id": "codemap.callgraph.models.build_qualified_name",
+      "kind": "function",
+      "module": "codemap.callgraph.models",
+      "class_name": null,
+      "name": "build_qualified_name",
+      "line": 163,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 2
+    },
+    {
+      "id": "codemap.callgraph.resolver._extract_class_name",
+      "kind": "function",
+      "module": "codemap.callgraph.resolver",
+      "class_name": null,
+      "name": "_extract_class_name",
+      "line": 114,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.callgraph.resolver._resolve_bare_name",
+      "kind": "function",
+      "module": "codemap.callgraph.resolver",
+      "class_name": null,
+      "name": "_resolve_bare_name",
+      "line": 135,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.callgraph.resolver._resolve_dotted_chain",
+      "kind": "function",
+      "module": "codemap.callgraph.resolver",
+      "class_name": null,
+      "name": "_resolve_dotted_chain",
+      "line": 154,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.callgraph.resolver._resolve_self_call",
+      "kind": "function",
+      "module": "codemap.callgraph.resolver",
+      "class_name": null,
+      "name": "_resolve_self_call",
+      "line": 74,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 6
+    },
+    {
+      "id": "codemap.callgraph.resolver._unresolved_edge",
+      "kind": "function",
+      "module": "codemap.callgraph.resolver",
+      "class_name": null,
+      "name": "_unresolved_edge",
+      "line": 190,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.callgraph.resolver.resolve_call",
+      "kind": "function",
+      "module": "codemap.callgraph.resolver",
+      "class_name": null,
+      "name": "resolve_call",
+      "line": 38,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 4
+    },
+    {
+      "id": "codemap.cli.analyze",
+      "kind": "function",
+      "module": "codemap.cli",
+      "class_name": null,
+      "name": "analyze",
+      "line": 54,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.cli.callgraph",
+      "kind": "function",
+      "module": "codemap.cli",
+      "class_name": null,
+      "name": "callgraph",
+      "line": 127,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 12
+    },
+    {
+      "id": "codemap.cli.hello",
+      "kind": "function",
+      "module": "codemap.cli",
+      "class_name": null,
+      "name": "hello",
+      "line": 37,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.cli.main",
+      "kind": "function",
+      "module": "codemap.cli",
+      "class_name": null,
+      "name": "main",
+      "line": 79,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.cli.scan",
+      "kind": "function",
+      "module": "codemap.cli",
+      "class_name": null,
+      "name": "scan",
+      "line": 85,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.cli.version",
+      "kind": "function",
+      "module": "codemap.cli",
+      "class_name": null,
+      "name": "version",
+      "line": 48,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.graph.builder._is_package",
+      "kind": "function",
+      "module": "codemap.graph.builder",
+      "class_name": null,
+      "name": "_is_package",
+      "line": 80,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.graph.builder._process_module",
+      "kind": "function",
+      "module": "codemap.graph.builder",
+      "class_name": null,
+      "name": "_process_module",
+      "line": 85,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 5
+    },
+    {
+      "id": "codemap.graph.builder.build_graph",
+      "kind": "function",
+      "module": "codemap.graph.builder",
+      "class_name": null,
+      "name": "build_graph",
+      "line": 29,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.graph.builder.find_cycles",
+      "kind": "function",
+      "module": "codemap.graph.builder",
+      "class_name": null,
+      "name": "find_cycles",
+      "line": 123,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.graph.discovery._is_ignored",
+      "kind": "function",
+      "module": "codemap.graph.discovery",
+      "class_name": null,
+      "name": "_is_ignored",
+      "line": 41,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.graph.discovery._to_dotted_path",
+      "kind": "function",
+      "module": "codemap.graph.discovery",
+      "class_name": null,
+      "name": "_to_dotted_path",
+      "line": 46,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 2
+    },
+    {
+      "id": "codemap.graph.discovery.discover_modules",
+      "kind": "function",
+      "module": "codemap.graph.discovery",
+      "class_name": null,
+      "name": "discover_modules",
+      "line": 66,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 6
+    },
+    {
+      "id": "codemap.graph.resolver._to_absolute_module",
+      "kind": "function",
+      "module": "codemap.graph.resolver",
+      "class_name": null,
+      "name": "_to_absolute_module",
+      "line": 85,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 8
+    },
+    {
+      "id": "codemap.graph.resolver.resolve_import",
+      "kind": "function",
+      "module": "codemap.graph.resolver",
+      "class_name": null,
+      "name": "resolve_import",
+      "line": 18,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 8
+    },
+    {
+      "id": "codemap.rendering._callgraph_header_panel",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "_callgraph_header_panel",
+      "line": 343,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.rendering._callgraph_parse_errors_panel",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "_callgraph_parse_errors_panel",
+      "line": 450,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 2
+    },
+    {
+      "id": "codemap.rendering._callgraph_stats_panel",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "_callgraph_stats_panel",
+      "line": 353,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 7
+    },
+    {
+      "id": "codemap.rendering._calls_panel",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "_calls_panel",
+      "line": 128,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.rendering._classes_panel",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "_classes_panel",
+      "line": 99,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 8
+    },
+    {
+      "id": "codemap.rendering._cycles_panel",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "_cycles_panel",
+      "line": 248,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 2
+    },
+    {
+      "id": "codemap.rendering._empty_panel",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "_empty_panel",
+      "line": 143,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.rendering._functions_panel",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "_functions_panel",
+      "line": 76,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 5
+    },
+    {
+      "id": "codemap.rendering._graph_header_panel",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "_graph_header_panel",
+      "line": 191,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.rendering._has_parse_errors",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "_has_parse_errors",
+      "line": 263,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.rendering._header_panel",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "_header_panel",
+      "line": 44,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.rendering._hotspots_panel",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "_hotspots_panel",
+      "line": 388,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.rendering._imports_panel",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "_imports_panel",
+      "line": 54,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 5
+    },
+    {
+      "id": "codemap.rendering._parse_errors_panel",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "_parse_errors_panel",
+      "line": 268,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.rendering._stats_panel",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "_stats_panel",
+      "line": 201,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 2
+    },
+    {
+      "id": "codemap.rendering._summarize_unresolved",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "_summarize_unresolved",
+      "line": 419,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.rendering._top_imported_panel",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "_top_imported_panel",
+      "line": 221,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.rendering._unresolved_panel",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "_unresolved_panel",
+      "line": 430,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "codemap.rendering.render_analysis",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "render_analysis",
+      "line": 22,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 1
+    },
+    {
+      "id": "codemap.rendering.render_callgraph_summary",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "render_callgraph_summary",
+      "line": 292,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 4
+    },
+    {
+      "id": "codemap.rendering.render_graph_summary",
+      "kind": "function",
+      "module": "codemap.rendering",
+      "class_name": null,
+      "name": "render_graph_summary",
+      "line": 157,
+      "is_method": false,
+      "is_async": false,
+      "complexity": 3
+    },
+    {
+      "id": "json.dumps",
+      "kind": "external"
+    },
+    {
+      "id": "networkx.DiGraph",
+      "kind": "external"
+    },
+    {
+      "id": "networkx.simple_cycles",
+      "kind": "external"
+    },
+    {
+      "id": "pathlib.Path",
+      "kind": "external"
+    },
+    {
+      "id": "rich.console.Group",
+      "kind": "external"
+    },
+    {
+      "id": "rich.panel.Panel",
+      "kind": "external"
+    },
+    {
+      "id": "rich.panel.Panel.fit",
+      "kind": "external"
+    },
+    {
+      "id": "rich.table.Table",
+      "kind": "external"
+    },
+    {
+      "id": "rich.text.Text",
+      "kind": "external"
+    },
+    {
+      "id": "typer.Argument",
+      "kind": "external"
+    },
+    {
+      "id": "typer.Exit",
+      "kind": "external"
+    },
+    {
+      "id": "typer.Option",
+      "kind": "external"
+    }
+  ],
+  "edges": [
+    {
+      "source": "codemap.ast_engine.parser._build_function_info",
+      "target": "<unresolved>:codemap.ast_engine.models.FunctionInfo",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 231
+    },
+    {
+      "source": "codemap.ast_engine.parser._build_function_info",
+      "target": "<unresolved>:isinstance",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 235
+    },
+    {
+      "source": "codemap.ast_engine.parser._build_function_info",
+      "target": "<unresolved>:tuple",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 234
+    },
+    {
+      "source": "codemap.ast_engine.parser._resolve_callee",
+      "target": "<unresolved>:<unknown>",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 260
+    },
+    {
+      "source": "codemap.ast_engine.parser._resolve_callee",
+      "target": "<unresolved>:isinstance",
+      "kind": "unresolved",
+      "call_count": 4,
+      "first_line": 249
+    },
+    {
+      "source": "codemap.ast_engine.parser._resolve_callee",
+      "target": "<unresolved>:parts.append",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 256
+    },
+    {
+      "source": "codemap.ast_engine.parser._resolve_callee",
+      "target": "<unresolved>:reversed",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 260
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_calls",
+      "target": "<unresolved>:calls.append",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 212
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_calls",
+      "target": "<unresolved>:codemap.ast_engine.models.CallInfo",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 213
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_calls",
+      "target": "<unresolved>:isinstance",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 211
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_calls",
+      "target": "<unresolved>:tuple",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 219
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_calls",
+      "target": "ast.parse",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 207
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_calls",
+      "target": "ast.walk",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 210
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_calls",
+      "target": "codemap.ast_engine.parser._resolve_callee",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 214
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_classes",
+      "target": "<unresolved>:classes.append",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 174
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_classes",
+      "target": "<unresolved>:codemap.ast_engine.models.ClassInfo",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 175
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_classes",
+      "target": "<unresolved>:isinstance",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 168
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_classes",
+      "target": "<unresolved>:tuple",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 169
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_classes",
+      "target": "ast.parse",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 164
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_classes",
+      "target": "codemap.ast_engine.parser._build_function_info",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 170
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_functions",
+      "target": "<unresolved>:functions.append",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 138
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_functions",
+      "target": "<unresolved>:isinstance",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 137
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_functions",
+      "target": "<unresolved>:tuple",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 140
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_functions",
+      "target": "ast.parse",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 133
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_functions",
+      "target": "codemap.ast_engine.parser._build_function_info",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 138
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_imports",
+      "target": "<unresolved>:codemap.ast_engine.models.ImportInfo",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 89
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_imports",
+      "target": "<unresolved>:imports.append",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 88
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_imports",
+      "target": "<unresolved>:isinstance",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 86
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_imports",
+      "target": "<unresolved>:tuple",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 110
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_imports",
+      "target": "ast.parse",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 82
+    },
+    {
+      "source": "codemap.ast_engine.parser.extract_imports",
+      "target": "ast.walk",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 85
+    },
+    {
+      "source": "codemap.ast_engine.parser.parse_file",
+      "target": "<unresolved>:codemap.ast_engine.models.FileAnalysis",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 55
+    },
+    {
+      "source": "codemap.ast_engine.parser.parse_file",
+      "target": "<unresolved>:path.read_text",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 53
+    },
+    {
+      "source": "codemap.ast_engine.parser.parse_file",
+      "target": "codemap.ast_engine.parser.extract_calls",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 60
+    },
+    {
+      "source": "codemap.ast_engine.parser.parse_file",
+      "target": "codemap.ast_engine.parser.extract_classes",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 59
+    },
+    {
+      "source": "codemap.ast_engine.parser.parse_file",
+      "target": "codemap.ast_engine.parser.extract_functions",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 58
+    },
+    {
+      "source": "codemap.ast_engine.parser.parse_file",
+      "target": "codemap.ast_engine.parser.extract_imports",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 57
+    },
+    {
+      "source": "codemap.ast_engine.parser.parse_file",
+      "target": "pathlib.Path",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 52
+    },
+    {
+      "source": "codemap.callgraph.builder._add_edge",
+      "target": "<unresolved>:graph.add_edge",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 272
+    },
+    {
+      "source": "codemap.callgraph.builder._add_edge",
+      "target": "<unresolved>:graph.has_edge",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 268
+    },
+    {
+      "source": "codemap.callgraph.builder._add_edge",
+      "target": "codemap.callgraph.builder._ensure_target_node",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 266
+    },
+    {
+      "source": "codemap.callgraph.builder._add_function_node",
+      "target": "<unresolved>:graph.add_node",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 211
+    },
+    {
+      "source": "codemap.callgraph.builder._ensure_target_node",
+      "target": "<unresolved>:graph.add_node",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 293
+    },
+    {
+      "source": "codemap.callgraph.builder._ensure_target_node",
+      "target": "<unresolved>:graph.has_node",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 289
+    },
+    {
+      "source": "codemap.callgraph.builder._parse_one_module",
+      "target": "<unresolved>:codemap.callgraph.builder._ParseFailure",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 175
+    },
+    {
+      "source": "codemap.callgraph.builder._parse_one_module",
+      "target": "<unresolved>:codemap.callgraph.builder._ParsedModule",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 197
+    },
+    {
+      "source": "codemap.callgraph.builder._parse_one_module",
+      "target": "<unresolved>:type",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 175
+    },
+    {
+      "source": "codemap.callgraph.builder._parse_one_module",
+      "target": "codemap.ast_engine.parser.parse_file",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 173
+    },
+    {
+      "source": "codemap.callgraph.builder._parse_one_module",
+      "target": "codemap.callgraph.complexity.compute_complexities",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 192
+    },
+    {
+      "source": "codemap.callgraph.builder._parse_one_module",
+      "target": "codemap.callgraph.context.build_module_context",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 177
+    },
+    {
+      "source": "codemap.callgraph.builder._parse_one_module",
+      "target": "codemap.callgraph.extractor.extract_module",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 184
+    },
+    {
+      "source": "codemap.callgraph.builder._validate_internal_edge",
+      "target": "<unresolved>:codemap.callgraph.models.CallEdge",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 250
+    },
+    {
+      "source": "codemap.callgraph.builder.build_call_graph",
+      "target": "<unresolved>:function_index.add",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 113
+    },
+    {
+      "source": "codemap.callgraph.builder.build_call_graph",
+      "target": "<unresolved>:isinstance",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 104
+    },
+    {
+      "source": "codemap.callgraph.builder.build_call_graph",
+      "target": "<unresolved>:module.complexities.get",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 120
+    },
+    {
+      "source": "codemap.callgraph.builder.build_call_graph",
+      "target": "<unresolved>:parsed.values",
+      "kind": "unresolved",
+      "call_count": 3,
+      "first_line": 111
+    },
+    {
+      "source": "codemap.callgraph.builder.build_call_graph",
+      "target": "<unresolved>:set",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 110
+    },
+    {
+      "source": "codemap.callgraph.builder.build_call_graph",
+      "target": "codemap.callgraph.builder._add_edge",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 127
+    },
+    {
+      "source": "codemap.callgraph.builder.build_call_graph",
+      "target": "codemap.callgraph.builder._add_function_node",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 121
+    },
+    {
+      "source": "codemap.callgraph.builder.build_call_graph",
+      "target": "codemap.callgraph.builder._parse_one_module",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 103
+    },
+    {
+      "source": "codemap.callgraph.builder.build_call_graph",
+      "target": "codemap.callgraph.builder._validate_internal_edge",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 126
+    },
+    {
+      "source": "codemap.callgraph.builder.build_call_graph",
+      "target": "codemap.callgraph.resolver.resolve_call",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 125
+    },
+    {
+      "source": "codemap.callgraph.builder.build_call_graph",
+      "target": "codemap.graph.discovery.discover_modules",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 92
+    },
+    {
+      "source": "codemap.callgraph.builder.build_call_graph",
+      "target": "networkx.DiGraph",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 116
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor._handle_function_def",
+      "target": "<unresolved>:bool",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 115
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor._handle_function_def",
+      "target": "<unresolved>:self._function_stack.append",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 125
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor._handle_function_def",
+      "target": "<unresolved>:self._function_stack.pop",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 128
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor._handle_function_def",
+      "target": "<unresolved>:self.generic_visit",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 126
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor._handle_function_def",
+      "target": "codemap.callgraph.models.build_qualified_name",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 119
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor._increment",
+      "target": "codemap.callgraph.complexity._ComplexityVisitor._increment_by",
+      "kind": "self",
+      "call_count": 1,
+      "first_line": 206
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_Assert",
+      "target": "<unresolved>:self.generic_visit",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 171
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_Assert",
+      "target": "codemap.callgraph.complexity._ComplexityVisitor._increment",
+      "kind": "self",
+      "call_count": 1,
+      "first_line": 170
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_AsyncFor",
+      "target": "<unresolved>:self.generic_visit",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 149
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_AsyncFor",
+      "target": "codemap.callgraph.complexity._ComplexityVisitor._increment",
+      "kind": "self",
+      "call_count": 1,
+      "first_line": 148
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_AsyncFunctionDef",
+      "target": "codemap.callgraph.complexity._ComplexityVisitor._handle_function_def",
+      "kind": "self",
+      "call_count": 1,
+      "first_line": 109
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_AsyncWith",
+      "target": "<unresolved>:len",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 166
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_AsyncWith",
+      "target": "<unresolved>:self.generic_visit",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 167
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_AsyncWith",
+      "target": "codemap.callgraph.complexity._ComplexityVisitor._increment_by",
+      "kind": "self",
+      "call_count": 1,
+      "first_line": 166
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_BoolOp",
+      "target": "<unresolved>:len",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 189
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_BoolOp",
+      "target": "<unresolved>:self.generic_visit",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 192
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_BoolOp",
+      "target": "codemap.callgraph.complexity._ComplexityVisitor._increment_by",
+      "kind": "self",
+      "call_count": 1,
+      "first_line": 191
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_ClassDef",
+      "target": "<unresolved>:self._class_stack.append",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 101
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_ClassDef",
+      "target": "<unresolved>:self._class_stack.pop",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 103
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_ClassDef",
+      "target": "<unresolved>:self.generic_visit",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 102
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_ExceptHandler",
+      "target": "<unresolved>:self.generic_visit",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 157
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_ExceptHandler",
+      "target": "codemap.callgraph.complexity._ComplexityVisitor._increment",
+      "kind": "self",
+      "call_count": 1,
+      "first_line": 156
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_For",
+      "target": "<unresolved>:self.generic_visit",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 145
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_For",
+      "target": "codemap.callgraph.complexity._ComplexityVisitor._increment",
+      "kind": "self",
+      "call_count": 1,
+      "first_line": 144
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_FunctionDef",
+      "target": "codemap.callgraph.complexity._ComplexityVisitor._handle_function_def",
+      "kind": "self",
+      "call_count": 1,
+      "first_line": 106
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_If",
+      "target": "<unresolved>:self.generic_visit",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 141
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_If",
+      "target": "codemap.callgraph.complexity._ComplexityVisitor._increment",
+      "kind": "self",
+      "call_count": 1,
+      "first_line": 140
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_IfExp",
+      "target": "<unresolved>:self.generic_visit",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 176
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_IfExp",
+      "target": "codemap.callgraph.complexity._ComplexityVisitor._increment",
+      "kind": "self",
+      "call_count": 1,
+      "first_line": 175
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_Match",
+      "target": "<unresolved>:len",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 182
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_Match",
+      "target": "<unresolved>:self.generic_visit",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 184
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_Match",
+      "target": "codemap.callgraph.complexity._ComplexityVisitor._increment_by",
+      "kind": "self",
+      "call_count": 1,
+      "first_line": 183
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_While",
+      "target": "<unresolved>:self.generic_visit",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 153
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_While",
+      "target": "codemap.callgraph.complexity._ComplexityVisitor._increment",
+      "kind": "self",
+      "call_count": 1,
+      "first_line": 152
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_With",
+      "target": "<unresolved>:len",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 162
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_With",
+      "target": "<unresolved>:self.generic_visit",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 163
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_With",
+      "target": "codemap.callgraph.complexity._ComplexityVisitor._increment_by",
+      "kind": "self",
+      "call_count": 1,
+      "first_line": 162
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_comprehension",
+      "target": "<unresolved>:len",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 200
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_comprehension",
+      "target": "<unresolved>:self.generic_visit",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 201
+    },
+    {
+      "source": "codemap.callgraph.complexity._ComplexityVisitor.visit_comprehension",
+      "target": "codemap.callgraph.complexity._ComplexityVisitor._increment_by",
+      "kind": "self",
+      "call_count": 1,
+      "first_line": 200
+    },
+    {
+      "source": "codemap.callgraph.complexity.compute_complexities",
+      "target": "<unresolved>:codemap.callgraph.complexity._ComplexityVisitor",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 72
+    },
+    {
+      "source": "codemap.callgraph.complexity.compute_complexities",
+      "target": "<unresolved>:path.read_text",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 69
+    },
+    {
+      "source": "codemap.callgraph.complexity.compute_complexities",
+      "target": "<unresolved>:visitor.visit",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 73
+    },
+    {
+      "source": "codemap.callgraph.complexity.compute_complexities",
+      "target": "ast.parse",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 70
+    },
+    {
+      "source": "codemap.callgraph.complexity.compute_complexities",
+      "target": "pathlib.Path",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 68
+    },
+    {
+      "source": "codemap.callgraph.context._expand_internal_target",
+      "target": "<unresolved>:internal_target.endswith",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 261
+    },
+    {
+      "source": "codemap.callgraph.context._resolve_one_import",
+      "target": "<unresolved>:codemap.callgraph.context.ResolvedName",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 219
+    },
+    {
+      "source": "codemap.callgraph.context._resolve_one_import",
+      "target": "<unresolved>:import_info.name.split",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 200
+    },
+    {
+      "source": "codemap.callgraph.context._resolve_one_import",
+      "target": "codemap.callgraph.context._expand_internal_target",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 214
+    },
+    {
+      "source": "codemap.callgraph.context._resolve_one_import",
+      "target": "codemap.callgraph.context._external_qualified_name",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 226
+    },
+    {
+      "source": "codemap.callgraph.context._resolve_one_import",
+      "target": "codemap.graph.resolver.resolve_import",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 206
+    },
+    {
+      "source": "codemap.callgraph.context.build_module_context",
+      "target": "<unresolved>:codemap.callgraph.context.ModuleContext",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 159
+    },
+    {
+      "source": "codemap.callgraph.context.build_module_context",
+      "target": "<unresolved>:codemap.callgraph.context.ResolvedName",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 131
+    },
+    {
+      "source": "codemap.callgraph.context.build_module_context",
+      "target": "<unresolved>:tuple",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 141
+    },
+    {
+      "source": "codemap.callgraph.context.build_module_context",
+      "target": "codemap.callgraph.context._resolve_one_import",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 146
+    },
+    {
+      "source": "codemap.callgraph.context.build_module_context",
+      "target": "codemap.callgraph.models.build_qualified_name",
+      "kind": "internal",
+      "call_count": 2,
+      "first_line": 132
+    },
+    {
+      "source": "codemap.callgraph.exporters._dot_edge_line",
+      "target": "<unresolved>:_EDGE_STYLE_BY_KIND.get",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 344
+    },
+    {
+      "source": "codemap.callgraph.exporters._dot_edge_line",
+      "target": "<unresolved>:attrs.get",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 343
+    },
+    {
+      "source": "codemap.callgraph.exporters._dot_function_node",
+      "target": "<unresolved>:<unknown>",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 312
+    },
+    {
+      "source": "codemap.callgraph.exporters._dot_function_node",
+      "target": "<unresolved>:attrs.get",
+      "kind": "unresolved",
+      "call_count": 3,
+      "first_line": 299
+    },
+    {
+      "source": "codemap.callgraph.exporters._dot_function_node",
+      "target": "<unresolved>:parts.append",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 309
+    },
+    {
+      "source": "codemap.callgraph.exporters._dot_function_node",
+      "target": "codemap.callgraph.exporters._complexity_color",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 300
+    },
+    {
+      "source": "codemap.callgraph.exporters._dot_function_node",
+      "target": "codemap.callgraph.exporters._dot_label",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 298
+    },
+    {
+      "source": "codemap.callgraph.exporters._dot_label",
+      "target": "<unresolved>:<unknown>",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 364
+    },
+    {
+      "source": "codemap.callgraph.exporters._dot_label",
+      "target": "<unresolved>:label.replace",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 364
+    },
+    {
+      "source": "codemap.callgraph.exporters._dot_label",
+      "target": "<unresolved>:len",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 360
+    },
+    {
+      "source": "codemap.callgraph.exporters._dot_label",
+      "target": "<unresolved>:node_id.startswith",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 359
+    },
+    {
+      "source": "codemap.callgraph.exporters._dot_node_line",
+      "target": "<unresolved>:attrs.get",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 284
+    },
+    {
+      "source": "codemap.callgraph.exporters._dot_node_line",
+      "target": "codemap.callgraph.exporters._dot_function_node",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 287
+    },
+    {
+      "source": "codemap.callgraph.exporters._dot_node_line",
+      "target": "codemap.callgraph.exporters._dot_synthetic_node",
+      "kind": "internal",
+      "call_count": 2,
+      "first_line": 289
+    },
+    {
+      "source": "codemap.callgraph.exporters._dot_synthetic_node",
+      "target": "<unresolved>:<unknown>",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 330
+    },
+    {
+      "source": "codemap.callgraph.exporters._dot_synthetic_node",
+      "target": "codemap.callgraph.exporters._dot_label",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 322
+    },
+    {
+      "source": "codemap.callgraph.exporters._drop_orphan_synthetic_nodes",
+      "target": "<unresolved>:attrs.get",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 229
+    },
+    {
+      "source": "codemap.callgraph.exporters._drop_orphan_synthetic_nodes",
+      "target": "<unresolved>:subgraph.degree",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 229
+    },
+    {
+      "source": "codemap.callgraph.exporters._drop_orphan_synthetic_nodes",
+      "target": "<unresolved>:subgraph.nodes",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 228
+    },
+    {
+      "source": "codemap.callgraph.exporters._drop_orphan_synthetic_nodes",
+      "target": "<unresolved>:subgraph.remove_nodes_from",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 231
+    },
+    {
+      "source": "codemap.callgraph.exporters._filter_graph",
+      "target": "<unresolved>:<unknown>",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 192
+    },
+    {
+      "source": "codemap.callgraph.exporters._filter_graph",
+      "target": "<unresolved>:graph.subgraph",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 192
+    },
+    {
+      "source": "codemap.callgraph.exporters._filter_graph",
+      "target": "codemap.callgraph.exporters._drop_orphan_synthetic_nodes",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 193
+    },
+    {
+      "source": "codemap.callgraph.exporters._filter_graph",
+      "target": "codemap.callgraph.exporters._select_kept_nodes",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 191
+    },
+    {
+      "source": "codemap.callgraph.exporters._json_edge",
+      "target": "<unresolved>:attrs.get",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 268
+    },
+    {
+      "source": "codemap.callgraph.exporters._json_node",
+      "target": "<unresolved>:attrs.get",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 254
+    },
+    {
+      "source": "codemap.callgraph.exporters._select_kept_nodes",
+      "target": "<unresolved>:attrs.get",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 210
+    },
+    {
+      "source": "codemap.callgraph.exporters._select_kept_nodes",
+      "target": "<unresolved>:graph.nodes",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 209
+    },
+    {
+      "source": "codemap.callgraph.exporters._select_kept_nodes",
+      "target": "<unresolved>:kept.add",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 211
+    },
+    {
+      "source": "codemap.callgraph.exporters._select_kept_nodes",
+      "target": "<unresolved>:set",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 208
+    },
+    {
+      "source": "codemap.callgraph.exporters.to_dot",
+      "target": "<unresolved>:<unknown>",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 165
+    },
+    {
+      "source": "codemap.callgraph.exporters.to_dot",
+      "target": "<unresolved>:filtered.edges",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 159
+    },
+    {
+      "source": "codemap.callgraph.exporters.to_dot",
+      "target": "<unresolved>:filtered.nodes",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 152
+    },
+    {
+      "source": "codemap.callgraph.exporters.to_dot",
+      "target": "<unresolved>:lines.append",
+      "kind": "unresolved",
+      "call_count": 9,
+      "first_line": 146
+    },
+    {
+      "source": "codemap.callgraph.exporters.to_dot",
+      "target": "<unresolved>:sorted",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 152
+    },
+    {
+      "source": "codemap.callgraph.exporters.to_dot",
+      "target": "codemap.callgraph.exporters._dot_edge_line",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 162
+    },
+    {
+      "source": "codemap.callgraph.exporters.to_dot",
+      "target": "codemap.callgraph.exporters._dot_node_line",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 153
+    },
+    {
+      "source": "codemap.callgraph.exporters.to_dot",
+      "target": "codemap.callgraph.exporters._filter_graph",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 143
+    },
+    {
+      "source": "codemap.callgraph.exporters.to_json",
+      "target": "<unresolved>:filtered.edges",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 103
+    },
+    {
+      "source": "codemap.callgraph.exporters.to_json",
+      "target": "<unresolved>:filtered.nodes",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 98
+    },
+    {
+      "source": "codemap.callgraph.exporters.to_json",
+      "target": "<unresolved>:sorted",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 98
+    },
+    {
+      "source": "codemap.callgraph.exporters.to_json",
+      "target": "codemap.callgraph.exporters._filter_graph",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 95
+    },
+    {
+      "source": "codemap.callgraph.exporters.to_json",
+      "target": "codemap.callgraph.exporters._json_edge",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 101
+    },
+    {
+      "source": "codemap.callgraph.exporters.to_json",
+      "target": "codemap.callgraph.exporters._json_node",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 98
+    },
+    {
+      "source": "codemap.callgraph.exporters.to_json",
+      "target": "json.dumps",
+      "kind": "external",
+      "call_count": 2,
+      "first_line": 111
+    },
+    {
+      "source": "codemap.callgraph.extractor._CallGraphVisitor._handle_function_def",
+      "target": "<unresolved>:bool",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 156
+    },
+    {
+      "source": "codemap.callgraph.extractor._CallGraphVisitor._handle_function_def",
+      "target": "<unresolved>:codemap.callgraph.models.FunctionNode",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 168
+    },
+    {
+      "source": "codemap.callgraph.extractor._CallGraphVisitor._handle_function_def",
+      "target": "<unresolved>:self._function_stack.append",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 187
+    },
+    {
+      "source": "codemap.callgraph.extractor._CallGraphVisitor._handle_function_def",
+      "target": "<unresolved>:self._function_stack.pop",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 189
+    },
+    {
+      "source": "codemap.callgraph.extractor._CallGraphVisitor._handle_function_def",
+      "target": "<unresolved>:self.functions.append",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 167
+    },
+    {
+      "source": "codemap.callgraph.extractor._CallGraphVisitor._handle_function_def",
+      "target": "<unresolved>:self.generic_visit",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 188
+    },
+    {
+      "source": "codemap.callgraph.extractor._CallGraphVisitor._handle_function_def",
+      "target": "codemap.callgraph.models.build_qualified_name",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 162
+    },
+    {
+      "source": "codemap.callgraph.extractor._CallGraphVisitor.visit_AsyncFunctionDef",
+      "target": "codemap.callgraph.extractor._CallGraphVisitor._handle_function_def",
+      "kind": "self",
+      "call_count": 1,
+      "first_line": 113
+    },
+    {
+      "source": "codemap.callgraph.extractor._CallGraphVisitor.visit_Call",
+      "target": "<unresolved>:codemap.callgraph.models.CallSite",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 132
+    },
+    {
+      "source": "codemap.callgraph.extractor._CallGraphVisitor.visit_Call",
+      "target": "<unresolved>:self.call_sites.append",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 131
+    },
+    {
+      "source": "codemap.callgraph.extractor._CallGraphVisitor.visit_Call",
+      "target": "<unresolved>:self.generic_visit",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 140
+    },
+    {
+      "source": "codemap.callgraph.extractor._CallGraphVisitor.visit_Call",
+      "target": "codemap.ast_engine.parser._resolve_callee",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 134
+    },
+    {
+      "source": "codemap.callgraph.extractor._CallGraphVisitor.visit_ClassDef",
+      "target": "<unresolved>:self._class_stack.append",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 117
+    },
+    {
+      "source": "codemap.callgraph.extractor._CallGraphVisitor.visit_ClassDef",
+      "target": "<unresolved>:self._class_stack.pop",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 119
+    },
+    {
+      "source": "codemap.callgraph.extractor._CallGraphVisitor.visit_ClassDef",
+      "target": "<unresolved>:self.generic_visit",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 118
+    },
+    {
+      "source": "codemap.callgraph.extractor._CallGraphVisitor.visit_FunctionDef",
+      "target": "codemap.callgraph.extractor._CallGraphVisitor._handle_function_def",
+      "kind": "self",
+      "call_count": 1,
+      "first_line": 109
+    },
+    {
+      "source": "codemap.callgraph.extractor.extract_module",
+      "target": "<unresolved>:codemap.callgraph.extractor._CallGraphVisitor",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 72
+    },
+    {
+      "source": "codemap.callgraph.extractor.extract_module",
+      "target": "<unresolved>:path.read_text",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 69
+    },
+    {
+      "source": "codemap.callgraph.extractor.extract_module",
+      "target": "<unresolved>:tuple",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 75
+    },
+    {
+      "source": "codemap.callgraph.extractor.extract_module",
+      "target": "<unresolved>:visitor.visit",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 73
+    },
+    {
+      "source": "codemap.callgraph.extractor.extract_module",
+      "target": "ast.parse",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 70
+    },
+    {
+      "source": "codemap.callgraph.extractor.extract_module",
+      "target": "pathlib.Path",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 68
+    },
+    {
+      "source": "codemap.callgraph.hotspots.compute_hotspots",
+      "target": "<unresolved>:attrs.get",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 81
+    },
+    {
+      "source": "codemap.callgraph.hotspots.compute_hotspots",
+      "target": "<unresolved>:codemap.callgraph.hotspots.HotspotEntry",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 90
+    },
+    {
+      "source": "codemap.callgraph.hotspots.compute_hotspots",
+      "target": "<unresolved>:entries.append",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 89
+    },
+    {
+      "source": "codemap.callgraph.hotspots.compute_hotspots",
+      "target": "<unresolved>:entries.sort",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 99
+    },
+    {
+      "source": "codemap.callgraph.hotspots.compute_hotspots",
+      "target": "<unresolved>:graph.in_degree",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 84
+    },
+    {
+      "source": "codemap.callgraph.hotspots.compute_hotspots",
+      "target": "<unresolved>:graph.nodes",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 80
+    },
+    {
+      "source": "codemap.callgraph.hotspots.compute_hotspots",
+      "target": "<unresolved>:graph.out_degree",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 85
+    },
+    {
+      "source": "codemap.callgraph.hotspots.top_hotspots",
+      "target": "<unresolved>:ValueError",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 125
+    },
+    {
+      "source": "codemap.callgraph.hotspots.top_hotspots",
+      "target": "codemap.callgraph.hotspots.compute_hotspots",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 126
+    },
+    {
+      "source": "codemap.callgraph.resolver._extract_class_name",
+      "target": "<unresolved>:caller_qname.startswith",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 122
+    },
+    {
+      "source": "codemap.callgraph.resolver._extract_class_name",
+      "target": "<unresolved>:len",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 125
+    },
+    {
+      "source": "codemap.callgraph.resolver._extract_class_name",
+      "target": "<unresolved>:remainder.split",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 126
+    },
+    {
+      "source": "codemap.callgraph.resolver._resolve_bare_name",
+      "target": "<unresolved>:codemap.callgraph.models.CallEdge",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 146
+    },
+    {
+      "source": "codemap.callgraph.resolver._resolve_bare_name",
+      "target": "<unresolved>:context.names.get",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 141
+    },
+    {
+      "source": "codemap.callgraph.resolver._resolve_bare_name",
+      "target": "codemap.callgraph.resolver._unresolved_edge",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 143
+    },
+    {
+      "source": "codemap.callgraph.resolver._resolve_dotted_chain",
+      "target": "<unresolved>:codemap.callgraph.models.CallEdge",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 182
+    },
+    {
+      "source": "codemap.callgraph.resolver._resolve_dotted_chain",
+      "target": "<unresolved>:context.names.get",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 176
+    },
+    {
+      "source": "codemap.callgraph.resolver._resolve_dotted_chain",
+      "target": "<unresolved>:expression.partition",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 174
+    },
+    {
+      "source": "codemap.callgraph.resolver._resolve_dotted_chain",
+      "target": "codemap.callgraph.resolver._unresolved_edge",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 178
+    },
+    {
+      "source": "codemap.callgraph.resolver._resolve_self_call",
+      "target": "<unresolved>:codemap.callgraph.models.CallEdge",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 106
+    },
+    {
+      "source": "codemap.callgraph.resolver._resolve_self_call",
+      "target": "<unresolved>:context.classes.get",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 101
+    },
+    {
+      "source": "codemap.callgraph.resolver._resolve_self_call",
+      "target": "<unresolved>:len",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 91
+    },
+    {
+      "source": "codemap.callgraph.resolver._resolve_self_call",
+      "target": "codemap.callgraph.resolver._extract_class_name",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 97
+    },
+    {
+      "source": "codemap.callgraph.resolver._resolve_self_call",
+      "target": "codemap.callgraph.resolver._unresolved_edge",
+      "kind": "internal",
+      "call_count": 3,
+      "first_line": 95
+    },
+    {
+      "source": "codemap.callgraph.resolver._unresolved_edge",
+      "target": "<unresolved>:codemap.callgraph.models.CallEdge",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 192
+    },
+    {
+      "source": "codemap.callgraph.resolver.resolve_call",
+      "target": "<unresolved>:expression.startswith",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 63
+    },
+    {
+      "source": "codemap.callgraph.resolver.resolve_call",
+      "target": "codemap.callgraph.resolver._resolve_bare_name",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 68
+    },
+    {
+      "source": "codemap.callgraph.resolver.resolve_call",
+      "target": "codemap.callgraph.resolver._resolve_dotted_chain",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 71
+    },
+    {
+      "source": "codemap.callgraph.resolver.resolve_call",
+      "target": "codemap.callgraph.resolver._resolve_self_call",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 64
+    },
+    {
+      "source": "codemap.callgraph.resolver.resolve_call",
+      "target": "codemap.callgraph.resolver._unresolved_edge",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 60
+    },
+    {
+      "source": "codemap.cli.analyze",
+      "target": "<unresolved>:app.command",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 53
+    },
+    {
+      "source": "codemap.cli.analyze",
+      "target": "<unresolved>:console.print",
+      "kind": "unresolved",
+      "call_count": 3,
+      "first_line": 70
+    },
+    {
+      "source": "codemap.cli.analyze",
+      "target": "codemap.ast_engine.parser.parse_file",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 68
+    },
+    {
+      "source": "codemap.cli.analyze",
+      "target": "codemap.rendering.render_analysis",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 76
+    },
+    {
+      "source": "codemap.cli.analyze",
+      "target": "typer.Argument",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 57
+    },
+    {
+      "source": "codemap.cli.analyze",
+      "target": "typer.Exit",
+      "kind": "external",
+      "call_count": 2,
+      "first_line": 71
+    },
+    {
+      "source": "codemap.cli.callgraph",
+      "target": "<unresolved>:app.command",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 126
+    },
+    {
+      "source": "codemap.cli.callgraph",
+      "target": "<unresolved>:console.print",
+      "kind": "unresolved",
+      "call_count": 6,
+      "first_line": 199
+    },
+    {
+      "source": "codemap.cli.callgraph",
+      "target": "<unresolved>:format.upper",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 232
+    },
+    {
+      "source": "codemap.cli.callgraph",
+      "target": "<unresolved>:output.write_text",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 231
+    },
+    {
+      "source": "codemap.cli.callgraph",
+      "target": "codemap.callgraph.builder.build_call_graph",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 211
+    },
+    {
+      "source": "codemap.cli.callgraph",
+      "target": "codemap.callgraph.exporters.to_dot",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 230
+    },
+    {
+      "source": "codemap.cli.callgraph",
+      "target": "codemap.callgraph.exporters.to_json",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 228
+    },
+    {
+      "source": "codemap.cli.callgraph",
+      "target": "codemap.rendering.render_callgraph_summary",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 217
+    },
+    {
+      "source": "codemap.cli.callgraph",
+      "target": "typer.Argument",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 130
+    },
+    {
+      "source": "codemap.cli.callgraph",
+      "target": "typer.Exit",
+      "kind": "external",
+      "call_count": 5,
+      "first_line": 200
+    },
+    {
+      "source": "codemap.cli.callgraph",
+      "target": "typer.Option",
+      "kind": "external",
+      "call_count": 4,
+      "first_line": 146
+    },
+    {
+      "source": "codemap.cli.hello",
+      "target": "<unresolved>:app.command",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 36
+    },
+    {
+      "source": "codemap.cli.hello",
+      "target": "<unresolved>:console.print",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 39
+    },
+    {
+      "source": "codemap.cli.hello",
+      "target": "rich.panel.Panel.fit",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 40
+    },
+    {
+      "source": "codemap.cli.main",
+      "target": "<unresolved>:app",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 81
+    },
+    {
+      "source": "codemap.cli.scan",
+      "target": "<unresolved>:app.command",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 84
+    },
+    {
+      "source": "codemap.cli.scan",
+      "target": "<unresolved>:console.print",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 113
+    },
+    {
+      "source": "codemap.cli.scan",
+      "target": "codemap.graph.builder.build_graph",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 111
+    },
+    {
+      "source": "codemap.cli.scan",
+      "target": "codemap.graph.builder.find_cycles",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 116
+    },
+    {
+      "source": "codemap.cli.scan",
+      "target": "codemap.rendering.render_graph_summary",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 117
+    },
+    {
+      "source": "codemap.cli.scan",
+      "target": "typer.Argument",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 88
+    },
+    {
+      "source": "codemap.cli.scan",
+      "target": "typer.Exit",
+      "kind": "external",
+      "call_count": 2,
+      "first_line": 114
+    },
+    {
+      "source": "codemap.cli.version",
+      "target": "<unresolved>:app.command",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 47
+    },
+    {
+      "source": "codemap.cli.version",
+      "target": "<unresolved>:console.print",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 50
+    },
+    {
+      "source": "codemap.graph.builder._process_module",
+      "target": "<unresolved>:graph.add_edge",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 118
+    },
+    {
+      "source": "codemap.graph.builder._process_module",
+      "target": "<unresolved>:type",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 98
+    },
+    {
+      "source": "codemap.graph.builder._process_module",
+      "target": "codemap.ast_engine.parser.parse_file",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 96
+    },
+    {
+      "source": "codemap.graph.builder._process_module",
+      "target": "codemap.graph.builder._is_package",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 101
+    },
+    {
+      "source": "codemap.graph.builder._process_module",
+      "target": "codemap.graph.resolver.resolve_import",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 105
+    },
+    {
+      "source": "codemap.graph.builder.build_graph",
+      "target": "<unresolved>:graph.add_node",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 65
+    },
+    {
+      "source": "codemap.graph.builder.build_graph",
+      "target": "codemap.graph.builder._is_package",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 68
+    },
+    {
+      "source": "codemap.graph.builder.build_graph",
+      "target": "codemap.graph.builder._process_module",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 75
+    },
+    {
+      "source": "codemap.graph.builder.build_graph",
+      "target": "codemap.graph.discovery.discover_modules",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 57
+    },
+    {
+      "source": "codemap.graph.builder.build_graph",
+      "target": "networkx.DiGraph",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 60
+    },
+    {
+      "source": "codemap.graph.builder.find_cycles",
+      "target": "<unresolved>:cycles.sort",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 144
+    },
+    {
+      "source": "codemap.graph.builder.find_cycles",
+      "target": "<unresolved>:len",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 144
+    },
+    {
+      "source": "codemap.graph.builder.find_cycles",
+      "target": "<unresolved>:list",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 143
+    },
+    {
+      "source": "codemap.graph.builder.find_cycles",
+      "target": "networkx.simple_cycles",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 143
+    },
+    {
+      "source": "codemap.graph.discovery._is_ignored",
+      "target": "<unresolved>:any",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 43
+    },
+    {
+      "source": "codemap.graph.discovery._to_dotted_path",
+      "target": "<unresolved>:<unknown>",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 57
+    },
+    {
+      "source": "codemap.graph.discovery._to_dotted_path",
+      "target": "<unresolved>:list",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 54
+    },
+    {
+      "source": "codemap.graph.discovery._to_dotted_path",
+      "target": "<unresolved>:parts.pop",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 61
+    },
+    {
+      "source": "codemap.graph.discovery._to_dotted_path",
+      "target": "<unresolved>:py_file.relative_to",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 53
+    },
+    {
+      "source": "codemap.graph.discovery.discover_modules",
+      "target": "<unresolved>:FileNotFoundError",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 86
+    },
+    {
+      "source": "codemap.graph.discovery.discover_modules",
+      "target": "<unresolved>:NotADirectoryError",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 88
+    },
+    {
+      "source": "codemap.graph.discovery.discover_modules",
+      "target": "<unresolved>:any",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 96
+    },
+    {
+      "source": "codemap.graph.discovery.discover_modules",
+      "target": "<unresolved>:codemap.graph.discovery.ModuleRecord",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 105
+    },
+    {
+      "source": "codemap.graph.discovery.discover_modules",
+      "target": "<unresolved>:py_file.relative_to",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 95
+    },
+    {
+      "source": "codemap.graph.discovery.discover_modules",
+      "target": "<unresolved>:records.append",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 105
+    },
+    {
+      "source": "codemap.graph.discovery.discover_modules",
+      "target": "<unresolved>:records.sort",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 107
+    },
+    {
+      "source": "codemap.graph.discovery.discover_modules",
+      "target": "<unresolved>:root.exists",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 85
+    },
+    {
+      "source": "codemap.graph.discovery.discover_modules",
+      "target": "<unresolved>:root.is_dir",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 87
+    },
+    {
+      "source": "codemap.graph.discovery.discover_modules",
+      "target": "<unresolved>:root.resolve",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 90
+    },
+    {
+      "source": "codemap.graph.discovery.discover_modules",
+      "target": "<unresolved>:root.rglob",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 93
+    },
+    {
+      "source": "codemap.graph.discovery.discover_modules",
+      "target": "codemap.graph.discovery._to_dotted_path",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 99
+    },
+    {
+      "source": "codemap.graph.resolver._to_absolute_module",
+      "target": "<unresolved>:<unknown>",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 123
+    },
+    {
+      "source": "codemap.graph.resolver._to_absolute_module",
+      "target": "<unresolved>:importer_dotted.split",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 113
+    },
+    {
+      "source": "codemap.graph.resolver._to_absolute_module",
+      "target": "<unresolved>:len",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 118
+    },
+    {
+      "source": "codemap.graph.resolver.resolve_import",
+      "target": "codemap.graph.resolver._to_absolute_module",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 41
+    },
+    {
+      "source": "codemap.rendering._callgraph_header_panel",
+      "target": "<unresolved>:str",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 346
+    },
+    {
+      "source": "codemap.rendering._callgraph_header_panel",
+      "target": "rich.console.Group",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 348
+    },
+    {
+      "source": "codemap.rendering._callgraph_header_panel",
+      "target": "rich.panel.Panel",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 347
+    },
+    {
+      "source": "codemap.rendering._callgraph_header_panel",
+      "target": "rich.text.Text",
+      "kind": "external",
+      "call_count": 2,
+      "first_line": 345
+    },
+    {
+      "source": "codemap.rendering._callgraph_parse_errors_panel",
+      "target": "<unresolved>:len",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 465
+    },
+    {
+      "source": "codemap.rendering._callgraph_parse_errors_panel",
+      "target": "<unresolved>:parse_errors.items",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 454
+    },
+    {
+      "source": "codemap.rendering._callgraph_parse_errors_panel",
+      "target": "<unresolved>:sorted",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 454
+    },
+    {
+      "source": "codemap.rendering._callgraph_parse_errors_panel",
+      "target": "<unresolved>:str",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 454
+    },
+    {
+      "source": "codemap.rendering._callgraph_parse_errors_panel",
+      "target": "<unresolved>:table.add_column",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 457
+    },
+    {
+      "source": "codemap.rendering._callgraph_parse_errors_panel",
+      "target": "<unresolved>:table.add_row",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 461
+    },
+    {
+      "source": "codemap.rendering._callgraph_parse_errors_panel",
+      "target": "rich.panel.Panel",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 463
+    },
+    {
+      "source": "codemap.rendering._callgraph_parse_errors_panel",
+      "target": "rich.table.Table",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 456
+    },
+    {
+      "source": "codemap.rendering._callgraph_stats_panel",
+      "target": "<unresolved>:attrs.get",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 359
+    },
+    {
+      "source": "codemap.rendering._callgraph_stats_panel",
+      "target": "<unresolved>:graph.edges",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 368
+    },
+    {
+      "source": "codemap.rendering._callgraph_stats_panel",
+      "target": "<unresolved>:graph.nodes",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 358
+    },
+    {
+      "source": "codemap.rendering._callgraph_stats_panel",
+      "target": "<unresolved>:str",
+      "kind": "unresolved",
+      "call_count": 7,
+      "first_line": 377
+    },
+    {
+      "source": "codemap.rendering._callgraph_stats_panel",
+      "target": "<unresolved>:table.add_column",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 374
+    },
+    {
+      "source": "codemap.rendering._callgraph_stats_panel",
+      "target": "<unresolved>:table.add_row",
+      "kind": "unresolved",
+      "call_count": 7,
+      "first_line": 377
+    },
+    {
+      "source": "codemap.rendering._callgraph_stats_panel",
+      "target": "rich.panel.Panel",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 385
+    },
+    {
+      "source": "codemap.rendering._callgraph_stats_panel",
+      "target": "rich.table.Table",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 373
+    },
+    {
+      "source": "codemap.rendering._calls_panel",
+      "target": "<unresolved>:len",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 140
+    },
+    {
+      "source": "codemap.rendering._calls_panel",
+      "target": "<unresolved>:str",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 138
+    },
+    {
+      "source": "codemap.rendering._calls_panel",
+      "target": "<unresolved>:table.add_column",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 134
+    },
+    {
+      "source": "codemap.rendering._calls_panel",
+      "target": "<unresolved>:table.add_row",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 138
+    },
+    {
+      "source": "codemap.rendering._calls_panel",
+      "target": "codemap.rendering._empty_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 131
+    },
+    {
+      "source": "codemap.rendering._calls_panel",
+      "target": "rich.panel.Panel",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 140
+    },
+    {
+      "source": "codemap.rendering._calls_panel",
+      "target": "rich.table.Table",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 133
+    },
+    {
+      "source": "codemap.rendering._classes_panel",
+      "target": "<unresolved>:<unknown>",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 116
+    },
+    {
+      "source": "codemap.rendering._classes_panel",
+      "target": "<unresolved>:enumerate",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 115
+    },
+    {
+      "source": "codemap.rendering._classes_panel",
+      "target": "<unresolved>:len",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 125
+    },
+    {
+      "source": "codemap.rendering._classes_panel",
+      "target": "<unresolved>:str",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 113
+    },
+    {
+      "source": "codemap.rendering._classes_panel",
+      "target": "<unresolved>:table.add_column",
+      "kind": "unresolved",
+      "call_count": 5,
+      "first_line": 105
+    },
+    {
+      "source": "codemap.rendering._classes_panel",
+      "target": "<unresolved>:table.add_row",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 113
+    },
+    {
+      "source": "codemap.rendering._classes_panel",
+      "target": "codemap.rendering._empty_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 102
+    },
+    {
+      "source": "codemap.rendering._classes_panel",
+      "target": "rich.panel.Panel",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 125
+    },
+    {
+      "source": "codemap.rendering._classes_panel",
+      "target": "rich.table.Table",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 104
+    },
+    {
+      "source": "codemap.rendering._cycles_panel",
+      "target": "<unresolved>:<unknown>",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 257
+    },
+    {
+      "source": "codemap.rendering._cycles_panel",
+      "target": "<unresolved>:enumerate",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 255
+    },
+    {
+      "source": "codemap.rendering._cycles_panel",
+      "target": "<unresolved>:len",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 258
+    },
+    {
+      "source": "codemap.rendering._cycles_panel",
+      "target": "<unresolved>:str",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 258
+    },
+    {
+      "source": "codemap.rendering._cycles_panel",
+      "target": "<unresolved>:table.add_column",
+      "kind": "unresolved",
+      "call_count": 3,
+      "first_line": 251
+    },
+    {
+      "source": "codemap.rendering._cycles_panel",
+      "target": "<unresolved>:table.add_row",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 258
+    },
+    {
+      "source": "codemap.rendering._cycles_panel",
+      "target": "rich.panel.Panel",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 260
+    },
+    {
+      "source": "codemap.rendering._cycles_panel",
+      "target": "rich.table.Table",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 250
+    },
+    {
+      "source": "codemap.rendering._empty_panel",
+      "target": "rich.panel.Panel",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 145
+    },
+    {
+      "source": "codemap.rendering._empty_panel",
+      "target": "rich.text.Text",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 146
+    },
+    {
+      "source": "codemap.rendering._functions_panel",
+      "target": "<unresolved>:<unknown>",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 88
+    },
+    {
+      "source": "codemap.rendering._functions_panel",
+      "target": "<unresolved>:len",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 96
+    },
+    {
+      "source": "codemap.rendering._functions_panel",
+      "target": "<unresolved>:str",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 93
+    },
+    {
+      "source": "codemap.rendering._functions_panel",
+      "target": "<unresolved>:table.add_column",
+      "kind": "unresolved",
+      "call_count": 4,
+      "first_line": 82
+    },
+    {
+      "source": "codemap.rendering._functions_panel",
+      "target": "<unresolved>:table.add_row",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 89
+    },
+    {
+      "source": "codemap.rendering._functions_panel",
+      "target": "codemap.rendering._empty_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 79
+    },
+    {
+      "source": "codemap.rendering._functions_panel",
+      "target": "rich.panel.Panel",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 96
+    },
+    {
+      "source": "codemap.rendering._functions_panel",
+      "target": "rich.table.Table",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 81
+    },
+    {
+      "source": "codemap.rendering._graph_header_panel",
+      "target": "<unresolved>:str",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 194
+    },
+    {
+      "source": "codemap.rendering._graph_header_panel",
+      "target": "rich.console.Group",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 196
+    },
+    {
+      "source": "codemap.rendering._graph_header_panel",
+      "target": "rich.panel.Panel",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 195
+    },
+    {
+      "source": "codemap.rendering._graph_header_panel",
+      "target": "rich.text.Text",
+      "kind": "external",
+      "call_count": 2,
+      "first_line": 193
+    },
+    {
+      "source": "codemap.rendering._has_parse_errors",
+      "target": "<unresolved>:any",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 265
+    },
+    {
+      "source": "codemap.rendering._has_parse_errors",
+      "target": "<unresolved>:attrs.get",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 265
+    },
+    {
+      "source": "codemap.rendering._has_parse_errors",
+      "target": "<unresolved>:graph.nodes",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 265
+    },
+    {
+      "source": "codemap.rendering._header_panel",
+      "target": "<unresolved>:str",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 47
+    },
+    {
+      "source": "codemap.rendering._header_panel",
+      "target": "rich.console.Group",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 49
+    },
+    {
+      "source": "codemap.rendering._header_panel",
+      "target": "rich.panel.Panel",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 48
+    },
+    {
+      "source": "codemap.rendering._header_panel",
+      "target": "rich.text.Text",
+      "kind": "external",
+      "call_count": 2,
+      "first_line": 46
+    },
+    {
+      "source": "codemap.rendering._hotspots_panel",
+      "target": "<unresolved>:enumerate",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 405
+    },
+    {
+      "source": "codemap.rendering._hotspots_panel",
+      "target": "<unresolved>:str",
+      "kind": "unresolved",
+      "call_count": 5,
+      "first_line": 407
+    },
+    {
+      "source": "codemap.rendering._hotspots_panel",
+      "target": "<unresolved>:table.add_column",
+      "kind": "unresolved",
+      "call_count": 6,
+      "first_line": 398
+    },
+    {
+      "source": "codemap.rendering._hotspots_panel",
+      "target": "<unresolved>:table.add_row",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 406
+    },
+    {
+      "source": "codemap.rendering._hotspots_panel",
+      "target": "codemap.rendering._empty_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 395
+    },
+    {
+      "source": "codemap.rendering._hotspots_panel",
+      "target": "rich.panel.Panel",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 416
+    },
+    {
+      "source": "codemap.rendering._hotspots_panel",
+      "target": "rich.table.Table",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 397
+    },
+    {
+      "source": "codemap.rendering._imports_panel",
+      "target": "<unresolved>:len",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 73
+    },
+    {
+      "source": "codemap.rendering._imports_panel",
+      "target": "<unresolved>:str",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 70
+    },
+    {
+      "source": "codemap.rendering._imports_panel",
+      "target": "<unresolved>:table.add_column",
+      "kind": "unresolved",
+      "call_count": 4,
+      "first_line": 60
+    },
+    {
+      "source": "codemap.rendering._imports_panel",
+      "target": "<unresolved>:table.add_row",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 66
+    },
+    {
+      "source": "codemap.rendering._imports_panel",
+      "target": "codemap.rendering._empty_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 57
+    },
+    {
+      "source": "codemap.rendering._imports_panel",
+      "target": "rich.panel.Panel",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 73
+    },
+    {
+      "source": "codemap.rendering._imports_panel",
+      "target": "rich.table.Table",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 59
+    },
+    {
+      "source": "codemap.rendering._parse_errors_panel",
+      "target": "<unresolved>:attrs.get",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 273
+    },
+    {
+      "source": "codemap.rendering._parse_errors_panel",
+      "target": "<unresolved>:graph.nodes",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 272
+    },
+    {
+      "source": "codemap.rendering._parse_errors_panel",
+      "target": "<unresolved>:len",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 284
+    },
+    {
+      "source": "codemap.rendering._parse_errors_panel",
+      "target": "<unresolved>:rows.sort",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 275
+    },
+    {
+      "source": "codemap.rendering._parse_errors_panel",
+      "target": "<unresolved>:str",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 271
+    },
+    {
+      "source": "codemap.rendering._parse_errors_panel",
+      "target": "<unresolved>:table.add_column",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 278
+    },
+    {
+      "source": "codemap.rendering._parse_errors_panel",
+      "target": "<unresolved>:table.add_row",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 282
+    },
+    {
+      "source": "codemap.rendering._parse_errors_panel",
+      "target": "rich.panel.Panel",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 284
+    },
+    {
+      "source": "codemap.rendering._parse_errors_panel",
+      "target": "rich.table.Table",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 277
+    },
+    {
+      "source": "codemap.rendering._stats_panel",
+      "target": "<unresolved>:attrs.get",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 204
+    },
+    {
+      "source": "codemap.rendering._stats_panel",
+      "target": "<unresolved>:graph.nodes",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 204
+    },
+    {
+      "source": "codemap.rendering._stats_panel",
+      "target": "<unresolved>:graph.number_of_edges",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 213
+    },
+    {
+      "source": "codemap.rendering._stats_panel",
+      "target": "<unresolved>:graph.number_of_nodes",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 212
+    },
+    {
+      "source": "codemap.rendering._stats_panel",
+      "target": "<unresolved>:int",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 204
+    },
+    {
+      "source": "codemap.rendering._stats_panel",
+      "target": "<unresolved>:len",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 215
+    },
+    {
+      "source": "codemap.rendering._stats_panel",
+      "target": "<unresolved>:str",
+      "kind": "unresolved",
+      "call_count": 5,
+      "first_line": 212
+    },
+    {
+      "source": "codemap.rendering._stats_panel",
+      "target": "<unresolved>:sum",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 203
+    },
+    {
+      "source": "codemap.rendering._stats_panel",
+      "target": "<unresolved>:table.add_column",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 209
+    },
+    {
+      "source": "codemap.rendering._stats_panel",
+      "target": "<unresolved>:table.add_row",
+      "kind": "unresolved",
+      "call_count": 5,
+      "first_line": 212
+    },
+    {
+      "source": "codemap.rendering._stats_panel",
+      "target": "rich.panel.Panel",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 218
+    },
+    {
+      "source": "codemap.rendering._stats_panel",
+      "target": "rich.table.Table",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 208
+    },
+    {
+      "source": "codemap.rendering._summarize_unresolved",
+      "target": "<unresolved>:attrs.get",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 423
+    },
+    {
+      "source": "codemap.rendering._summarize_unresolved",
+      "target": "<unresolved>:counts.get",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 424
+    },
+    {
+      "source": "codemap.rendering._summarize_unresolved",
+      "target": "<unresolved>:counts.items",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 426
+    },
+    {
+      "source": "codemap.rendering._summarize_unresolved",
+      "target": "<unresolved>:graph.edges",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 422
+    },
+    {
+      "source": "codemap.rendering._summarize_unresolved",
+      "target": "<unresolved>:sorted",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 426
+    },
+    {
+      "source": "codemap.rendering._top_imported_panel",
+      "target": "<unresolved>:enumerate",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 238
+    },
+    {
+      "source": "codemap.rendering._top_imported_panel",
+      "target": "<unresolved>:graph.in_degree",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 230
+    },
+    {
+      "source": "codemap.rendering._top_imported_panel",
+      "target": "<unresolved>:graph.nodes",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 229
+    },
+    {
+      "source": "codemap.rendering._top_imported_panel",
+      "target": "<unresolved>:graph.number_of_nodes",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 223
+    },
+    {
+      "source": "codemap.rendering._top_imported_panel",
+      "target": "<unresolved>:sorted",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 228
+    },
+    {
+      "source": "codemap.rendering._top_imported_panel",
+      "target": "<unresolved>:str",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 239
+    },
+    {
+      "source": "codemap.rendering._top_imported_panel",
+      "target": "<unresolved>:table.add_column",
+      "kind": "unresolved",
+      "call_count": 3,
+      "first_line": 234
+    },
+    {
+      "source": "codemap.rendering._top_imported_panel",
+      "target": "<unresolved>:table.add_row",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 239
+    },
+    {
+      "source": "codemap.rendering._top_imported_panel",
+      "target": "codemap.rendering._empty_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 224
+    },
+    {
+      "source": "codemap.rendering._top_imported_panel",
+      "target": "rich.panel.Panel",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 241
+    },
+    {
+      "source": "codemap.rendering._top_imported_panel",
+      "target": "rich.table.Table",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 233
+    },
+    {
+      "source": "codemap.rendering._unresolved_panel",
+      "target": "<unresolved>:enumerate",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 437
+    },
+    {
+      "source": "codemap.rendering._unresolved_panel",
+      "target": "<unresolved>:len",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 440
+    },
+    {
+      "source": "codemap.rendering._unresolved_panel",
+      "target": "<unresolved>:str",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 441
+    },
+    {
+      "source": "codemap.rendering._unresolved_panel",
+      "target": "<unresolved>:table.add_column",
+      "kind": "unresolved",
+      "call_count": 3,
+      "first_line": 433
+    },
+    {
+      "source": "codemap.rendering._unresolved_panel",
+      "target": "<unresolved>:table.add_row",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 441
+    },
+    {
+      "source": "codemap.rendering._unresolved_panel",
+      "target": "<unresolved>:target.startswith",
+      "kind": "unresolved",
+      "call_count": 1,
+      "first_line": 440
+    },
+    {
+      "source": "codemap.rendering._unresolved_panel",
+      "target": "rich.panel.Panel",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 443
+    },
+    {
+      "source": "codemap.rendering._unresolved_panel",
+      "target": "rich.table.Table",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 432
+    },
+    {
+      "source": "codemap.rendering.render_analysis",
+      "target": "codemap.rendering._calls_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 40
+    },
+    {
+      "source": "codemap.rendering.render_analysis",
+      "target": "codemap.rendering._classes_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 39
+    },
+    {
+      "source": "codemap.rendering.render_analysis",
+      "target": "codemap.rendering._functions_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 38
+    },
+    {
+      "source": "codemap.rendering.render_analysis",
+      "target": "codemap.rendering._header_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 36
+    },
+    {
+      "source": "codemap.rendering.render_analysis",
+      "target": "codemap.rendering._imports_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 37
+    },
+    {
+      "source": "codemap.rendering.render_analysis",
+      "target": "rich.console.Group",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 35
+    },
+    {
+      "source": "codemap.rendering.render_callgraph_summary",
+      "target": "<unresolved>:panels.append",
+      "kind": "unresolved",
+      "call_count": 3,
+      "first_line": 331
+    },
+    {
+      "source": "codemap.rendering.render_callgraph_summary",
+      "target": "codemap.callgraph.hotspots.compute_hotspots",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 330
+    },
+    {
+      "source": "codemap.rendering.render_callgraph_summary",
+      "target": "codemap.rendering._callgraph_header_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 326
+    },
+    {
+      "source": "codemap.rendering.render_callgraph_summary",
+      "target": "codemap.rendering._callgraph_parse_errors_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 338
+    },
+    {
+      "source": "codemap.rendering.render_callgraph_summary",
+      "target": "codemap.rendering._callgraph_stats_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 327
+    },
+    {
+      "source": "codemap.rendering.render_callgraph_summary",
+      "target": "codemap.rendering._hotspots_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 331
+    },
+    {
+      "source": "codemap.rendering.render_callgraph_summary",
+      "target": "codemap.rendering._summarize_unresolved",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 333
+    },
+    {
+      "source": "codemap.rendering.render_callgraph_summary",
+      "target": "codemap.rendering._unresolved_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 335
+    },
+    {
+      "source": "codemap.rendering.render_callgraph_summary",
+      "target": "rich.console.Group",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 340
+    },
+    {
+      "source": "codemap.rendering.render_graph_summary",
+      "target": "<unresolved>:panels.append",
+      "kind": "unresolved",
+      "call_count": 2,
+      "first_line": 185
+    },
+    {
+      "source": "codemap.rendering.render_graph_summary",
+      "target": "codemap.rendering._cycles_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 185
+    },
+    {
+      "source": "codemap.rendering.render_graph_summary",
+      "target": "codemap.rendering._graph_header_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 180
+    },
+    {
+      "source": "codemap.rendering.render_graph_summary",
+      "target": "codemap.rendering._has_parse_errors",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 186
+    },
+    {
+      "source": "codemap.rendering.render_graph_summary",
+      "target": "codemap.rendering._parse_errors_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 187
+    },
+    {
+      "source": "codemap.rendering.render_graph_summary",
+      "target": "codemap.rendering._stats_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 181
+    },
+    {
+      "source": "codemap.rendering.render_graph_summary",
+      "target": "codemap.rendering._top_imported_panel",
+      "kind": "internal",
+      "call_count": 1,
+      "first_line": 182
+    },
+    {
+      "source": "codemap.rendering.render_graph_summary",
+      "target": "rich.console.Group",
+      "kind": "external",
+      "call_count": 1,
+      "first_line": 188
+    }
+  ]
+}
