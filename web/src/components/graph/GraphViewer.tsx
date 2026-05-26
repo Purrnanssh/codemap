@@ -29,6 +29,9 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
     return map;
   }, [data]);
 
+  // Memoize graphData to prevent React from passing new object references on every render
+  const graphData = useMemo(() => ({ nodes: data.nodes, links: data.edges }), [data]);
+
   useEffect(() => {
     const handleResize = () => setDimensions({ width: window.innerWidth, height: window.innerHeight });
     window.addEventListener('resize', handleResize);
@@ -37,12 +40,18 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
 
   // Center on selected node with cinematic ease
   useEffect(() => {
-    if (selectedNode && selectedNode.x !== undefined && selectedNode.y !== undefined && fgRef.current) {
-      // Snappier transition (800ms) and tighter zoom for focus
-      fgRef.current.centerAt(selectedNode.x, selectedNode.y, 800);
-      fgRef.current.zoom(3.5, 800);
+    if (selectedNode && fgRef.current) {
+      // Lookup the exact live node instance inside the physics simulation
+      // This prevents using stale x/y coordinates from frozen React references
+      const simNode = fgRef.current.graphData().nodes.find((n: any) => n.id === selectedNode.id);
+      
+      if (simNode && simNode.x !== undefined && simNode.y !== undefined) {
+        // Snappier transition (800ms) and tighter zoom for focus
+        fgRef.current.centerAt(simNode.x, simNode.y, 800);
+        fgRef.current.zoom(3.5, 800);
+      }
     }
-  }, [selectedNode]);
+  }, [selectedNode, data]);
 
   // Adjust physics for denser graphs
   useEffect(() => {
@@ -122,7 +131,8 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
     <div className={`absolute inset-0 bg-transparent overflow-hidden ${hoverNode ? 'cursor-pointer' : 'cursor-grab active:cursor-grabbing'}`}>
       <ForceGraph2D
         ref={fgRef}
-        graphData={{ nodes: data.nodes, links: data.edges }}
+        graphData={graphData}
+        nodeId="id"
         width={dimensions.width}
         height={dimensions.height}
         nodeLabel={() => ''} // disable default title tooltip for cleaner UI

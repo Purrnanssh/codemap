@@ -113,6 +113,7 @@ function App() {
       </div>
 
       <GraphViewer 
+        key={graphMode}
         data={activeData} 
         selectedNode={selectedNode}
         hoverNode={hoverNode}
