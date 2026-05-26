@@ -3,7 +3,7 @@
   <p>Cinematic architecture visualization for modern Python codebases.</p>
   <p><small>Python • AST Analysis • Interactive Graphs • AI Insights</small></p>
   <br />
-  <img src="assets/hero.png" width="85%" alt="CodeMap Dashboard Screenshot" />
+  <img src="assets/hero.png?v=2" width="85%" alt="CodeMap Dashboard Screenshot" />
   <br />
 </div>
 
