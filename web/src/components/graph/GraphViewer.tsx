@@ -15,22 +15,32 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
   const fgRef = useRef<any>(null);
   const [dimensions, setDimensions] = useState({ width: window.innerWidth, height: window.innerHeight });
 
-  // Pre-calculate neighbor map for fast lookup on hover
+  // Pre-calculate neighbor map for fast lookup on hover (guarded)
   const neighbors = useMemo(() => {
     const map = new Map<string, Set<string>>();
+    if (!data?.edges) return map;
+    
     data.edges.forEach((edge: any) => {
-      const s = typeof edge.source === 'object' ? edge.source.id : edge.source;
-      const t = typeof edge.target === 'object' ? edge.target.id : edge.target;
-      if (!map.has(s)) map.set(s, new Set());
-      if (!map.has(t)) map.set(t, new Set());
-      map.get(s)!.add(t);
-      map.get(t)!.add(s);
+      if (!edge) return;
+      const s = typeof edge.source === 'object' ? edge.source?.id : edge.source;
+      const t = typeof edge.target === 'object' ? edge.target?.id : edge.target;
+      if (s && t) {
+        if (!map.has(s)) map.set(s, new Set());
+        if (!map.has(t)) map.set(t, new Set());
+        map.get(s)!.add(t);
+        map.get(t)!.add(s);
+      }
     });
     return map;
   }, [data]);
 
   // Memoize graphData to prevent React from passing new object references on every render
-  const graphData = useMemo(() => ({ nodes: data.nodes, links: data.edges }), [data]);
+  const graphData = useMemo(() => {
+    return { 
+      nodes: data?.nodes || [], 
+      links: data?.edges || [] 
+    };
+  }, [data]);
 
   useEffect(() => {
     const handleResize = () => setDimensions({ width: window.innerWidth, height: window.innerHeight });
@@ -38,49 +48,84 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // Center on selected node with cinematic ease
+  const focusTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const zoomTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Safe & Cinematic Camera Focus System
   useEffect(() => {
-    if (selectedNode && fgRef.current) {
-      // Lookup the exact live node instance inside the physics simulation
-      // This prevents using stale x/y coordinates from frozen React references
-      const simNode = fgRef.current.graphData().nodes.find((n: any) => n.id === selectedNode.id);
-      
-      if (simNode && simNode.x !== undefined && simNode.y !== undefined) {
-        // Snappier transition (800ms) and tighter zoom for focus
-        fgRef.current.centerAt(simNode.x, simNode.y, 800);
-        fgRef.current.zoom(3.5, 800);
-      }
+    // Prevent race conditions by clearing pending animations on selection change
+    if (focusTimeoutRef.current) clearTimeout(focusTimeoutRef.current);
+    if (zoomTimeoutRef.current) clearTimeout(zoomTimeoutRef.current);
+
+    if (selectedNode && fgRef.current && data?.nodes) {
+      // 1. Delay slightly so graph physics can stabilize before camera locks on
+      focusTimeoutRef.current = setTimeout(() => {
+        if (!fgRef.current || !data?.nodes) return;
+
+        // Securely find the node's live coordinates in React state
+        const simNode = data.nodes.find((n: any) => n?.id === selectedNode.id);
+        
+        if (simNode && typeof simNode.x === 'number' && typeof simNode.y === 'number' && !isNaN(simNode.x) && !isNaN(simNode.y)) {
+          if (typeof fgRef.current.centerAt === 'function') {
+            // 2. Smoothly glide to the node's position (800ms)
+            fgRef.current.centerAt(simNode.x, simNode.y, 800);
+            
+            // 3. Elegantly push in (zoom) after the camera arrives
+            // We do this sequentially to avoid D3 transition cancellation bugs!
+            if (typeof fgRef.current.zoom === 'function') {
+              zoomTimeoutRef.current = setTimeout(() => {
+                if (fgRef.current) {
+                  const currentZoom = fgRef.current.zoom() || 1;
+                  // Moderate zoom (2.2) to bring node into attention while preserving neighborhood context
+                  if (currentZoom < 2.2) {
+                    fgRef.current.zoom(2.2, 800);
+                  }
+                }
+              }, 800); // Wait for pan to finish
+            }
+          }
+        }
+      }, 150);
     }
+
+    return () => {
+      if (focusTimeoutRef.current) clearTimeout(focusTimeoutRef.current);
+      if (zoomTimeoutRef.current) clearTimeout(zoomTimeoutRef.current);
+    };
   }, [selectedNode, data]);
 
   // Adjust physics for denser graphs
   useEffect(() => {
     if (fgRef.current) {
-      fgRef.current.d3Force('charge').strength(-350); // increased repulsion for breathing room
-      fgRef.current.d3Force('collide', (d: any) => d.val * 1.5 + 8); // larger collision radius
+      // Safely apply forces if they exist
+      const chargeForce = fgRef.current.d3Force('charge');
+      if (chargeForce && typeof chargeForce.strength === 'function') {
+        chargeForce.strength(-350);
+      }
+      
+      // Removed buggy custom 'collide' function that crashes D3 simulation
     }
   }, [data]);
 
   const paintNode = useCallback((node: CodeMapNode, ctx: CanvasRenderingContext2D, globalScale: number) => {
+    if (!node || typeof node.x !== 'number' || typeof node.y !== 'number' || isNaN(node.x) || isNaN(node.y)) return;
+
     const isSelected = selectedNode?.id === node.id;
     const isHovered = hoverNode?.id === node.id;
-    const isNeighbor = (hoverNode && neighbors.get(hoverNode.id)?.has(node.id)) || (selectedNode && neighbors.get(selectedNode.id)?.has(node.id));
+    const isNeighbor = Boolean((hoverNode && neighbors.get(hoverNode.id)?.has(node.id)) || (selectedNode && neighbors.get(selectedNode.id)?.has(node.id)));
     
     // Dimming logic
-    const hasFocus = hoverNode || selectedNode;
+    const hasFocus = Boolean(hoverNode || selectedNode);
     const isDimmed = hasFocus && !isHovered && !isSelected && !isNeighbor;
     
-    // Scale node subtly if active
     const scaleFactor = (isSelected || isHovered) ? 1.3 : 1;
     const size = (node.val || 2) * scaleFactor;
     const color = getComplexityColor(node.complexity);
 
     ctx.beginPath();
-    ctx.arc(node.x!, node.y!, size, 0, 2 * Math.PI, false);
-    // Blend dimmed nodes deeply into the slate-900 background
+    ctx.arc(node.x, node.y, size, 0, 2 * Math.PI, false);
     ctx.fillStyle = isDimmed ? 'rgba(30, 41, 59, 0.3)' : color;
 
-    // Elegant inner glow for focused nodes
     if ((node.isInCycle && !isDimmed) || isHovered || isSelected) {
       ctx.shadowBlur = (isHovered || isSelected) ? 25 : 15;
       ctx.shadowColor = (isHovered || isSelected) ? color : '#ef4444';
@@ -89,18 +134,17 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
     }
 
     ctx.fill();
-    ctx.shadowBlur = 0; // Reset
+    ctx.shadowBlur = 0; 
 
-    // Cinematic focus ring
     if (isSelected || isHovered) {
       ctx.beginPath();
-      ctx.arc(node.x!, node.y!, size + (5 / globalScale), 0, 2 * Math.PI, false);
+      ctx.arc(node.x, node.y, size + (5 / globalScale), 0, 2 * Math.PI, false);
       ctx.lineWidth = 1.5 / globalScale;
       ctx.strokeStyle = isSelected ? '#ffffff' : 'rgba(255, 255, 255, 0.4)';
       ctx.stroke();
     } else if (!isDimmed && (node.kind === 'external' || node.kind === 'unresolved')) {
       ctx.beginPath();
-      ctx.arc(node.x!, node.y!, size, 0, 2 * Math.PI, false);
+      ctx.arc(node.x, node.y, size, 0, 2 * Math.PI, false);
       ctx.lineWidth = 0.5 / globalScale;
       ctx.strokeStyle = '#444444';
       ctx.setLineDash([1 / globalScale, 1 / globalScale]);
@@ -108,22 +152,20 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
       ctx.setLineDash([]);
     }
 
-    // Progressive Disclosure: Labels
     if (!isDimmed && (globalScale > 3 || isSelected || isHovered || isNeighbor)) {
       const label = node.name || node.id;
-      const fontSize = Math.max(12 / globalScale, 1.5);
-      
-      // Enhance text contrast for focused elements
-      ctx.font = `${isHovered || isSelected ? '500' : '400'} ${fontSize}px Inter, sans-serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillStyle = isHovered || isSelected ? '#ffffff' : 'rgba(255, 255, 255, 0.55)';
-      
-      // Text drop shadow to ensure legibility over lines
-      ctx.shadowColor = '#0f172a';
-      ctx.shadowBlur = 4 / globalScale;
-      ctx.fillText(label, node.x!, node.y! + size + fontSize + (3 / globalScale));
-      ctx.shadowBlur = 0;
+      if (label) {
+        const fontSize = Math.max(12 / globalScale, 1.5);
+        ctx.font = `${isHovered || isSelected ? '500' : '400'} ${fontSize}px Inter, sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = isHovered || isSelected ? '#ffffff' : 'rgba(255, 255, 255, 0.55)';
+        
+        ctx.shadowColor = '#0f172a';
+        ctx.shadowBlur = 4 / globalScale;
+        ctx.fillText(label, node.x, node.y + size + fontSize + (3 / globalScale));
+        ctx.shadowBlur = 0;
+      }
     }
   }, [selectedNode, hoverNode, neighbors]);
 
@@ -135,7 +177,7 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
         nodeId="id"
         width={dimensions.width}
         height={dimensions.height}
-        nodeLabel={() => ''} // disable default title tooltip for cleaner UI
+        nodeLabel={() => ''}
         nodeVal="val"
         nodeCanvasObject={paintNode as any}
         onNodeHover={(n) => {
@@ -143,29 +185,34 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
             onNodeHover(n as CodeMapNode | null);
           }
         }}
-        onNodeClick={(n) => onNodeClick(n as CodeMapNode)}
+        onNodeClick={(n) => {
+          if (n) onNodeClick(n as CodeMapNode);
+        }}
         
-        // Dynamic edge rendering
         linkColor={(link: any) => {
+          if (!link) return 'transparent';
           const edge = link as CodeMapEdge;
-          const sId = typeof edge.source === 'object' ? (edge.source as CodeMapNode).id : edge.source;
-          const tId = typeof edge.target === 'object' ? (edge.target as CodeMapNode).id : edge.target;
+          const sId = typeof edge.source === 'object' ? (edge.source as CodeMapNode)?.id : edge.source;
+          const tId = typeof edge.target === 'object' ? (edge.target as CodeMapNode)?.id : edge.target;
           
-          const hasFocus = hoverNode || selectedNode;
+          if (!sId || !tId) return 'transparent';
+
+          const hasFocus = Boolean(hoverNode || selectedNode);
           const isConnectedToFocus = hasFocus && 
             (sId === hoverNode?.id || tId === hoverNode?.id || sId === selectedNode?.id || tId === selectedNode?.id);
           
-          if (hasFocus && !isConnectedToFocus) return 'rgba(30, 41, 59, 0.2)'; // fade out unrelated edges
-          if (edge.isInCycle) return '#ef4444'; // Bright red for cycle edges
-          if (isConnectedToFocus) return 'rgba(255, 255, 255, 0.6)'; // bright white-ish for connected active edges
+          if (hasFocus && !isConnectedToFocus) return 'rgba(30, 41, 59, 0.2)';
+          if (edge.isInCycle) return '#ef4444';
+          if (isConnectedToFocus) return 'rgba(255, 255, 255, 0.6)';
           return EDGE_COLORS[edge.kind] || EDGE_COLORS.internal;
         }}
         linkWidth={(link: any) => {
+          if (!link) return 0;
           const edge = link as CodeMapEdge;
-          const sId = typeof edge.source === 'object' ? (edge.source as CodeMapNode).id : edge.source;
-          const tId = typeof edge.target === 'object' ? (edge.target as CodeMapNode).id : edge.target;
+          const sId = typeof edge.source === 'object' ? (edge.source as CodeMapNode)?.id : edge.source;
+          const tId = typeof edge.target === 'object' ? (edge.target as CodeMapNode)?.id : edge.target;
           
-          const hasFocus = hoverNode || selectedNode;
+          const hasFocus = Boolean(hoverNode || selectedNode);
           const isConnectedToFocus = hasFocus && 
             (sId === hoverNode?.id || tId === hoverNode?.id || sId === selectedNode?.id || tId === selectedNode?.id);
           
@@ -173,30 +220,30 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
           if (hasFocus && !isConnectedToFocus) return 0.2;
           return edge.isInCycle ? 2 : (edge.kind === 'internal' ? 1 : 0.5);
         }}
-        linkLineDash={(link: any) => (link.kind === 'external' || link.kind === 'unresolved') && !link.isInCycle ? [2, 2] : null}
+        linkLineDash={(link: any) => {
+          if (!link) return null;
+          return (link.kind === 'external' || link.kind === 'unresolved') && !link.isInCycle ? [2, 2] : null;
+        }}
         
-        // Choreographed energy pulses
         linkDirectionalParticles={(link: any) => {
-          const sId = typeof link.source === 'object' ? link.source.id : link.source;
-          const tId = typeof link.target === 'object' ? link.target.id : link.target;
+          if (!link) return 0;
+          const sId = typeof link.source === 'object' ? link.source?.id : link.source;
+          const tId = typeof link.target === 'object' ? link.target?.id : link.target;
           
-          const hasFocus = hoverNode || selectedNode;
+          const hasFocus = Boolean(hoverNode || selectedNode);
           const isConnectedToFocus = hasFocus && 
             (sId === hoverNode?.id || tId === hoverNode?.id || sId === selectedNode?.id || tId === selectedNode?.id);
 
           if (link.isInCycle) return 5;
-          if (hasFocus) {
-            return isConnectedToFocus ? 4 : 0; // dense particles on active, zero on dimmed
-          }
+          if (hasFocus) return isConnectedToFocus ? 4 : 0;
           return (link.kind === 'internal' || link.kind === 'self') ? 1 : 0;
         }}
-        linkDirectionalParticleWidth={(link: any) => link.isInCycle ? 3 : 2}
-        linkDirectionalParticleSpeed={(link: any) => link.isInCycle ? 0.012 : 0.006}
-        linkDirectionalParticleColor={(link: any) => link.isInCycle ? 'rgba(239, 68, 68, 0.9)' : 'rgba(255, 255, 255, 0.8)'}
+        linkDirectionalParticleWidth={(link: any) => link?.isInCycle ? 3 : 2}
+        linkDirectionalParticleSpeed={(link: any) => link?.isInCycle ? 0.012 : 0.006}
+        linkDirectionalParticleColor={(link: any) => link?.isInCycle ? 'rgba(239, 68, 68, 0.9)' : 'rgba(255, 255, 255, 0.8)'}
         
-        // Physics tuning
-        d3VelocityDecay={0.12} // Lower decay creates a smoother, more fluid settling inertia
-        warmupTicks={150} // Pre-compute more frames for instant stability on load
+        d3VelocityDecay={0.12}
+        warmupTicks={150}
         cooldownTicks={100}
       />
     </div>
