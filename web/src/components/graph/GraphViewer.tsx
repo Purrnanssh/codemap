@@ -38,59 +38,19 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const animationFrameRef = useRef<number | null>(null);
-
-  // Cinematic Camera Focus System
+  // Center on selected node with cinematic ease
   useEffect(() => {
     if (selectedNode && fgRef.current) {
+      // Lookup the exact live node instance inside the physics simulation
+      // This prevents using stale x/y coordinates from frozen React references
       const simNode = fgRef.current.graphData().nodes.find((n: any) => n.id === selectedNode.id);
       
       if (simNode && simNode.x !== undefined && simNode.y !== undefined) {
-        if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
-
-        const currentZoom = fgRef.current.zoom();
-        const currentCenter = fgRef.current.centerAt();
-        
-        if (!currentCenter) {
-           fgRef.current.centerAt(simNode.x, simNode.y);
-           fgRef.current.zoom(3.5);
-           return;
-        }
-
-        const targetZoom = 3.5;
-        const duration = 800;
-        const startTime = performance.now();
-        
-        const animate = (time: number) => {
-          let progress = (time - startTime) / duration;
-          if (progress > 1) progress = 1;
-          
-          // easeOutCubic for a smooth, cinematic glide
-          const ease = 1 - Math.pow(1 - progress, 3);
-          
-          // Dynamically read node's live coordinates so camera tracks moving nodes!
-          const liveX = simNode.x as number;
-          const liveY = simNode.y as number;
-          
-          // Apply synchronous transformations to bypass d3 transition interruptions
-          fgRef.current.centerAt(
-            currentCenter.x + (liveX - currentCenter.x) * ease,
-            currentCenter.y + (liveY - currentCenter.y) * ease
-          );
-          fgRef.current.zoom(currentZoom + (targetZoom - currentZoom) * ease);
-          
-          if (progress < 1) {
-            animationFrameRef.current = requestAnimationFrame(animate);
-          }
-        };
-        
-        animationFrameRef.current = requestAnimationFrame(animate);
+        // Snappier transition (800ms) and tighter zoom for focus
+        fgRef.current.centerAt(simNode.x, simNode.y, 800);
+        fgRef.current.zoom(3.5, 800);
       }
     }
-
-    return () => {
-      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
-    };
   }, [selectedNode, data]);
 
   // Adjust physics for denser graphs
