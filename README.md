@@ -1,14 +1,19 @@
 <div align="center">
   <h1>CodeMap</h1>
   <p>Cinematic architecture visualization for modern Python codebases.</p>
+  <p><small>Python • AST Analysis • Interactive Graphs • AI Insights</small></p>
   <br />
-  <img src="assets/hero.png" width="100%" alt="CodeMap Dashboard Screenshot" />
+  <img src="assets/hero.png" width="85%" alt="CodeMap Dashboard Screenshot" />
   <br />
 </div>
 
 <br />
 
-CodeMap provides deep structural visibility into complex Python repositories. It combines a robust AST parsing backend with a high-performance, WebGL-accelerated frontend to expose architectural patterns, dependency cycles, and systemic hotspots in real time.
+[Live Demo](#)
+
+<br />
+
+CodeMap provides deep structural visibility into complex Python repositories. It combines a robust AST parsing backend with a high-performance interactive frontend to expose architectural patterns, dependency cycles, and systemic hotspots in real time.
 
 <br />
 
