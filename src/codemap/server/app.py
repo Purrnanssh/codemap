@@ -34,18 +34,44 @@ class IngestRequest(BaseModel):
     path: str
 
 
+import subprocess
+import tempfile
+import shutil
+
 # In-memory job store for MVP.
 # Maps job_id to status and result.
 jobs: Dict[str, Dict[str, Any]] = {}
 
 
-def _process_ingestion(job_id: str, target_path: Path) -> None:
-    """Synchronous worker function that builds the graph."""
+def _process_ingestion(job_id: str, path_str: str) -> None:
+    """Synchronous worker function that clones (if needed) and builds the graph."""
+    is_github = path_str.startswith("https://github.com/")
+    temp_dir = None
+    
     try:
-        jobs[job_id]["status"] = "processing"
+        if is_github:
+            jobs[job_id]["status"] = "cloning"
+            temp_dir = tempfile.mkdtemp(prefix="codemap_")
+            target_path = Path(temp_dir)
+            
+            # Clone repo
+            process = subprocess.run(
+                ["git", "clone", "--depth", "1", path_str, str(target_path)],
+                capture_output=True, text=True
+            )
+            if process.returncode != 0:
+                raise RuntimeError(f"Git clone failed: {process.stderr}")
+        else:
+            target_path = Path(path_str).resolve()
+            if not target_path.exists() or not target_path.is_dir():
+                raise FileNotFoundError(f"Directory not found: {path_str}")
+
+        jobs[job_id]["status"] = "extracting"
         
         # Build the graph using our existing Python AST engine
         graph, parse_errors = build_call_graph(target_path)
+        
+        jobs[job_id]["status"] = "building"
         
         # Export to JSON payload
         json_payload = to_json(graph, min_complexity=1)
@@ -56,22 +82,21 @@ def _process_ingestion(job_id: str, target_path: Path) -> None:
     except Exception as exc:
         jobs[job_id]["status"] = "failed"
         jobs[job_id]["error_msg"] = str(exc)
+    finally:
+        # Aggressive cleanup of temp directories immediately after extraction
+        if temp_dir and Path(temp_dir).exists():
+            shutil.rmtree(temp_dir, ignore_errors=True)
 
 
 @app.post("/api/v1/workspaces/ingest")
 async def ingest_workspace(request: IngestRequest, background_tasks: BackgroundTasks) -> Dict[str, str]:
-    """Start an asynchronous ingestion job for a local path."""
-    target_path = Path(request.path).resolve()
-    
-    if not target_path.exists() or not target_path.is_dir():
-        raise HTTPException(status_code=400, detail=f"Directory not found: {request.path}")
-        
+    """Start an asynchronous ingestion job for a local path or GitHub URL."""
     import uuid
     job_id = str(uuid.uuid4())
     
     jobs[job_id] = {
         "status": "queued",
-        "path": str(target_path),
+        "path": request.path,
         "result": None,
         "errors": None,
         "error_msg": None,
@@ -79,7 +104,7 @@ async def ingest_workspace(request: IngestRequest, background_tasks: BackgroundT
     
     # Offload the heavy CPU-bound parsing to a background thread
     background_tasks.add_task(
-        asyncio.to_thread, _process_ingestion, job_id, target_path
+        asyncio.to_thread, _process_ingestion, job_id, request.path
     )
     
     return {"job_id": job_id}

@@ -2,7 +2,7 @@ const API_BASE = "http://127.0.0.1:8000/api/v1";
 
 export interface JobStatus {
   job_id: string;
-  status: "queued" | "processing" | "completed" | "failed";
+  status: "queued" | "cloning" | "extracting" | "building" | "completed" | "failed";
   error_msg: string | null;
 }
 

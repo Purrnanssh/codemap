@@ -17,7 +17,7 @@ function App() {
   
   // Ingestion State
   const [workspacePath, setWorkspacePath] = useState('');
-  const [ingestStatus, setIngestStatus] = useState<'idle' | 'queued' | 'processing' | 'completed' | 'failed'>('idle');
+  const [ingestStatus, setIngestStatus] = useState<'idle' | 'queued' | 'cloning' | 'extracting' | 'building' | 'completed' | 'failed'>('idle');
   const [jobId, setJobId] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
@@ -94,48 +94,89 @@ function App() {
   }, [activeData]);
 
   if (!activeData) {
+    const isProcessing = ['queued', 'cloning', 'extracting', 'building'].includes(ingestStatus);
+    
+    let statusText = 'Connecting to engine...';
+    if (ingestStatus === 'cloning') statusText = 'Cloning repository...';
+    if (ingestStatus === 'extracting') statusText = 'Extracting abstract syntax trees...';
+    if (ingestStatus === 'building') statusText = 'Synthesizing topologies...';
+
     return (
-      <div className="min-h-screen bg-background cinematic-bg flex flex-col items-center justify-center p-6">
+      <div className="min-h-screen bg-background cinematic-bg flex flex-col items-center justify-center p-6 relative">
+        {/* Subtle background pulse when processing */}
+        <AnimatePresence>
+          {isProcessing && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 z-0 overflow-hidden pointer-events-none"
+            >
+              <motion.div 
+                animate={{ scale: [1, 1.05, 1], opacity: [0.1, 0.2, 0.1] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/5 blur-[120px] rounded-full"
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="max-w-md w-full"
+          className="max-w-md w-full relative z-10"
         >
           <div className="text-center mb-8">
             <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)] flex items-center justify-center mx-auto mb-6">
               <FolderCode className="w-8 h-8 text-slate-300" />
             </div>
-            <h1 className="text-2xl font-bold text-white tracking-tight mb-2">Ingest Workspace</h1>
-            <p className="text-slate-400 text-sm">Enter the absolute path to a Python repository to generate a live dependency graph.</p>
+            <h1 className="text-2xl font-bold text-white tracking-tight mb-2">Initialize Workspace</h1>
+            <p className="text-slate-400 text-sm font-medium">Paste a GitHub URL or absolute local path to begin.</p>
           </div>
 
           <form onSubmit={handleIngest} className="space-y-4">
-            <div className="relative">
+            <div className="relative group">
               <input 
                 type="text" 
                 value={workspacePath}
                 onChange={(e) => setWorkspacePath(e.target.value)}
-                placeholder="/Users/dev/my-python-project"
-                disabled={ingestStatus === 'queued' || ingestStatus === 'processing'}
-                className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all disabled:opacity-50"
+                placeholder="https://github.com/encode/starlette"
+                disabled={isProcessing}
+                className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-white/30 transition-all disabled:opacity-50"
               />
             </div>
             
             <button 
               type="submit"
-              disabled={!workspacePath.trim() || ingestStatus === 'queued' || ingestStatus === 'processing'}
-              className="w-full bg-white text-black font-medium text-sm rounded-xl px-4 py-3 flex items-center justify-center gap-2 hover:bg-slate-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={!workspacePath.trim() || isProcessing}
+              className="relative w-full overflow-hidden bg-white text-black font-medium text-sm rounded-xl px-4 py-3 flex items-center justify-center gap-2 hover:bg-slate-200 transition-colors disabled:opacity-80 disabled:cursor-wait h-[44px]"
             >
-              {(ingestStatus === 'queued' || ingestStatus === 'processing') ? (
-                <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  {ingestStatus === 'queued' ? 'Queued...' : 'Extracting AST...'}
-                </>
-              ) : (
-                <>
-                  Scan Repository <ArrowRight className="w-4 h-4" />
-                </>
-              )}
+              <AnimatePresence mode="wait">
+                {isProcessing ? (
+                  <motion.div
+                    key="processing"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex items-center gap-2"
+                  >
+                    <Loader2 className="w-4 h-4 animate-spin opacity-50" />
+                    <span>{statusText}</span>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="idle"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex items-center gap-2"
+                  >
+                    Scan Repository <ArrowRight className="w-4 h-4 opacity-50" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </button>
           </form>
 
@@ -145,10 +186,10 @@ function App() {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
-                className="mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm flex gap-3"
+                className="mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm flex gap-3 overflow-hidden"
               >
-                <AlertCircle className="w-5 h-5 shrink-0" />
-                <p className="leading-relaxed">{errorMsg}</p>
+                <AlertCircle className="w-4 h-4 mt-0.5 shrink-0 opacity-80" />
+                <p className="leading-relaxed font-medium">{errorMsg}</p>
               </motion.div>
             )}
           </AnimatePresence>
