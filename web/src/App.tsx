@@ -5,34 +5,63 @@ import { InspectorPanel } from './components/panels/InspectorPanel';
 import { GraphLegend } from './components/panels/GraphLegend';
 import type { CodeMapGraph, CodeMapNode, Hotspot, GraphMode } from './types/codemap';
 import { buildModuleGraph, enhanceGraph } from './utils/graphMetrics';
-import { Layers } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Layers, FolderCode, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { codemapApi, type JobStatus } from './api/client';
 
 function App() {
   const [rawData, setRawData] = useState<{ symbol: CodeMapGraph, module: CodeMapGraph } | null>(null);
   const [graphMode, setGraphMode] = useState<GraphMode>('symbol');
   const [selectedNode, setSelectedNode] = useState<CodeMapNode | null>(null);
   const [hoverNode, setHoverNode] = useState<CodeMapNode | null>(null);
-  const [loading, setLoading] = useState(true);
+  
+  // Ingestion State
+  const [workspacePath, setWorkspacePath] = useState('');
+  const [ingestStatus, setIngestStatus] = useState<'idle' | 'queued' | 'processing' | 'completed' | 'failed'>('idle');
+  const [jobId, setJobId] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
+  // Polling Effect
   useEffect(() => {
-    fetch('/data.json')
-      .then(res => res.json())
-      .then((json: CodeMapGraph) => {
-        const symbolGraph = json;
-        const moduleGraph = buildModuleGraph(json);
+    if (!jobId || ingestStatus === 'completed' || ingestStatus === 'failed') return;
+
+    const interval = setInterval(async () => {
+      try {
+        const status: JobStatus = await codemapApi.pollJobStatus(jobId);
+        setIngestStatus(status.status);
         
-        setRawData({
-          symbol: enhanceGraph(symbolGraph),
-          module: enhanceGraph(moduleGraph)
-        });
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error("Failed to load graph data:", err);
-        setLoading(false);
-      });
-  }, []);
+        if (status.status === 'completed') {
+          const json = await codemapApi.getGraph(jobId);
+          setRawData({
+            symbol: enhanceGraph(json),
+            module: enhanceGraph(buildModuleGraph(json))
+          });
+        } else if (status.status === 'failed') {
+          setErrorMsg(status.error_msg || "Unknown ingestion error");
+        }
+      } catch (err: any) {
+        setIngestStatus('failed');
+        setErrorMsg(err.message);
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [jobId, ingestStatus]);
+
+  const handleIngest = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!workspacePath.trim()) return;
+    
+    setIngestStatus('queued');
+    setErrorMsg(null);
+    try {
+      const id = await codemapApi.ingestWorkspace(workspacePath);
+      setJobId(id);
+    } catch (err: any) {
+      setIngestStatus('failed');
+      setErrorMsg(err.message);
+    }
+  };
 
   const activeData = rawData ? rawData[graphMode] : null;
 
@@ -64,22 +93,69 @@ function App() {
     return candidates.sort((a, b) => b.score - a.score).slice(0, 50);
   }, [activeData]);
 
-  if (loading) {
+  if (!activeData) {
     return (
-      <div className="min-h-screen bg-background cinematic-bg flex flex-col items-center justify-center">
+      <div className="min-h-screen bg-background cinematic-bg flex flex-col items-center justify-center p-6">
         <motion.div 
-          animate={{ scale: [0.95, 1, 0.95], opacity: [0.5, 1, 0.5] }} 
-          transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-          className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)] flex items-center justify-center mb-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="max-w-md w-full"
         >
-          <div className="w-3 h-3 rounded-full bg-slate-300" />
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)] flex items-center justify-center mx-auto mb-6">
+              <FolderCode className="w-8 h-8 text-slate-300" />
+            </div>
+            <h1 className="text-2xl font-bold text-white tracking-tight mb-2">Ingest Workspace</h1>
+            <p className="text-slate-400 text-sm">Enter the absolute path to a Python repository to generate a live dependency graph.</p>
+          </div>
+
+          <form onSubmit={handleIngest} className="space-y-4">
+            <div className="relative">
+              <input 
+                type="text" 
+                value={workspacePath}
+                onChange={(e) => setWorkspacePath(e.target.value)}
+                placeholder="/Users/dev/my-python-project"
+                disabled={ingestStatus === 'queued' || ingestStatus === 'processing'}
+                className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all disabled:opacity-50"
+              />
+            </div>
+            
+            <button 
+              type="submit"
+              disabled={!workspacePath.trim() || ingestStatus === 'queued' || ingestStatus === 'processing'}
+              className="w-full bg-white text-black font-medium text-sm rounded-xl px-4 py-3 flex items-center justify-center gap-2 hover:bg-slate-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {(ingestStatus === 'queued' || ingestStatus === 'processing') ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  {ingestStatus === 'queued' ? 'Queued...' : 'Extracting AST...'}
+                </>
+              ) : (
+                <>
+                  Scan Repository <ArrowRight className="w-4 h-4" />
+                </>
+              )}
+            </button>
+          </form>
+
+          <AnimatePresence>
+            {errorMsg && (
+              <motion.div 
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm flex gap-3"
+              >
+                <AlertCircle className="w-5 h-5 shrink-0" />
+                <p className="leading-relaxed">{errorMsg}</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
-        <div className="text-slate-500 text-[10px] tracking-widest uppercase font-medium">Initializing Workspace</div>
       </div>
     );
   }
-
-  if (!activeData) return null;
 
   return (
     <motion.div 

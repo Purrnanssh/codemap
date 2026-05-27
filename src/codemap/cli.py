@@ -233,3 +233,14 @@ def callgraph(
 
     if parse_errors:
         raise typer.Exit(code=2)
+
+
+@app.command()
+def serve(
+    host: Annotated[str, typer.Option(help="Host to bind the server to.")] = "127.0.0.1",
+    port: Annotated[int, typer.Option(help="Port to bind the server to.")] = 8000,
+) -> None:
+    """Launch the live ingestion API server."""
+    import uvicorn
+    console.print(f"[bold green]Starting CodeMap server on http://{host}:{port}[/bold green]")
+    uvicorn.run("codemap.server.app:app", host=host, port=port, reload=True)
