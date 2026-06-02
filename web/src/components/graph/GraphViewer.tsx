@@ -10,9 +10,10 @@ interface GraphViewerProps {
   onNodeHover: (node: CodeMapNode | null) => void;
   selectedNode: CodeMapNode | null;
   hoverNode: CodeMapNode | null;
+  isSidebarOpen: boolean;
 }
 
-export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onNodeHover, selectedNode, hoverNode }) => {
+export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onNodeHover, selectedNode, hoverNode, isSidebarOpen }) => {
   const fgRef = useRef<any>(null);
   const isEngineRunning = useRef(true);
   const [dimensions, setDimensions] = useState({ width: window.innerWidth, height: window.innerHeight });
@@ -46,10 +47,22 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
   }, [data]);
 
   useEffect(() => {
-    const handleResize = () => setDimensions({ width: window.innerWidth, height: window.innerHeight });
+    const handleResize = () => {
+      // Offset by 320px (w-80 sidebar) + 16px (left-4 margin) + 16px (right spacing) = 352px when open
+      // This forces the React Force Graph to physically shrink its WebGL canvas
+      // which automatically shifts D3's center of gravity, causing the nodes to seamlessly glide
+      // to the new visual center of the available space.
+      const sidebarOffset = isSidebarOpen ? 352 : 0;
+      setDimensions({ 
+        width: window.innerWidth - sidebarOffset, 
+        height: window.innerHeight 
+      });
+    };
+    
+    handleResize(); // Trigger immediately when sidebar state changes
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  }, [isSidebarOpen]);
 
   const focusTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const zoomTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -227,7 +240,10 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
   }, [selectedNode, hoverNode, dragNode, neighbors]);
 
   return (
-    <div className={`absolute inset-0 bg-transparent overflow-hidden ${dragNode ? 'cursor-grabbing' : (hoverNode ? 'cursor-grab' : 'cursor-grab active:cursor-grabbing')}`}>
+    <div 
+      className={`absolute inset-y-0 right-0 bg-transparent overflow-hidden ${dragNode ? 'cursor-grabbing' : (hoverNode ? 'cursor-grab' : 'cursor-grab active:cursor-grabbing')} transition-all duration-300 ease-[cubic-bezier(0.175,0.885,0.32,1.275)]`}
+      style={{ left: isSidebarOpen ? '352px' : '0px' }}
+    >
       <ForceGraph2D
         ref={fgRef}
         graphData={graphData}

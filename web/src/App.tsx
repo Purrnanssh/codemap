@@ -16,6 +16,7 @@ function App() {
   const [graphMode, setGraphMode] = useState<GraphMode>('symbol');
   const [selectedNode, setSelectedNode] = useState<CodeMapNode | null>(null);
   const [hoverNode, setHoverNode] = useState<CodeMapNode | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   
   // Ingestion State
   const [workspacePath, setWorkspacePath] = useState('');
@@ -265,12 +266,15 @@ function App() {
         hoverNode={hoverNode}
         onNodeClick={setSelectedNode}
         onNodeHover={(n) => setHoverNode(n || null)} 
+        isSidebarOpen={isSidebarOpen}
       />
       
       <Sidebar 
         hotspots={hotspots}
         selectedId={selectedNode?.id || null}
         onHotspotClick={(h) => setSelectedNode(h.node)}
+        isOpen={isSidebarOpen}
+        onToggle={() => setIsSidebarOpen(!isSidebarOpen)}
       />
 
       <InspectorPanel 
