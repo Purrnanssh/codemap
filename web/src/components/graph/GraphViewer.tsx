@@ -336,14 +336,53 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
           const isConnectedToFocus = (hoverNode && (sId === hoverNode.id || tId === hoverNode.id)) || 
                                      (selectedNode && (sId === selectedNode.id || tId === selectedNode.id));
 
-          if (link.isInCycle) return 5;
-          if (isConnectedToFocus) return 4;
+          if (link.isInCycle) return 4;
+          if (isConnectedToFocus) return 3; // energized flow when focused
           
-          // Randomize slightly so they don't all look uniform
-          return Math.random() > 0.5 ? 2 : 1;
+          const src = typeof link.source === 'object' ? link.source : null;
+          const tgt = typeof link.target === 'object' ? link.target : null;
+          
+          // Identify central backbone connections (high complexity nodes)
+          const isMajor = src && tgt && ((src.val || 1) > 4 || (tgt.val || 1) > 4 || ((src.val || 1) + (tgt.val || 1)) > 7);
+          
+          if (isMajor) {
+            // ~70% density for major edges, spawning 1-3 particles
+            return Math.random() > 0.3 ? Math.floor(Math.random() * 3) + 1 : 0;
+          }
+          
+          // Minor edges: very sparse
+          return Math.random() > 0.85 ? 1 : 0;
         }}
-        linkDirectionalParticleWidth={(link: any) => link?.isInCycle ? 3 : 1.5}
-        linkDirectionalParticleSpeed={(link: any) => link?.isInCycle ? 0.012 : (0.003 + Math.random() * 0.003)}
+        linkDirectionalParticleWidth={(link: any) => {
+          if (!link) return 0;
+          if (link.isInCycle) return 3;
+          
+          const sId = typeof link.source === 'object' ? link.source?.id : link.source;
+          const tId = typeof link.target === 'object' ? link.target?.id : link.target;
+          const isConnectedToFocus = (hoverNode && (sId === hoverNode.id || tId === hoverNode.id)) || 
+                                     (selectedNode && (sId === selectedNode.id || tId === selectedNode.id));
+                                     
+          if (isConnectedToFocus) return 2.5;
+          
+          const src = typeof link.source === 'object' ? link.source : null;
+          const tgt = typeof link.target === 'object' ? link.target : null;
+          const isMajor = src && tgt && ((src.val || 1) > 4 || (tgt.val || 1) > 4 || ((src.val || 1) + (tgt.val || 1)) > 7);
+          
+          return isMajor ? 2.0 : 1.2;
+        }}
+        linkDirectionalParticleSpeed={(link: any) => {
+          if (link?.isInCycle) return 0.012;
+          
+          const sId = typeof link.source === 'object' ? link.source?.id : link.source;
+          const tId = typeof link.target === 'object' ? link.target?.id : link.target;
+          const isConnectedToFocus = (hoverNode && (sId === hoverNode.id || tId === hoverNode.id)) || 
+                                     (selectedNode && (sId === selectedNode.id || tId === selectedNode.id));
+                                     
+          if (isConnectedToFocus) return 0.005 + Math.random() * 0.002;
+          
+          // Slow to medium data flow speed
+          return 0.002 + Math.random() * 0.002; 
+        }}
         linkDirectionalParticleColor={(link: any) => {
           if (link?.isInCycle) return 'rgba(239, 68, 68, 0.9)';
           
@@ -352,8 +391,14 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
           const isConnectedToFocus = (hoverNode && (sId === hoverNode.id || tId === hoverNode.id)) || 
                                      (selectedNode && (sId === selectedNode.id || tId === selectedNode.id));
                                      
-          if (isConnectedToFocus) return 'rgba(255, 255, 255, 0.9)';
-          return 'rgba(100, 150, 255, 0.4)'; // Cyberpunk ambient data stream color
+          if (isConnectedToFocus) return 'rgba(255, 255, 255, 0.95)'; // Bright white on focus
+          
+          const src = typeof link.source === 'object' ? link.source : null;
+          const tgt = typeof link.target === 'object' ? link.target : null;
+          const isMajor = src && tgt && ((src.val || 1) > 4 || (tgt.val || 1) > 4 || ((src.val || 1) + (tgt.val || 1)) > 7);
+          
+          if (isMajor) return 'rgba(180, 225, 255, 0.85)'; // Visible blue-white for major flow
+          return 'rgba(100, 150, 255, 0.25)'; // Very subtle for minor flow
         }}
         
         d3VelocityDecay={0.12}
