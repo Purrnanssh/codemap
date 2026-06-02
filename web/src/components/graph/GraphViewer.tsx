@@ -141,24 +141,22 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
       (dragNode && neighbors.get(dragNode.id)?.has(node.id))
     );
     
-    // Ambient Galaxy Drift & Breathing Effect
-    // Applies a subtle, perpetual floating motion when the physics engine settles.
-    // Major hubs move less; peripheral nodes drift more.
+    // Ambient Galaxy Rotation
+    // Applies a slow, continuous clockwise rotation when the physics engine settles.
     if (!isEngineRunning.current && node.isStabilized && !isDragged && !isSelected && typeof node.baseX === 'number' && typeof node.baseY === 'number') {
-      // Time scalar increased for visible, continuous movement
-      const t = Date.now() / 1000; 
+      // 1 full clockwise revolution every 90 seconds
+      // negative angle = clockwise in standard canvas coordinates (y points down)
+      // wait, standard math: positive angle with Y down is actually clockwise.
+      // let's use positive for clockwise.
+      const rpm = 1 / 90; // revolutions per second is 1/90
+      const angle = (Date.now() / 1000) * rpm * 2 * Math.PI;
       
-      // Subtle cluster breathing: expands/contracts by ~3% smoothly
-      const breathing = Math.sin(t * 0.4) * 0.03;
+      const cosA = Math.cos(angle);
+      const sinA = Math.sin(angle);
       
-      // Procedural drift offset: 3x larger amplitude so it reads clearly within 2-3 seconds
-      const amplitude = Math.max(0.4, 4.5 / Math.sqrt(node.val || 2));
-      const offsetX = Math.sin(t * 0.8 + (node.seedX || 0)) * amplitude;
-      const offsetY = Math.cos(t * 0.9 + (node.seedY || 0)) * amplitude;
-      
-      // Update coordinates dynamically. react-force-graph will use these on the next frame to draw edges.
-      node.x = node.baseX * (1 + breathing) + offsetX;
-      node.y = node.baseY * (1 + breathing) + offsetY;
+      // Pure rigid-body rotation around the graph's center of mass (0,0)
+      node.x = node.baseX * cosA - node.baseY * sinA;
+      node.y = node.baseX * sinA + node.baseY * cosA;
     }
     
     // Dimming logic: Only dim the graph when a node is explicitly clicked (selectedNode), NOT on hover or drag.
