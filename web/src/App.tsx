@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { GraphViewer } from './components/graph/GraphViewer';
 import { Sidebar } from './components/panels/Sidebar';
 import { InspectorPanel } from './components/panels/InspectorPanel';
@@ -93,13 +93,29 @@ function App() {
     return candidates.sort((a, b) => b.score - a.score).slice(0, 50);
   }, [activeData]);
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Ignore if user is already typing in an input or textarea
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      if (e.key === '/') {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
   if (!activeData) {
-    const isProcessing = ['queued', 'cloning', 'extracting', 'building'].includes(ingestStatus);
+    const isProcessing = ['queued', 'cloning', 'extracting', 'building', 'completed'].includes(ingestStatus);
     
     let statusText = 'Connecting to engine...';
     if (ingestStatus === 'cloning') statusText = 'Cloning repository...';
     if (ingestStatus === 'extracting') statusText = 'Extracting abstract syntax trees...';
     if (ingestStatus === 'building') statusText = 'Synthesizing topologies...';
+    if (ingestStatus === 'completed') statusText = 'Loading graph topology...';
 
     return (
       <div className="min-h-screen bg-background cinematic-bg flex flex-col items-center justify-center p-6 relative">
@@ -137,13 +153,19 @@ function App() {
           <form onSubmit={handleIngest} className="space-y-4">
             <div className="relative group">
               <input 
+                ref={inputRef}
                 type="text" 
                 value={workspacePath}
                 onChange={(e) => setWorkspacePath(e.target.value)}
                 placeholder="https://github.com/encode/starlette"
                 disabled={isProcessing}
-                className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-white/30 transition-all disabled:opacity-50"
+                className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-white/30 transition-all disabled:opacity-50 pr-12"
               />
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">
+                <kbd className="hidden sm:inline-block px-2 py-0.5 text-xs font-mono font-semibold bg-white/10 border border-white/20 rounded text-slate-300 shadow-sm">
+                  /
+                </kbd>
+              </div>
             </div>
             
             <button 
