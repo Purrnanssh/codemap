@@ -183,9 +183,9 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
     }
 
     // Progressive Disclosure: Labels
-    // [PERF] Only draw text if sufficiently zoomed in or focused.
-    // Hover labels are explicitly disabled as per design requirements to keep hover purely visual and minimal.
-    if (!isDimmed && (globalScale > 3 || isSelected)) {
+    // Show labels if zoomed in, explicitly selected, or if it's a first-degree connection to the selected node.
+    // Hover labels are disabled to keep hover purely visual and minimal.
+    if (!isDimmed && (globalScale > 3 || isSelected || (selectedNode && isNeighbor))) {
       const label = node.name || node.id;
       if (label) {
         const fontSize = Math.max(12 / globalScale, 1.5);
@@ -204,7 +204,7 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
         ctx.fillText(label, node.x, textY);
       }
     }
-  }, [selectedNode, hoverNode, neighbors]);
+  }, [selectedNode, hoverNode, dragNode, neighbors]);
 
   return (
     <div className={`absolute inset-0 bg-transparent overflow-hidden ${dragNode ? 'cursor-grabbing' : (hoverNode ? 'cursor-grab' : 'cursor-grab active:cursor-grabbing')}`}>
@@ -217,6 +217,14 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
         nodeLabel={() => ''}
         nodeVal="val"
         nodeCanvasObject={paintNode as any}
+        nodePointerAreaPaint={(node: any, color, ctx) => {
+          // Expand the interactive hit area for small nodes so they are consistently draggable
+          const size = Math.max(((node.val || 2) * 1.3), 5);
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, size, 0, 2 * Math.PI, false);
+          ctx.fill();
+        }}
         onNodeHover={(n) => {
           if (hoverNode?.id !== (n as CodeMapNode | null)?.id) {
             onNodeHover(n as CodeMapNode | null);
