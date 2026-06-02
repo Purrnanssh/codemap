@@ -165,12 +165,8 @@ function App() {
             <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)] flex items-center justify-center mx-auto mb-6">
               <FolderCode className="w-8 h-8 text-slate-300" />
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-white drop-shadow-md">
-              CodeMap
-            </h1>
-            <p className="text-slate-400 text-lg max-w-md tracking-wide">
-              Visualize the architecture of any repository
-            </p>
+            <h1 className="text-2xl font-bold text-white tracking-tight mb-2">CodeMap</h1>
+            <p className="text-slate-400 text-sm font-medium">Paste a GitHub URL or absolute local path to begin.</p>
           </div>
 
           <form onSubmit={handleIngest} className="space-y-4">
