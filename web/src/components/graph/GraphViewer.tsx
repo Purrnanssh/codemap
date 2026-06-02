@@ -14,6 +14,7 @@ interface GraphViewerProps {
 
 export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onNodeHover, selectedNode, hoverNode }) => {
   const fgRef = useRef<any>(null);
+  const isEngineRunning = useRef(true);
   const [dimensions, setDimensions] = useState({ width: window.innerWidth, height: window.innerHeight });
   const [dragNode, setDragNode] = useState<CodeMapNode | null>(null);
 
@@ -115,7 +116,7 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
     }
   }, [data]);
 
-  const paintNode = useCallback((node: CodeMapNode, ctx: CanvasRenderingContext2D, globalScale: number) => {
+  const paintNode = useCallback((node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
     if (!node || typeof node.x !== 'number' || typeof node.y !== 'number' || isNaN(node.x) || isNaN(node.y)) return;
 
     const isSelected = selectedNode?.id === node.id;
@@ -126,6 +127,25 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
       (selectedNode && neighbors.get(selectedNode.id)?.has(node.id)) ||
       (dragNode && neighbors.get(dragNode.id)?.has(node.id))
     );
+    
+    // Ambient Galaxy Drift & Breathing Effect
+    // Applies a subtle, perpetual floating motion when the physics engine settles.
+    // Major hubs move less; peripheral nodes drift more.
+    if (!isEngineRunning.current && node.isStabilized && !isDragged && !isSelected && typeof node.baseX === 'number' && typeof node.baseY === 'number') {
+      const t = Date.now() / 3000;
+      
+      // Subtle cluster breathing: expands/contracts by ~1.5% smoothly
+      const breathing = Math.sin(t * 0.5) * 0.015;
+      
+      // Procedural drift offset
+      const amplitude = Math.max(0.1, 1.5 / Math.sqrt(node.val || 2));
+      const offsetX = Math.sin(t + (node.seedX || 0)) * amplitude;
+      const offsetY = Math.cos(t + (node.seedY || 0)) * amplitude;
+      
+      // Update coordinates dynamically. react-force-graph will use these on the next frame to draw edges.
+      node.x = node.baseX * (1 + breathing) + offsetX;
+      node.y = node.baseY * (1 + breathing) + offsetY;
+    }
     
     // Dimming logic: Only dim the graph when a node is explicitly clicked (selectedNode), NOT on hover or drag.
     // The user requested: "Preserve graph visibility. Dragging should NEVER hide the graph".
@@ -250,6 +270,25 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
           // Reheat the simulation slightly so the surrounding nodes react smoothly
           if (fgRef.current) {
             fgRef.current.d3ReheatSimulation();
+          }
+        }}
+        
+        onEngineTick={() => {
+          isEngineRunning.current = true;
+        }}
+        onEngineStop={() => {
+          isEngineRunning.current = false;
+          // When simulation settles, snapshot positions for the ambient galaxy drift effect
+          if (graphData && graphData.nodes) {
+            graphData.nodes.forEach((n: any) => {
+              n.baseX = n.x;
+              n.baseY = n.y;
+              if (n.seedX === undefined) {
+                n.seedX = Math.random() * 1000;
+                n.seedY = Math.random() * 1000;
+                n.isStabilized = true;
+              }
+            });
           }
         }}
         
