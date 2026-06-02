@@ -15,6 +15,7 @@ interface GraphViewerProps {
 export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onNodeHover, selectedNode, hoverNode }) => {
   const fgRef = useRef<any>(null);
   const [dimensions, setDimensions] = useState({ width: window.innerWidth, height: window.innerHeight });
+  const [dragNode, setDragNode] = useState<CodeMapNode | null>(null);
 
   // Pre-calculate neighbor map for fast lookup on hover (guarded)
   const neighbors = useMemo(() => {
@@ -101,9 +102,10 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
       // Safely apply forces if they exist
       const chargeForce = fgRef.current.d3Force('charge');
       if (chargeForce && typeof chargeForce.strength === 'function') {
-        // Less repulsion for smaller graphs (like module view)
-        const repulsion = data.nodes.length < 200 ? -150 : -350;
-        chargeForce.strength(repulsion);
+        // Less repulsion for smaller graphs (like module view), but scale relative to node size (val)
+        // so larger/higher-degree nodes become heavier anchor points that push surrounding clusters visually.
+        const baseRepulsion = data.nodes.length < 200 ? -40 : -100;
+        chargeForce.strength((n: any) => baseRepulsion * Math.max(1, Math.sqrt(n.val || 1)));
       }
       
       // Add a gentle gravity force to keep disconnected subgraphs from flying into deep space
@@ -118,21 +120,36 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
 
     const isSelected = selectedNode?.id === node.id;
     const isHovered = hoverNode?.id === node.id;
-    const isNeighbor = Boolean((hoverNode && neighbors.get(hoverNode.id)?.has(node.id)) || (selectedNode && neighbors.get(selectedNode.id)?.has(node.id)));
+    const isDragged = dragNode?.id === node.id;
+    const isNeighbor = Boolean(
+      (hoverNode && neighbors.get(hoverNode.id)?.has(node.id)) || 
+      (selectedNode && neighbors.get(selectedNode.id)?.has(node.id)) ||
+      (dragNode && neighbors.get(dragNode.id)?.has(node.id))
+    );
     
-    // Dimming logic: Only dim the graph when a node is explicitly clicked (selectedNode), NOT on hover.
+    // Dimming logic: Only dim the graph when a node is explicitly clicked (selectedNode), NOT on hover or drag.
+    // The user requested: "Preserve graph visibility. Dragging should NEVER hide the graph".
     const isDimmed = Boolean(selectedNode) && !isSelected && !isNeighbor;
     
-    const scaleFactor = (isSelected || isHovered) ? 1.3 : 1;
+    const scaleFactor = isDragged ? 1.5 : ((isSelected || isHovered) ? 1.3 : 1);
     const size = (node.val || 2) * scaleFactor;
     const color = getComplexityColor(node.complexity);
 
     // [PERF] Sub-pixel culling: Skip drawing microscopic nodes unless they are actively focused or cyclic
     const screenRadius = size * globalScale;
-    if (screenRadius < 0.5 && !isSelected && !isHovered && !isNeighbor && !node.isInCycle) return;
+    if (screenRadius < 0.5 && !isSelected && !isHovered && !isDragged && !isNeighbor && !node.isInCycle) return;
 
-    // [PERF] Fake Glows: Replaced extremely expensive ctx.shadowBlur with a cheap low-opacity radial arc.
-    // This improves node render speeds by ~40x on large graphs.
+    // Drag Glow Effect
+    if (isDragged) {
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, size * 2.5, 0, 2 * Math.PI, false);
+      ctx.fillStyle = '#ffffff';
+      ctx.globalAlpha = 0.2;
+      ctx.fill();
+      ctx.globalAlpha = 1.0;
+    }
+
+    // [PERF] Fake Glows for Cycle/Hover/Select
     if ((node.isInCycle && !isDimmed) || isHovered || isSelected) {
       ctx.beginPath();
       ctx.arc(node.x, node.y, size * 2.5, 0, 2 * Math.PI, false);
@@ -149,11 +166,11 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
     ctx.fill();
 
     // Cinematic focus ring
-    if (isSelected || isHovered) {
+    if (isSelected || isHovered || isDragged) {
       ctx.beginPath();
       ctx.arc(node.x, node.y, size + (5 / globalScale), 0, 2 * Math.PI, false);
-      ctx.lineWidth = 1.5 / globalScale;
-      ctx.strokeStyle = isSelected ? '#ffffff' : 'rgba(255, 255, 255, 0.4)';
+      ctx.lineWidth = (isDragged ? 2.5 : 1.5) / globalScale;
+      ctx.strokeStyle = (isSelected || isDragged) ? '#ffffff' : 'rgba(255, 255, 255, 0.4)';
       ctx.stroke();
     } else if (!isDimmed && (node.kind === 'external' || node.kind === 'unresolved')) {
       ctx.beginPath();
@@ -190,7 +207,7 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
   }, [selectedNode, hoverNode, neighbors]);
 
   return (
-    <div className={`absolute inset-0 bg-transparent overflow-hidden ${hoverNode ? 'cursor-pointer' : 'cursor-grab active:cursor-grabbing'}`}>
+    <div className={`absolute inset-0 bg-transparent overflow-hidden ${dragNode ? 'cursor-grabbing' : (hoverNode ? 'cursor-grab' : 'cursor-grab active:cursor-grabbing')}`}>
       <ForceGraph2D
         ref={fgRef}
         graphData={graphData}
@@ -207,6 +224,25 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
         }}
         onNodeClick={(n) => {
           if (n) onNodeClick(n as CodeMapNode);
+        }}
+        
+        onNodeDrag={(n: any) => {
+          if (dragNode?.id !== n.id) {
+            setDragNode(n as CodeMapNode);
+          }
+          n.fx = n.x;
+          n.fy = n.y;
+        }}
+        onNodeDragEnd={(n: any) => {
+          setDragNode(null);
+          // Release physics lock so node settles naturally back into the simulation
+          n.fx = undefined;
+          n.fy = undefined;
+          
+          // Reheat the simulation slightly so the surrounding nodes react smoothly
+          if (fgRef.current) {
+            fgRef.current.d3ReheatSimulation();
+          }
         }}
         
         linkColor={(link: any) => {
