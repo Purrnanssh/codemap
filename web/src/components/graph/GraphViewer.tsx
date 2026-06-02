@@ -141,23 +141,7 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
       (dragNode && neighbors.get(dragNode.id)?.has(node.id))
     );
     
-    // Ambient Galaxy Rotation
-    // Applies a slow, continuous clockwise rotation when the physics engine settles.
-    if (!isEngineRunning.current && node.isStabilized && !isDragged && !isSelected && typeof node.baseX === 'number' && typeof node.baseY === 'number') {
-      // 1 full clockwise revolution every 90 seconds
-      // negative angle = clockwise in standard canvas coordinates (y points down)
-      // wait, standard math: positive angle with Y down is actually clockwise.
-      // let's use positive for clockwise.
-      const rpm = 1 / 90; // revolutions per second is 1/90
-      const angle = (Date.now() / 1000) * rpm * 2 * Math.PI;
-      
-      const cosA = Math.cos(angle);
-      const sinA = Math.sin(angle);
-      
-      // Pure rigid-body rotation around the graph's center of mass (0,0)
-      node.x = node.baseX * cosA - node.baseY * sinA;
-      node.y = node.baseX * sinA + node.baseY * cosA;
-    }
+
     
     // Dimming logic: Only dim the graph when a node is explicitly clicked (selectedNode), NOT on hover or drag.
     // The user requested: "Preserve graph visibility. Dragging should NEVER hide the graph".
