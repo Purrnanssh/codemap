@@ -145,15 +145,16 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
     // Applies a subtle, perpetual floating motion when the physics engine settles.
     // Major hubs move less; peripheral nodes drift more.
     if (!isEngineRunning.current && node.isStabilized && !isDragged && !isSelected && typeof node.baseX === 'number' && typeof node.baseY === 'number') {
-      const t = Date.now() / 3000;
+      // Time scalar increased for visible, continuous movement
+      const t = Date.now() / 1000; 
       
-      // Subtle cluster breathing: expands/contracts by ~1.5% smoothly
-      const breathing = Math.sin(t * 0.5) * 0.015;
+      // Subtle cluster breathing: expands/contracts by ~3% smoothly
+      const breathing = Math.sin(t * 0.4) * 0.03;
       
-      // Procedural drift offset
-      const amplitude = Math.max(0.1, 1.5 / Math.sqrt(node.val || 2));
-      const offsetX = Math.sin(t + (node.seedX || 0)) * amplitude;
-      const offsetY = Math.cos(t + (node.seedY || 0)) * amplitude;
+      // Procedural drift offset: 3x larger amplitude so it reads clearly within 2-3 seconds
+      const amplitude = Math.max(0.4, 4.5 / Math.sqrt(node.val || 2));
+      const offsetX = Math.sin(t * 0.8 + (node.seedX || 0)) * amplitude;
+      const offsetY = Math.cos(t * 0.9 + (node.seedY || 0)) * amplitude;
       
       // Update coordinates dynamically. react-force-graph will use these on the next frame to draw edges.
       node.x = node.baseX * (1 + breathing) + offsetX;

@@ -221,6 +221,24 @@ function App() {
             </button>
           </form>
         </motion.div>
+        
+        {/* Creator Credit / Signature */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1, duration: 1 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-[13px] text-white/55 tracking-wide font-medium z-10"
+        >
+          <span>Built by Purrnanssh Sinha</span>
+          <a 
+            href="https://github.com/Purrnanssh" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="hover:text-white/95 transition-colors duration-300"
+          >
+            github.com/Purrnanssh
+          </a>
+        </motion.div>
       </div>
     );
   }
