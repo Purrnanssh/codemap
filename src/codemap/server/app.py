@@ -90,13 +90,32 @@ def _process_ingestion(job_id: str, path_str: str) -> None:
 
         jobs[job_id]["status"] = "extracting"
         
+        total_files = 0
+        python_files = 0
+        extensions = set()
+        
+        for p in target_path.rglob("*"):
+            if p.is_file() and not p.is_symlink():
+                total_files += 1
+                ext = p.suffix.lower().lstrip('.')
+                if ext:
+                    extensions.add(ext)
+                if ext == "py":
+                    python_files += 1
+                    
+        summary = {
+            "files_scanned": total_files,
+            "python_files": python_files,
+            "detected_extensions": list(extensions)
+        }
+        
         # Build the graph using our existing Python AST engine
         graph, parse_errors = build_call_graph(target_path)
         
         jobs[job_id]["status"] = "building"
         
         # Export to JSON payload
-        json_payload = to_json(graph, min_complexity=1)
+        json_payload = to_json(graph, min_complexity=1, summary=summary)
         
         jobs[job_id]["status"] = "completed"
         jobs[job_id]["result"] = json_payload

@@ -3,9 +3,10 @@ import { GraphViewer } from './components/graph/GraphViewer';
 import { Sidebar } from './components/panels/Sidebar';
 import { InspectorPanel } from './components/panels/InspectorPanel';
 import { GraphLegend } from './components/panels/GraphLegend';
+import { EmptyStateCard, ErrorStateCard } from './components/panels/StateCards';
 import type { CodeMapGraph, CodeMapNode, Hotspot, GraphMode } from './types/codemap';
 import { buildModuleGraph, enhanceGraph } from './utils/graphMetrics';
-import { Layers, FolderCode, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
+import { Layers, FolderCode, ArrowRight, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { codemapApi, type JobStatus } from './api/client';
 
@@ -108,6 +109,22 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  const resetWorkspace = () => {
+    setRawData(null);
+    setIngestStatus('idle');
+    setJobId(null);
+    setErrorMsg(null);
+    setWorkspacePath('');
+  };
+
+  if (errorMsg && ingestStatus === 'failed') {
+    return <ErrorStateCard errorMsg={errorMsg} onReset={resetWorkspace} />;
+  }
+
+  if (activeData && activeData.nodes.length === 0) {
+    return <EmptyStateCard summary={rawData?.symbol.summary} onReset={resetWorkspace} />;
+  }
+
   if (!activeData) {
     const isProcessing = ['queued', 'cloning', 'extracting', 'building', 'completed'].includes(ingestStatus);
     
@@ -201,20 +218,6 @@ function App() {
               </AnimatePresence>
             </button>
           </form>
-
-          <AnimatePresence>
-            {errorMsg && (
-              <motion.div 
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm flex gap-3 overflow-hidden"
-              >
-                <AlertCircle className="w-4 h-4 mt-0.5 shrink-0 opacity-80" />
-                <p className="leading-relaxed font-medium">{errorMsg}</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </motion.div>
       </div>
     );

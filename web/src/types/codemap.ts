@@ -29,9 +29,16 @@ export interface CodeMapEdge {
   first_line?: number;
 }
 
+export interface GraphSummary {
+  files_scanned: number;
+  python_files: number;
+  detected_extensions: string[];
+}
+
 export interface CodeMapGraph {
   nodes: CodeMapNode[];
   edges: CodeMapEdge[];
+  summary?: GraphSummary;
 }
 
 export interface Hotspot {

@@ -114,7 +114,8 @@ export function buildModuleGraph(symbolGraph: CodeMapGraph): CodeMapGraph {
 
   return {
     nodes: Array.from(moduleNodes.values()),
-    edges: Array.from(moduleEdges.values())
+    edges: Array.from(moduleEdges.values()),
+    summary: symbolGraph.summary
   };
 }
 
@@ -145,5 +146,5 @@ export function enhanceGraph(graph: CodeMapGraph): CodeMapGraph {
     };
   });
 
-  return { nodes, edges };
+  return { nodes, edges, summary: graph.summary };
 }

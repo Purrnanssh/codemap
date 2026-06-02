@@ -58,6 +58,7 @@ def to_json(
     graph: nx.DiGraph,
     min_complexity: int = 0,
     pretty: bool = True,
+    summary: dict | None = None,
 ) -> str:
     """Serialize the call graph to a flat JSON document.
 
@@ -106,6 +107,8 @@ def to_json(
     ]
 
     document = {"nodes": nodes_payload, "edges": edges_payload}
+    if summary is not None:
+        document["summary"] = summary
 
     if pretty:
         return json.dumps(document, indent=2, sort_keys=False) + "\n"
