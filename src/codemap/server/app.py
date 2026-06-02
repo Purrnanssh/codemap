@@ -20,10 +20,16 @@ from codemap.callgraph.exporters import to_json
 
 app = FastAPI(title="CodeMap API")
 
-# Allow the Vite frontend to access the API during local development
+import os
+
+# Configure CORS using environment variables for production security
+# Example: ALLOWED_ORIGINS="https://codemap.vercel.app,http://localhost:5173"
+allowed_origins_str = os.getenv("ALLOWED_ORIGINS", "*")
+allowed_origins = [origin.strip() for origin in allowed_origins_str.split(",") if origin.strip()]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # For MVP. Restrict in production.
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -53,14 +59,30 @@ def _process_ingestion(job_id: str, path_str: str) -> None:
             jobs[job_id]["status"] = "cloning"
             temp_dir = tempfile.mkdtemp(prefix="codemap_")
             target_path = Path(temp_dir)
+            import urllib.request
+            import zipfile
+            import io
             
-            # Clone repo
-            process = subprocess.run(
-                ["git", "clone", "--depth", "1", path_str, str(target_path)],
-                capture_output=True, text=True
-            )
-            if process.returncode != 0:
-                raise RuntimeError(f"Git clone failed: {process.stderr}")
+            parts = path_str.rstrip("/").split("/")
+            if len(parts) < 2:
+                raise ValueError(f"Invalid GitHub URL: {path_str}")
+            owner, repo = parts[-2], parts[-1]
+            
+            zip_url = f"https://api.github.com/repos/{owner}/{repo}/zipball"
+            req = urllib.request.Request(zip_url, headers={'User-Agent': 'CodeMap-Ingestion'})
+            
+            try:
+                with urllib.request.urlopen(req) as response:
+                    with zipfile.ZipFile(io.BytesIO(response.read())) as z:
+                        z.extractall(target_path)
+            except Exception as e:
+                raise RuntimeError(f"Failed to download repository: {e}")
+                
+            # GitHub zipballs extract into a single top-level directory (e.g. owner-repo-sha)
+            # We must set this as the target_path so module resolution isn't prefixed
+            extracted_items = list(target_path.iterdir())
+            if len(extracted_items) == 1 and extracted_items[0].is_dir():
+                target_path = extracted_items[0]
         else:
             target_path = Path(path_str).resolve()
             if not target_path.exists() or not target_path.is_dir():
