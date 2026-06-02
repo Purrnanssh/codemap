@@ -34,7 +34,7 @@ export function RepositoryCard({ workspacePath }: RepositoryCardProps) {
 
   return (
     <motion.div 
-      initial={{ opacity: 0, y: -10 }}
+      initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       className="flex items-center gap-3 bg-slate-900/80 border border-white/10 rounded-full px-4 py-1.5 backdrop-blur-xl shadow-lg"
     >
