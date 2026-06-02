@@ -34,45 +34,31 @@ export function RepositoryCard({ workspacePath }: RepositoryCardProps) {
 
   return (
     <motion.div 
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      className="absolute top-6 left-6 z-20"
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex items-center gap-3 bg-slate-900/80 border border-white/10 rounded-full px-4 py-1.5 backdrop-blur-xl shadow-lg"
     >
-      <div className="bg-slate-900/60 border border-white/10 rounded-xl p-4 backdrop-blur-xl shadow-2xl w-72">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="w-6 h-6 rounded bg-blue-500/20 flex items-center justify-center">
-            {isGithub ? <GitBranch className="w-3.5 h-3.5 text-blue-400" /> : <FolderCode className="w-3.5 h-3.5 text-blue-400" />}
-          </div>
-          <span className="text-xs font-semibold text-slate-400 tracking-wider uppercase">
-            CodeMap Workspace
-          </span>
-        </div>
-        
-        <div className="mb-3">
-          {owner ? (
-            <h2 className="text-lg font-bold text-white leading-tight flex flex-col">
-              <span className="text-sm font-medium text-slate-400">{owner} /</span>
-              <span>{repo}</span>
-            </h2>
-          ) : (
-            <h2 className="text-base font-bold text-white leading-tight truncate">
-              {displayName}
-            </h2>
-          )}
-        </div>
+      <div className="flex items-center gap-1.5">
+        {isGithub ? <GitBranch className="w-3.5 h-3.5 text-blue-400" /> : <FolderCode className="w-3.5 h-3.5 text-blue-400" />}
+        <span className="text-xs font-semibold text-white tracking-wide">
+          {displayName}
+        </span>
+      </div>
 
-        {isGithub && (
+      {isGithub && (
+        <>
+          <div className="w-1 h-1 rounded-full bg-slate-600"></div>
           <a 
             href={workspacePath}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-white transition-colors"
+            className="flex items-center gap-1 text-[11px] font-medium text-slate-400 hover:text-white transition-colors uppercase tracking-wider"
           >
-            View on GitHub
+            View GitHub
             <ExternalLink className="w-3 h-3" />
           </a>
-        )}
-      </div>
+        </>
+      )}
     </motion.div>
   );
 }

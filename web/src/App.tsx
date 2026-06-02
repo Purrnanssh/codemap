@@ -231,9 +231,10 @@ function App() {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="relative w-screen h-screen overflow-hidden bg-background text-foreground cinematic-bg"
     >
-      <RepositoryCard workspacePath={workspacePath} />
+      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3">
+        <RepositoryCard workspacePath={workspacePath} />
 
-      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20 p-1 rounded-full flex gap-1 bg-slate-900/60 border border-white/10 shadow-2xl backdrop-blur-xl">
+        <div className="p-1 rounded-full flex gap-1 bg-slate-900/60 border border-white/10 shadow-2xl backdrop-blur-xl">
         {(['symbol', 'module'] as GraphMode[]).map((mode) => (
           <button
             key={mode}
@@ -255,6 +256,7 @@ function App() {
             </span>
           </button>
         ))}
+        </div>
       </div>
 
       <GraphViewer 

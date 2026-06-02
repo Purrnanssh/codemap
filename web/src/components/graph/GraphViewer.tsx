@@ -167,11 +167,12 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
 
     // Progressive Disclosure: Labels
     // [PERF] Only draw text if sufficiently zoomed in or focused.
-    if (!isDimmed && (globalScale > 3 || isSelected || isHovered || isNeighbor)) {
+    // Hover labels are explicitly disabled as per design requirements to keep hover purely visual and minimal.
+    if (!isDimmed && (globalScale > 3 || isSelected)) {
       const label = node.name || node.id;
       if (label) {
         const fontSize = Math.max(12 / globalScale, 1.5);
-        ctx.font = `${isHovered || isSelected ? '500' : '400'} ${fontSize}px Inter, sans-serif`;
+        ctx.font = `${isSelected ? '500' : '400'} ${fontSize}px Inter, sans-serif`;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         
@@ -182,7 +183,7 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
         ctx.strokeStyle = '#0f172a';
         ctx.strokeText(label, node.x, textY);
         
-        ctx.fillStyle = isHovered || isSelected ? '#ffffff' : 'rgba(255, 255, 255, 0.55)';
+        ctx.fillStyle = isSelected ? '#ffffff' : 'rgba(255, 255, 255, 0.55)';
         ctx.fillText(label, node.x, textY);
       }
     }
