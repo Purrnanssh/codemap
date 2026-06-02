@@ -10,7 +10,7 @@
 
 <br/>
 
-![CodeMap Hero](https://via.placeholder.com/1200x600/111827/ffffff?text=CodeMap+Architecture+Graph)
+![CodeMap Hero](assets/screenshots/hero.png)
 
 </div>
 
@@ -37,22 +37,22 @@ Built for speed and clarity, CodeMap helps engineers accelerate onboarding, disc
 
 <div align="center">
 
-![Architecture Graph](https://via.placeholder.com/1200x600/111827/ffffff?text=Architecture+Graph)
+![Architecture Graph](assets/screenshots/graph.png)
 *Interactive symbol-level dependency graph.*
 
 <br/>
 
-![Hotspot Explorer](https://via.placeholder.com/1200x600/111827/ffffff?text=Hotspot+Explorer)
+![Hotspot Explorer](assets/screenshots/hotspot.png)
 *Identify highly complex and critical architectural hotspots.*
 
 <br/>
 
-![Dependency Inspector](https://via.placeholder.com/1200x600/111827/ffffff?text=Dependency+Inspector)
+![Dependency Inspector](assets/screenshots/inspector.png)
 *Inspect node-specific fan-in and fan-out relationships.*
 
 <br/>
 
-![Module View](https://via.placeholder.com/1200x600/111827/ffffff?text=Module+View)
+![Module View](assets/screenshots/module-view.png)
 *Macro-level visualization of module dependencies.*
 
 </div>
