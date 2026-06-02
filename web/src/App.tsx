@@ -1,258 +1,202 @@
-import { useEffect, useState, useMemo } from 'react';
-import { GraphViewer } from './components/graph/GraphViewer';
-import { Sidebar } from './components/panels/Sidebar';
-import { InspectorPanel } from './components/panels/InspectorPanel';
-import { GraphLegend } from './components/panels/GraphLegend';
-import type { CodeMapGraph, CodeMapNode, Hotspot, GraphMode } from './types/codemap';
-import { buildModuleGraph, enhanceGraph } from './utils/graphMetrics';
-import { Layers, FolderCode, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { codemapApi, type JobStatus } from './api/client';
+import { useState, useCallback, useEffect } from 'react';
+import { ReactFlow, Controls, Background, useNodesState, useEdgesState, MarkerType } from '@xyflow/react';
+import '@xyflow/react/dist/style.css';
+import dagre from 'dagre';
+import { Loader2, Search, X } from 'lucide-react';
+import { codemapApi } from './api/client';
 
-function App() {
-  const [rawData, setRawData] = useState<{ symbol: CodeMapGraph, module: CodeMapGraph } | null>(null);
-  const [graphMode, setGraphMode] = useState<GraphMode>('symbol');
-  const [selectedNode, setSelectedNode] = useState<CodeMapNode | null>(null);
-  const [hoverNode, setHoverNode] = useState<CodeMapNode | null>(null);
-  
-  // Ingestion State
-  const [workspacePath, setWorkspacePath] = useState('');
-  const [ingestStatus, setIngestStatus] = useState<'idle' | 'queued' | 'cloning' | 'extracting' | 'building' | 'completed' | 'failed'>('idle');
+const dagreGraph = new dagre.graphlib.Graph();
+dagreGraph.setDefaultEdgeLabel(() => ({}));
+
+const getLayoutedElements = (nodes: any[], edges: any[], direction = 'LR') => {
+  dagreGraph.setGraph({ rankdir: direction, nodesep: 30, ranksep: 150 });
+
+  nodes.forEach((node) => {
+    // Arbitrary size for the layout algorithm
+    dagreGraph.setNode(node.id, { width: 180, height: 40 });
+  });
+
+  edges.forEach((edge) => {
+    dagreGraph.setEdge(edge.source, edge.target);
+  });
+
+  dagre.layout(dagreGraph);
+
+  const layoutedNodes = nodes.map((node) => {
+    const nodeWithPosition = dagreGraph.node(node.id);
+    return {
+      ...node,
+      targetPosition: 'left',
+      sourcePosition: 'right',
+      position: {
+        x: nodeWithPosition.x - 90,
+        y: nodeWithPosition.y - 20,
+      },
+    };
+  });
+
+  return { nodes: layoutedNodes, edges };
+};
+
+export default function App() {
+  const [url, setUrl] = useState('');
+  const [status, setStatus] = useState<'idle' | 'polling' | 'completed' | 'failed'>('idle');
   const [jobId, setJobId] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [statusText, setStatusText] = useState('Connecting...');
+  
+  const [nodes, setNodes, onNodesChange] = useNodesState<any>([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<any>([]);
+  const [selectedNodeData, setSelectedNodeData] = useState<any | null>(null);
 
-  // Polling Effect
   useEffect(() => {
-    if (!jobId || ingestStatus === 'completed' || ingestStatus === 'failed') return;
-
+    if (status !== 'polling' || !jobId) return;
+    
     const interval = setInterval(async () => {
       try {
-        const status: JobStatus = await codemapApi.pollJobStatus(jobId);
-        setIngestStatus(status.status);
+        const job = await codemapApi.pollJobStatus(jobId);
+        if (job.status === 'cloning') setStatusText('Cloning repository...');
+        if (job.status === 'extracting') setStatusText('Extracting syntax trees...');
+        if (job.status === 'building') setStatusText('Synthesizing graph...');
         
-        if (status.status === 'completed') {
-          const json = await codemapApi.getGraph(jobId);
-          setRawData({
-            symbol: enhanceGraph(json),
-            module: enhanceGraph(buildModuleGraph(json))
+        if (job.status === 'completed') {
+          clearInterval(interval);
+          const rawGraph = await codemapApi.getGraph(jobId);
+          
+          const rawNodes = rawGraph.nodes.map((n: any) => ({
+            id: n.id,
+            data: { label: n.name || n.id, raw: n },
+            style: { 
+              background: '#1e293b', 
+              color: '#f8fafc', 
+              border: '1px solid #334155',
+              borderRadius: '8px',
+              padding: '10px',
+              fontSize: '12px'
+            }
+          }));
+          
+          const rawEdges = rawGraph.edges.map((e: any, i: number) => {
+             const source = typeof e.source === 'string' ? e.source : e.source.id;
+             const target = typeof e.target === 'string' ? e.target : e.target.id;
+             return {
+               id: `e${i}-${source}-${target}`,
+               source,
+               target,
+               animated: true,
+               style: { stroke: '#475569' },
+               markerEnd: { type: MarkerType.ArrowClosed, color: '#475569' }
+             };
           });
-        } else if (status.status === 'failed') {
-          setErrorMsg(status.error_msg || "Unknown ingestion error");
+
+          const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(rawNodes, rawEdges);
+          setNodes(layoutedNodes);
+          setEdges(layoutedEdges);
+          setStatus('completed');
+        } else if (job.status === 'failed') {
+          clearInterval(interval);
+          setStatus('failed');
+          setErrorMsg(job.error_msg || 'Unknown error occurred.');
         }
       } catch (err: any) {
-        setIngestStatus('failed');
+        clearInterval(interval);
+        setStatus('failed');
         setErrorMsg(err.message);
       }
     }, 1000);
-
     return () => clearInterval(interval);
-  }, [jobId, ingestStatus]);
+  }, [status, jobId, setNodes, setEdges]);
 
-  const handleIngest = async (e: React.FormEvent) => {
+  const handleAnalyze = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!workspacePath.trim()) return;
-    
-    setIngestStatus('queued');
+    if (!url.trim()) return;
+    setStatus('polling');
     setErrorMsg(null);
+    setSelectedNodeData(null);
     try {
-      const id = await codemapApi.ingestWorkspace(workspacePath);
+      const id = await codemapApi.ingestWorkspace(url);
       setJobId(id);
     } catch (err: any) {
-      setIngestStatus('failed');
+      setStatus('failed');
       setErrorMsg(err.message);
     }
   };
 
-  const activeData = rawData ? rawData[graphMode] : null;
-
-  const hotspots = useMemo(() => {
-    if (!activeData) return [];
-    
-    const fanInMap: Record<string, number> = {};
-    activeData.edges.forEach((edge: any) => {
-      const target = typeof edge.target === 'object' ? edge.target.id : edge.target;
-      fanInMap[target] = (fanInMap[target] || 0) + 1;
-    });
-
-    const candidates: Hotspot[] = activeData.nodes
-      .filter((n: any) => n.kind === 'function')
-      .map((node: any) => {
-        const fanIn = fanInMap[node.id] || 0;
-        const cx = node.complexity || 1;
-        return {
-          id: node.id,
-          name: node.name || node.id.split('.').pop() || '',
-          complexity: cx,
-          fanIn,
-          score: cx * fanIn,
-          node
-        };
-      })
-      .filter((h: any) => h.score > 0);
-
-    return candidates.sort((a, b) => b.score - a.score).slice(0, 50);
-  }, [activeData]);
-
-  if (!activeData) {
-    const isProcessing = ['queued', 'cloning', 'extracting', 'building'].includes(ingestStatus);
-    
-    let statusText = 'Connecting to engine...';
-    if (ingestStatus === 'cloning') statusText = 'Cloning repository...';
-    if (ingestStatus === 'extracting') statusText = 'Extracting abstract syntax trees...';
-    if (ingestStatus === 'building') statusText = 'Synthesizing topologies...';
-
-    return (
-      <div className="min-h-screen bg-background cinematic-bg flex flex-col items-center justify-center p-6 relative">
-        {/* Subtle background pulse when processing */}
-        <AnimatePresence>
-          {isProcessing && (
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 z-0 overflow-hidden pointer-events-none"
-            >
-              <motion.div 
-                animate={{ scale: [1, 1.05, 1], opacity: [0.1, 0.2, 0.1] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/5 blur-[120px] rounded-full"
-              />
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-md w-full relative z-10"
-        >
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)] flex items-center justify-center mx-auto mb-6">
-              <FolderCode className="w-8 h-8 text-slate-300" />
-            </div>
-            <h1 className="text-2xl font-bold text-white tracking-tight mb-2">Initialize Workspace</h1>
-            <p className="text-slate-400 text-sm font-medium">Paste a GitHub URL or absolute local path to begin.</p>
-          </div>
-
-          <form onSubmit={handleIngest} className="space-y-4">
-            <div className="relative group">
-              <input 
-                type="text" 
-                value={workspacePath}
-                onChange={(e) => setWorkspacePath(e.target.value)}
-                placeholder="https://github.com/encode/starlette"
-                disabled={isProcessing}
-                className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-white/30 transition-all disabled:opacity-50"
-              />
-            </div>
-            
-            <button 
-              type="submit"
-              disabled={!workspacePath.trim() || isProcessing}
-              className="relative w-full overflow-hidden bg-white text-black font-medium text-sm rounded-xl px-4 py-3 flex items-center justify-center gap-2 hover:bg-slate-200 transition-colors disabled:opacity-80 disabled:cursor-wait h-[44px]"
-            >
-              <AnimatePresence mode="wait">
-                {isProcessing ? (
-                  <motion.div
-                    key="processing"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="flex items-center gap-2"
-                  >
-                    <Loader2 className="w-4 h-4 animate-spin opacity-50" />
-                    <span>{statusText}</span>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="idle"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="flex items-center gap-2"
-                  >
-                    Scan Repository <ArrowRight className="w-4 h-4 opacity-50" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </button>
-          </form>
-
-          <AnimatePresence>
-            {errorMsg && (
-              <motion.div 
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="mt-4 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm flex gap-3 overflow-hidden"
-              >
-                <AlertCircle className="w-4 h-4 mt-0.5 shrink-0 opacity-80" />
-                <p className="leading-relaxed font-medium">{errorMsg}</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      </div>
-    );
-  }
+  const onNodeClick = useCallback((_: any, node: any) => {
+    setSelectedNodeData(node.data.raw);
+  }, []);
 
   return (
-    <motion.div 
-      initial={{ opacity: 0 }} 
-      animate={{ opacity: 1 }} 
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className="relative w-screen h-screen overflow-hidden bg-background text-foreground cinematic-bg"
-    >
-      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20 p-1 rounded-full flex gap-1 bg-slate-900/60 border border-white/10 shadow-2xl backdrop-blur-xl">
-        {(['symbol', 'module'] as GraphMode[]).map((mode) => (
+    <div className="w-screen h-screen bg-slate-950 text-slate-200 font-sans overflow-hidden">
+      {/* Navbar / Header */}
+      <div className="absolute top-0 left-0 w-full p-4 z-10 flex gap-4 items-center bg-slate-950/80 backdrop-blur border-b border-slate-800">
+        <h1 className="text-xl font-bold text-white tracking-tight shrink-0">CodeMap</h1>
+        <form onSubmit={handleAnalyze} className="flex gap-2 w-full max-w-2xl">
+          <input
+            type="text"
+            placeholder="https://github.com/encode/starlette"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            disabled={status === 'polling'}
+            className="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+          />
           <button
-            key={mode}
-            onClick={() => { setGraphMode(mode); setSelectedNode(null); }}
-            className={`relative px-5 py-1.5 rounded-full text-xs tracking-wide font-medium transition-colors duration-200 flex items-center gap-2 ${
-              graphMode === mode ? 'text-white' : 'text-slate-400 hover:text-slate-200'
-            }`}
+            type="submit"
+            disabled={!url.trim() || status === 'polling'}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 disabled:opacity-50 transition-colors"
           >
-            {graphMode === mode && (
-              <motion.div
-                layoutId="activeTab"
-                className="absolute inset-0 bg-white/10 border border-white/5 rounded-full"
-                transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              />
-            )}
-            <span className="relative z-10 flex items-center gap-1.5 capitalize">
-              {mode === 'module' && <Layers className="w-3.5 h-3.5" />}
-              {mode} View
-            </span>
+            {status === 'polling' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+            Analyze
           </button>
-        ))}
+        </form>
+        {status === 'polling' && <span className="text-sm text-blue-400 animate-pulse">{statusText}</span>}
+        {status === 'failed' && <span className="text-sm text-red-400">{errorMsg}</span>}
       </div>
 
-      <GraphViewer 
-        key={graphMode}
-        data={activeData} 
-        selectedNode={selectedNode}
-        hoverNode={hoverNode}
-        onNodeClick={setSelectedNode}
-        onNodeHover={(n) => setHoverNode(n || null)} 
-      />
-      
-      <Sidebar 
-        hotspots={hotspots}
-        selectedId={selectedNode?.id || null}
-        onHotspotClick={(h) => setSelectedNode(h.node)}
-      />
+      {/* Main Graph Area */}
+      <div className="w-full h-full pt-16">
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onNodeClick={onNodeClick}
+          fitView
+          colorMode="dark"
+          minZoom={0.1}
+        >
+          <Background color="#334155" gap={16} />
+          <Controls className="!bg-slate-900 !border-slate-800 !fill-slate-300" />
+        </ReactFlow>
+      </div>
 
-      <InspectorPanel 
-        node={selectedNode}
-        edges={activeData.edges}
-        onClose={() => setSelectedNode(null)}
-      />
-
-      <GraphLegend isInspectorOpen={!!selectedNode} />
-    </motion.div>
+      {/* Node Inspector Sidebar */}
+      {selectedNodeData && (
+        <div className="absolute top-20 right-4 w-80 bg-slate-900/90 backdrop-blur-xl border border-slate-700 rounded-xl shadow-2xl p-4 z-20 flex flex-col max-h-[calc(100vh-100px)] overflow-hidden">
+          <div className="flex justify-between items-start mb-4 shrink-0">
+            <h2 className="text-lg font-bold text-white break-all pr-4">{selectedNodeData.name || selectedNodeData.id}</h2>
+            <button onClick={() => setSelectedNodeData(null)} className="p-1 hover:bg-slate-800 rounded">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          <div className="overflow-y-auto space-y-4 text-sm flex-1">
+            <div>
+              <span className="text-slate-400 text-xs uppercase font-bold tracking-wider">Module</span>
+              <p className="mt-1 font-mono text-slate-300 break-all">{selectedNodeData.module || 'Unknown'}</p>
+            </div>
+            {selectedNodeData.complexity !== undefined && (
+              <div>
+                <span className="text-slate-400 text-xs uppercase font-bold tracking-wider">Complexity</span>
+                <p className="mt-1 font-mono text-slate-300">{selectedNodeData.complexity}</p>
+              </div>
+            )}
+            <div>
+              <span className="text-slate-400 text-xs uppercase font-bold tracking-wider">Kind</span>
+              <p className="mt-1 font-mono text-slate-300">{selectedNodeData.kind || 'Unknown'}</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
-
-export default App;
