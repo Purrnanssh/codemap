@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import ForceGraph2D from 'react-force-graph-2d';
+import { forceX, forceY } from 'd3-force';
 import type { CodeMapGraph, CodeMapNode, CodeMapEdge } from '../../types/codemap';
 import { getComplexityColor, EDGE_COLORS } from '../../utils/colors';
 
@@ -100,10 +101,15 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
       // Safely apply forces if they exist
       const chargeForce = fgRef.current.d3Force('charge');
       if (chargeForce && typeof chargeForce.strength === 'function') {
-        chargeForce.strength(-350);
+        // Less repulsion for smaller graphs (like module view)
+        const repulsion = data.nodes.length < 200 ? -150 : -350;
+        chargeForce.strength(repulsion);
       }
       
-      // Removed buggy custom 'collide' function that crashes D3 simulation
+      // Add a gentle gravity force to keep disconnected subgraphs from flying into deep space
+      // which ruins the camera's auto-zoom and causes all nodes to be culled
+      fgRef.current.d3Force('x', forceX(0).strength(0.05));
+      fgRef.current.d3Force('y', forceY(0).strength(0.05));
     }
   }, [data]);
 
