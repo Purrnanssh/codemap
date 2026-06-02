@@ -120,9 +120,8 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
     const isHovered = hoverNode?.id === node.id;
     const isNeighbor = Boolean((hoverNode && neighbors.get(hoverNode.id)?.has(node.id)) || (selectedNode && neighbors.get(selectedNode.id)?.has(node.id)));
     
-    // Dimming logic
-    const hasFocus = Boolean(hoverNode || selectedNode);
-    const isDimmed = hasFocus && !isHovered && !isSelected && !isNeighbor;
+    // Dimming logic: Only dim the graph when a node is explicitly clicked (selectedNode), NOT on hover.
+    const isDimmed = Boolean(selectedNode) && !isSelected && !isNeighbor;
     
     const scaleFactor = (isSelected || isHovered) ? 1.3 : 1;
     const size = (node.val || 2) * scaleFactor;
@@ -217,11 +216,12 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
           
           if (!sId || !tId) return 'transparent';
 
-          const hasFocus = Boolean(hoverNode || selectedNode);
-          const isConnectedToFocus = hasFocus && 
-            (sId === hoverNode?.id || tId === hoverNode?.id || sId === selectedNode?.id || tId === selectedNode?.id);
+          // Only isolate unselected edges when explicitly clicked
+          const hasSelection = Boolean(selectedNode);
+          const isConnectedToFocus = (hoverNode && (sId === hoverNode.id || tId === hoverNode.id)) || 
+                                     (selectedNode && (sId === selectedNode.id || tId === selectedNode.id));
           
-          if (hasFocus && !isConnectedToFocus) return 'rgba(30, 41, 59, 0.2)';
+          if (hasSelection && !(selectedNode && (sId === selectedNode.id || tId === selectedNode.id))) return 'rgba(30, 41, 59, 0.2)';
           if (edge.isInCycle) return '#ef4444';
           if (isConnectedToFocus) return 'rgba(255, 255, 255, 0.6)';
           return EDGE_COLORS[edge.kind] || EDGE_COLORS.internal;
@@ -232,12 +232,12 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
           const sId = typeof edge.source === 'object' ? (edge.source as CodeMapNode)?.id : edge.source;
           const tId = typeof edge.target === 'object' ? (edge.target as CodeMapNode)?.id : edge.target;
           
-          const hasFocus = Boolean(hoverNode || selectedNode);
-          const isConnectedToFocus = hasFocus && 
-            (sId === hoverNode?.id || tId === hoverNode?.id || sId === selectedNode?.id || tId === selectedNode?.id);
+          const hasSelection = Boolean(selectedNode);
+          const isConnectedToFocus = (hoverNode && (sId === hoverNode.id || tId === hoverNode.id)) || 
+                                     (selectedNode && (sId === selectedNode.id || tId === selectedNode.id));
           
           if (isConnectedToFocus) return 2;
-          if (hasFocus && !isConnectedToFocus) return 0.2;
+          if (hasSelection && !(selectedNode && (sId === selectedNode.id || tId === selectedNode.id))) return 0.2;
           return edge.isInCycle ? 2 : (edge.kind === 'internal' ? 1 : 0.5);
         }}
         linkLineDash={(link: any) => {
@@ -250,23 +250,28 @@ export const GraphViewer: React.FC<GraphViewerProps> = ({ data, onNodeClick, onN
           const sId = typeof link.source === 'object' ? link.source?.id : link.source;
           const tId = typeof link.target === 'object' ? link.target?.id : link.target;
           
-          const hasFocus = Boolean(hoverNode || selectedNode);
-          const isConnectedToFocus = hasFocus && 
-            (sId === hoverNode?.id || tId === hoverNode?.id || sId === selectedNode?.id || tId === selectedNode?.id);
+          const isConnectedToFocus = (hoverNode && (sId === hoverNode.id || tId === hoverNode.id)) || 
+                                     (selectedNode && (sId === selectedNode.id || tId === selectedNode.id));
 
           if (link.isInCycle) return 5;
-          if (hasFocus) return isConnectedToFocus ? 4 : 0;
+          if (isConnectedToFocus) return 4;
           
-          // [PERF] Adaptive Ambient Throttling: 
-          // Disable idle background particles entirely if the graph is massive to preserve CPU.
-          // Focus/cycle particles still render properly.
-          if (data.edges.length > 250) return 0;
-          
-          return (link.kind === 'internal' || link.kind === 'self') ? 1 : 0;
+          // Randomize slightly so they don't all look uniform
+          return Math.random() > 0.5 ? 2 : 1;
         }}
-        linkDirectionalParticleWidth={(link: any) => link?.isInCycle ? 3 : 2}
-        linkDirectionalParticleSpeed={(link: any) => link?.isInCycle ? 0.012 : 0.006}
-        linkDirectionalParticleColor={(link: any) => link?.isInCycle ? 'rgba(239, 68, 68, 0.9)' : 'rgba(255, 255, 255, 0.8)'}
+        linkDirectionalParticleWidth={(link: any) => link?.isInCycle ? 3 : 1.5}
+        linkDirectionalParticleSpeed={(link: any) => link?.isInCycle ? 0.012 : (0.003 + Math.random() * 0.003)}
+        linkDirectionalParticleColor={(link: any) => {
+          if (link?.isInCycle) return 'rgba(239, 68, 68, 0.9)';
+          
+          const sId = typeof link.source === 'object' ? link.source?.id : link.source;
+          const tId = typeof link.target === 'object' ? link.target?.id : link.target;
+          const isConnectedToFocus = (hoverNode && (sId === hoverNode.id || tId === hoverNode.id)) || 
+                                     (selectedNode && (sId === selectedNode.id || tId === selectedNode.id));
+                                     
+          if (isConnectedToFocus) return 'rgba(255, 255, 255, 0.9)';
+          return 'rgba(100, 150, 255, 0.4)'; // Cyberpunk ambient data stream color
+        }}
         
         d3VelocityDecay={0.12}
         warmupTicks={150}

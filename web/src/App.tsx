@@ -3,6 +3,7 @@ import { GraphViewer } from './components/graph/GraphViewer';
 import { Sidebar } from './components/panels/Sidebar';
 import { InspectorPanel } from './components/panels/InspectorPanel';
 import { GraphLegend } from './components/panels/GraphLegend';
+import { RepositoryCard } from './components/panels/RepositoryCard';
 import { EmptyStateCard, ErrorStateCard } from './components/panels/StateCards';
 import type { CodeMapGraph, CodeMapNode, Hotspot, GraphMode } from './types/codemap';
 import { buildModuleGraph, enhanceGraph } from './utils/graphMetrics';
@@ -230,6 +231,8 @@ function App() {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="relative w-screen h-screen overflow-hidden bg-background text-foreground cinematic-bg"
     >
+      <RepositoryCard workspacePath={workspacePath} />
+
       <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20 p-1 rounded-full flex gap-1 bg-slate-900/60 border border-white/10 shadow-2xl backdrop-blur-xl">
         {(['symbol', 'module'] as GraphMode[]).map((mode) => (
           <button
