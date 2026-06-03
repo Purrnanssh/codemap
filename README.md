@@ -2,11 +2,13 @@
 
 # CodeMap
 
-**Interactive architecture visualization for modern codebases.**
+**Visualize, explore, and understand software architecture through interactive dependency graphs.**
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-000000?style=for-the-badge&logo=vercel)](https://codemap.vercel.app/)
-[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/Purrnanssh/codemap)
-[![License](https://img.shields.io/badge/License-MIT-333333?style=for-the-badge)](https://opensource.org/licenses/MIT)
+<br/>
+
+[![Live Demo](https://img.shields.io/badge/Live_Demo-000000?style=for-the-badge&logo=vercel)](https://codemap-teal.vercel.app/?)
+&nbsp;&nbsp;
+[![Source Code](https://img.shields.io/badge/Source_Code-181717?style=for-the-badge&logo=github)](https://github.com/Purrnanssh/codemap)
 
 <br/>
 
@@ -16,114 +18,133 @@
 
 ---
 
-## Why CodeMap
+## The Problem
 
 Navigating a large, unfamiliar codebase is inherently difficult. Developers are typically constrained to reading flat files, traversing deeply nested directories, and relying on global searches to build a mental model of an architecture.
 
-CodeMap transforms this process by parsing your repository into a living, physics-based dependency graph. It exposes the hidden geometry of your software, highlighting critical structural dependencies, identifying highly-coupled architectural hotspots, and revealing the true relationships between functions and modules.
+Without spatial context, identifying technical debt, tracing execution flow, and safely planning major refactors becomes an exercise in guesswork. Software is fundamentally a network of relationships, yet modern developer tooling rarely treats it as one.
 
-Built for speed and clarity, CodeMap helps engineers accelerate onboarding, discover technical debt, and safely plan refactors with complete spatial awareness.
+---
 
-## Features
+## Why CodeMap
 
-- **Automated Repository Ingestion:** Parse public GitHub repositories instantly.
-- **Interactive Topologies:** Physics-based rendering of your system's architecture.
-- **Granular Views:** Seamlessly toggle between symbol-level and module-level hierarchies.
-- **Hotspot Detection:** Automatically isolate highly complex and heavily dependent nodes.
-- **Dependency Flow:** Visualize fan-in and fan-out metrics with directional edge streams.
-- **AI-Powered Insights:** Automatically synthesize architectural observations and risks.
+CodeMap solves architectural blindness by automatically transforming static code into living, physics-based network topologies.
+
+| Capability | Description |
+| :--- | :--- |
+| **Dependency Graphs** | Visualize relationships across an entire repository |
+| **Hotspot Detection** | Surface high-risk architectural components |
+| **Fan-In/Fan-Out Analysis** | Understand coupling and dependency flow |
+| **AI Insights** | Architectural observations and onboarding guidance |
+| **Symbol & Module Views** | Explore systems at multiple abstraction levels |
+
+---
 
 ## Screenshots
 
 <div align="center">
 
+### Architecture Graph
 ![Architecture Graph](assets/screenshots/graph.png)
-*Interactive symbol-level dependency graph.*
+*Interactive symbol-level dependency topology.*
 
 <br/>
 
+### Hotspot Explorer
 ![Hotspot Explorer](assets/screenshots/hotspot.png)
-*Identify highly complex and critical architectural hotspots.*
+*Isolate and inspect highly complex, critical nodes.*
 
 <br/>
 
+### Dependency Inspector
 ![Dependency Inspector](assets/screenshots/inspector.png)
-*Inspect node-specific fan-in and fan-out relationships.*
-
-<br/>
-
-![Module View](assets/screenshots/module-view.png)
-*Macro-level visualization of module dependencies.*
+*Granular fan-in and fan-out relationship flow.*
 
 </div>
 
-## How It Works
+---
 
-Repository Source<br/>
-↓<br/>
-AST Static Analysis<br/>
-↓<br/>
-Dependency Extraction<br/>
-↓<br/>
-Graph Construction<br/>
-↓<br/>
-Hotspot Detection<br/>
-↓<br/>
-Interactive Visualization<br/>
+## Architecture Pipeline
 
-## Technology Stack
+```mermaid
+graph TD
+    A[Repository] --> B[Static Analysis]
+    B --> C[Dependency Extraction]
+    C --> D[Graph Construction]
+    D --> E[Hotspot Detection]
+    E --> F[Interactive Visualization]
+
+    classDef default fill:#1e293b,stroke:#334155,color:#f8fafc;
+    classDef highlight fill:#0ea5e9,stroke:#0284c7,color:#ffffff;
+    class A highlight
+    class F highlight
+```
+
+---
+
+## Tech Stack
 
 | Layer | Technologies |
 | :--- | :--- |
-| **Frontend** | React, TypeScript, Vite, D3 / Force Graph, Tailwind CSS, Framer Motion |
-| **Backend** | Python, FastAPI, AST Analysis |
-| **Deployment** | Vercel (Edge), Railway (Compute) |
+| **Frontend** | React, TypeScript, Tailwind, Framer Motion |
+| **Visualization** | D3.js, Force Graph |
+| **Backend** | Python, FastAPI |
+| **Analysis** | AST Parsing, Static Analysis |
+| **Deployment** | Vercel, Railway |
 
-## Quick Start
+---
 
-### Backend
+## Use Cases
 
+- Onboarding onto unfamiliar codebases
+- Open-source contribution discovery
+- Dependency auditing
+- Refactor planning
+- Architectural reviews
+- Technical debt discovery
+
+---
+
+## Roadmap
+
+- **TypeScript/JavaScript Support:** Extend parser for modern JS ecosystems.
+- **Global Search:** Instantly locate specific symbols within the graph.
+- **Graph Export:** Export topologies to high-resolution SVGs or JSON data.
+- **Direct IDE Integrations:** Embed visualizations natively within VS Code.
+- **Team Workspaces:** Shared architectural views and persistent states.
+
+---
+
+## Getting Started
+
+### Local Setup
+
+**Backend**
 ```bash
 cd backend
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-
 uvicorn main:app --reload --port 8000
 ```
 
-### Frontend
-
+**Frontend**
 ```bash
 cd web
 npm install
 npm run dev
 ```
 
-### Environment Variables
-
 Create a `.env` in the `web` directory:
-
 ```env
 VITE_API_URL=http://localhost:8000
 ```
 
-## Roadmap
+---
 
-- JavaScript / TypeScript parser integration
-- Multi-repository cross-graph visualization
-- Advanced AST structural risk detection
-- Interactive node-filtering queries
-- SVG & JSON graph export
-- Direct IDE integrations
+<div align="center">
 
-## Contributing
+**Built by Purrnanssh Sinha**  
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github)](https://github.com/Purrnanssh)
 
-We welcome contributions from the community. Please fork the repository, create a feature branch, and submit a pull request for review.
-
-## Author
-
-**Purrnanssh Sinha**  
-[github.com/Purrnanssh](https://github.com/Purrnanssh)
-
-*Built with precision for the modern software engineer.*
+</div>
