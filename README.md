@@ -142,9 +142,9 @@ VITE_API_URL=http://localhost:8000
 
 ---
 
-<div align="center">
-
-**Built by Purrnanssh Sinha**  
-[![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github)](https://github.com/Purrnanssh)
-
-</div>
+<p align="center">
+  <strong>Built by Purrnanssh Sinha</strong><br><br>
+  <a href="https://www.linkedin.com/in/purrnanssh/" target="_blank">
+    <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg" width="24" height="24" alt="LinkedIn"/>
+  </a>
+</p>
