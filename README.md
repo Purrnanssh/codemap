@@ -7,7 +7,6 @@
 <br/>
 
 [![Live Demo](https://img.shields.io/badge/Live_Demo-000000?style=for-the-badge&logo=vercel)](https://codemap-teal.vercel.app/?)
-&nbsp;&nbsp;
 [![Source Code](https://img.shields.io/badge/Source_Code-181717?style=for-the-badge&logo=github)](https://github.com/Purrnanssh/codemap)
 
 <br/>
@@ -16,15 +15,11 @@
 
 </div>
 
----
-
 ## The Problem
 
 Navigating a large, unfamiliar codebase is inherently difficult. Developers are typically constrained to reading flat files, traversing deeply nested directories, and relying on global searches to build a mental model of an architecture.
 
 Without spatial context, identifying technical debt, tracing execution flow, and safely planning major refactors becomes an exercise in guesswork. Software is fundamentally a network of relationships, yet modern developer tooling rarely treats it as one.
-
----
 
 ## Why CodeMap
 
@@ -37,8 +32,6 @@ CodeMap solves architectural blindness by automatically transforming static code
 | **Fan-In/Fan-Out Analysis** | Understand coupling and dependency flow |
 | **AI Insights** | Architectural observations and onboarding guidance |
 | **Symbol & Module Views** | Explore systems at multiple abstraction levels |
-
----
 
 ## Screenshots
 
@@ -62,8 +55,6 @@ CodeMap solves architectural blindness by automatically transforming static code
 
 </div>
 
----
-
 ## Architecture Pipeline
 
 ```mermaid
@@ -80,8 +71,6 @@ graph TD
     class F highlight
 ```
 
----
-
 ## Tech Stack
 
 | Layer | Technologies |
@@ -92,8 +81,6 @@ graph TD
 | **Analysis** | AST Parsing, Static Analysis |
 | **Deployment** | Vercel, Railway |
 
----
-
 ## Use Cases
 
 - Onboarding onto unfamiliar codebases
@@ -103,8 +90,6 @@ graph TD
 - Architectural reviews
 - Technical debt discovery
 
----
-
 ## Roadmap
 
 - **TypeScript/JavaScript Support:** Extend parser for modern JS ecosystems.
@@ -112,8 +97,6 @@ graph TD
 - **Graph Export:** Export topologies to high-resolution SVGs or JSON data.
 - **Direct IDE Integrations:** Embed visualizations natively within VS Code.
 - **Team Workspaces:** Shared architectural views and persistent states.
-
----
 
 ## Getting Started
 
@@ -140,12 +123,8 @@ Create a `.env` in the `web` directory:
 VITE_API_URL=http://localhost:8000
 ```
 
----
+<br/>
 
-<p align="center">
-  <strong>Built by Purrnanssh Sinha</strong>
-  &nbsp;
-  <a href="https://www.linkedin.com/in/purrnanssh/" target="_blank">
-    <img src="https://cdn.simpleicons.org/linkedin/A1A1AA" alt="LinkedIn" width="14" height="14" align="center" />
-  </a>
-</p>
+<div align="center">
+  Built by Purrnanssh Sinha &middot; <a href="https://www.linkedin.com/in/purrnanssh/" target="_blank">LinkedIn</a>
+</div>
