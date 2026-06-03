@@ -126,5 +126,5 @@ VITE_API_URL=http://localhost:8000
 <br/>
 
 <div align="center">
-  Built by Purrnanssh Sinha &nbsp;&middot;&nbsp; <a href="https://www.linkedin.com/in/purrnanssh/" target="_blank"><img src="https://cdn.simpleicons.org/linkedin/8b949e" width="14" height="14" alt="LinkedIn" /></a>
+  Built by Purrnanssh Sinha &nbsp;&middot;&nbsp; <a href="https://www.linkedin.com/in/purrnanssh/" target="_blank"><img src="assets/linkedin.svg" width="14" height="14" alt="LinkedIn" /></a>
 </div>
