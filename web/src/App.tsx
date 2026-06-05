@@ -19,7 +19,7 @@ function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   
   // Ingestion State
-  const [workspacePath, setWorkspacePath] = useState('');
+  const [workspacePath, setWorkspacePath] = useState('https://github.com/');
   const [ingestStatus, setIngestStatus] = useState<'idle' | 'queued' | 'cloning' | 'extracting' | 'building' | 'completed' | 'failed'>('idle');
   const [jobId, setJobId] = useState<string | null>(null);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -111,12 +111,36 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  const handlePathChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let val = e.target.value;
+    if (val.startsWith('https://github.com/https://github.com/')) {
+      val = val.replace('https://github.com/https://github.com/', 'https://github.com/');
+    } else if (val.startsWith('https://github.com/git@github.com:')) {
+      val = val.replace('https://github.com/git@github.com:', 'https://github.com/');
+    }
+    setWorkspacePath(val);
+  };
+
+  const handlePathPaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    const pastedText = e.clipboardData.getData('text').trim();
+    if (workspacePath === 'https://github.com/') {
+      if (
+        pastedText.startsWith('https://github.com/') || 
+        pastedText.startsWith('/') || 
+        pastedText.match(/^[a-zA-Z]:\\/)
+      ) {
+        e.preventDefault();
+        setWorkspacePath(pastedText);
+      }
+    }
+  };
+
   const resetWorkspace = () => {
     setRawData(null);
     setIngestStatus('idle');
     setJobId(null);
     setErrorMsg(null);
-    setWorkspacePath('');
+    setWorkspacePath('https://github.com/');
   };
 
   return (
@@ -175,7 +199,8 @@ function App() {
                   ref={inputRef}
                   type="text" 
                   value={workspacePath}
-                  onChange={(e) => setWorkspacePath(e.target.value)}
+                  onChange={handlePathChange}
+                  onPaste={handlePathPaste}
                   placeholder="https://github.com/encode/starlette"
                   disabled={['queued', 'cloning', 'extracting', 'building', 'completed'].includes(ingestStatus)}
                   className="w-full bg-slate-900/50 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-white/30 transition-all disabled:opacity-50 pr-12"
